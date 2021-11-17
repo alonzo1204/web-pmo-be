@@ -29,7 +29,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 //ROUTES
-var { ClientsRoute, AuthRoutes } = require('./app/routes');
+var { ClientsRoute, AuthRoutes, CareerRoutes, CycleRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes } = require('./app/routes');
 const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION;
 
 //MySQL Database Connection
@@ -46,3 +46,8 @@ mysqlConnection.connect(function (err) {
 
 app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, ClientsRoute);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
+app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, CareerRoutes);
+app.use(APP_ROUTE + endpoints.CYCLE_URL.MAIN, CycleRoutes);
+app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, PostulationRoutes);
+app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, ProjectRoutes);
+app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, RoleRoutes);

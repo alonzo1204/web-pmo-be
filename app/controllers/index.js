@@ -1,7 +1,17 @@
 const ClientsController = require('./clientsController');
 const AuthController = require('./AuthController');
+const CareerController = require('./CareerController');
+const CycleController = require('./CycleController');
+const PostulationController = require('./PostulationController');
+const ProjectController = require('./ProjectController');
+const RoleController = require('./RoleController');
 
 module.exports = {
     ClientsController,
-    AuthController
+    AuthController,
+    CareerController,
+    CycleController,
+    PostulationController,
+    ProjectController,
+    RoleController
 }
