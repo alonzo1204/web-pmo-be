@@ -1,8 +1,9 @@
-const { PostulationService } = require('../services');
+const { UserService } = require('../services');
 var dot = require('dot-object');
 
 exports.getFullList = function (req, res) {
-    PostulationService.getFullList().then(function (result) {
+    UserService.getFullList().then(function (result) {
+
         if (result) {
             result.map(r => dot.object(r));
             return res.status(200).send({

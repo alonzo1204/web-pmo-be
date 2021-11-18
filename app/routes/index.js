@@ -5,6 +5,8 @@ var CycleRoutes = require('./CycleRoutes');
 var PostulationRoutes = require('./PostulationRoutes');
 var ProjectRoutes = require('./ProjectRoutes');
 var RoleRoutes = require('./RoleRoutes');
+var UserRoutes = require('./UserRoutes');
+
 module.exports = {
     ClientsRoute,
     AuthRoutes,
@@ -12,5 +14,6 @@ module.exports = {
     CycleRoutes,
     PostulationRoutes,
     ProjectRoutes,
-    RoleRoutes
+    RoleRoutes,
+    UserRoutes
 }

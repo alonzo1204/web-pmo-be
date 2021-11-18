@@ -18,10 +18,19 @@ const endpoints = {
             LOGOUT: '/logout'
         }
     },
+    USER_URL: {
+        MAIN: '/users',
+        OPERATIONS: {
+            LIST: '/',
+            SAVE: '/save',
+            GET_ONE: '/:idUser'
+        }
+    },
     PROJECT_URL: {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/',
+            LIST_APPROVED: '/approved',
             SAVE: '/save',
             GET_ONE: '/:idProject'
         }

@@ -1,5 +1,6 @@
 const { ProjectService } = require('../services');
 var dot = require('dot-object');
+
 exports.getFullList = function (req, res) {
     ProjectService.getFullList().then(function (result) {
 
