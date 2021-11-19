@@ -51,7 +51,11 @@ exports.getFullList = function () {
                     coautor.id as 'co_autor.id',
                     coautor.code as 'co_autor.code',
                     coautor.firstname as 'co_autor.firstname',
-                    coautor.lastname as 'co_autor.lastname'
+                    coautor.lastname as 'co_autor.lastname',
+
+                    comp.id as 'company.id',
+                    comp.name as 'company.name',
+                    comp.image as 'company.image'
 
                     from project p
                     left join career ca on ca.id = p.career_id
@@ -61,7 +65,8 @@ exports.getFullList = function () {
                     left join user stud_2 on stud_2.id = p.student_2_id
                     left join user powner on powner.id = p.product_owner_id
                     left join user pmanager on pmanager.id = p.portfolio_manager_id
-                    left join user coautor on coautor.id = p.co_autor_id`,
+                    left join user coautor on coautor.id = p.co_autor_id
+                    left join company comp on comp.id = p.company_id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);

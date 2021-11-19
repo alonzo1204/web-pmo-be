@@ -66,6 +66,14 @@ const endpoints = {
             SAVE: '/save',
             GET_ONE: '/:idCycle'
         }
+    },
+    COMPANY_URL: {
+        MAIN: '/companies',
+        OPERATIONS: {
+            LIST: '/',
+            SAVE: '/save',
+            GET_ONE: '/:idCompany'
+        }
     }
 }
 
