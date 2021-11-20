@@ -112,3 +112,48 @@ exports.getFullList = function () {
         })
     })
 }
+
+exports.save = function (postulation) {
+    return new Promise(function (resolve, reject) {
+        if (postulation.student_1_id && postulation.student_2_id && postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
+            mysqlConnection.query({
+                sql: 'SELECT id, student_1_id, student_2_id from postulation where student_1_id = ? or student_1_id = ? or student_2_id = ? or student_2_id = ?',
+            }, [postulation.student_1_id, postulation.student_2_id, postulation.student_1_id, postulation.student_2_id], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    reject({
+                        codeMessage: 'STUDENT_IN_POSTULATION',
+                        message: `The student with id ${postulation.student_1_id} or ${postulation.student_2_id} are already in a postulation`
+                    })
+                } else {
+                    mysqlConnection.query({
+                        sql: 'INSERT INTO postulation (`student_1_id`, `student_2_id`, `project_1_id`, `project_2_id`, `project_3_id`, `project_4_id`) VALUES (?,?,?,?,?,?)',
+                    }, [
+                        postulation.student_1_id, postulation.student_2_id,
+                        postulation.project_1_id, postulation.project_2_id,
+                        postulation.project_3_id, postulation.project_4_id,], function (error, result, fields) {
+                            if (result) {
+                                resolve(result);
+                            }
+                            if (error) {
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                        })
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for postulation'
+            })
+        }
+    })
+}
