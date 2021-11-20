@@ -5,9 +5,13 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var expressSession = require('express-session');
 const localPassport = require('./app/middlewares/passport/local-strategy');
+var morgan = require('morgan')
 
 //MySql Database Connection
 var { mysqlConnection } = require('./app/connections');
+
+//MORGAN
+app.use(morgan())
 
 // Parse data
 app.use(bodyParser.json());
