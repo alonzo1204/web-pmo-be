@@ -19,9 +19,9 @@ const endpoints = {
         }
     },
     USER_URL: {
-        MAIN: '/users',
+        MAIN: '/users', 
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/',//done
             SAVE: '/save',
             GET_ONE: '/:idUser'
         }
@@ -29,24 +29,24 @@ const endpoints = {
     PROJECT_URL: {
         MAIN: '/projects',
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/', //done
             LIST_APPROVED: '/approved',
-            SAVE: '/save',
+            SAVE: '/save', //done
             GET_ONE: '/:idProject'
         }
     },
     POSTULATION_URL: {
         MAIN: '/postulations',
         OPERATIONS: {
-            LIST: '/',
-            SAVE: '/save',
+            LIST: '/', //done
+            SAVE: '/save', //done
             GET_ONE: '/:idPostulation'
         }
     },
     CAREER_URL: {
         MAIN: '/careers',
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idCareer'
         }
@@ -54,7 +54,7 @@ const endpoints = {
     ROLE_URL: {
         MAIN: '/roles',
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idRole'
         }
@@ -62,7 +62,7 @@ const endpoints = {
     CYCLE_URL: {
         MAIN: '/cycles',
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idCycle'
         }
@@ -70,7 +70,7 @@ const endpoints = {
     COMPANY_URL: {
         MAIN: '/companies',
         OPERATIONS: {
-            LIST: '/',
+            LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idCompany'
         }
