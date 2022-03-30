@@ -1,5 +1,5 @@
 const server = {
-    PORT: 3000,
+    PORT: 30,
     NAME: "PMO BACKEND",
     CLIENTS: ["http://localhost:4200", "*"]
 }

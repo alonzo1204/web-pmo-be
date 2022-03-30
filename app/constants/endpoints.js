@@ -32,6 +32,7 @@ const endpoints = {
             LIST: '/', //done
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
+            SAVEEXCEL: '/saveExcel',//viendo
             GET_ONE: '/:idProject'
         }
     },

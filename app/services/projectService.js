@@ -84,6 +84,7 @@ exports.getFullList = function () {
 exports.save = function (project) {
     return new Promise(function (resolve, reject) {
         if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.cycle_id && project.project_process_state_id && project.company) {
+           
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',
             }, [project.code], function (error, result, fields) {
@@ -118,6 +119,62 @@ exports.save = function (project) {
                     })
                 }
                 if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
+
+exports.saveExcel = function (project) {
+    return new Promise(function (resolve, reject) {
+        if ((project.code && project.name && project.paper && project.devices && project.career_id && project.cycle_id && project.company)>=0) {
+            
+            mysqlConnection.query({
+                sql: 'SELECT id, code from project where code = ?',
+            }, [project.code], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for project'
+                    })
+                } else {
+                    mysqlConnection.query({
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `cycle_id`, `student_1_id`, `student_2_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                    }, [
+                        project.code, project.name, 
+                        project.description, project.general_objective, 
+                        project.specific_objetive_1, project.specific_objetive_2, 
+                        project.specific_objetive_3, project.specific_objetive_4, 
+                        project.paper, project.devices, 
+                        project.url_file, project.url_sharepoint, 
+                        project.career_id, project.cycle_id, 
+                        project.student_1_id, project.student_2_id, 
+                        project.product_owner_id, project.portfolio_manager_id, 
+                        project.co_autor_id, project.project_process_state_id, project.company], function (error, result, fields) {
+                            
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
+                }
+                if (error) {
+                    
                     reject({
                         codeMessage: error.code ? error.code : 'ER_',
                         message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'

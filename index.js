@@ -4,7 +4,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var expressSession = require('express-session');
-const localPassport = require('./app/middlewares/passport/local-strategy');
+var localPassport = require('./app/middlewares/passport/local-strategy');
 var morgan = require('morgan')
 
 //MySql Database Connection
