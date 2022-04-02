@@ -4,19 +4,19 @@ exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql:
-                `SELECT 
-                    u.id, 
-                    u.code,
-                    u.firstname,
-                    u.lastname,
-                    u.active,
-                    u.weighted_average,
-
-                    role.id as 'role.id',
-                    role.name as 'role.name'
-
-                    from user u
-                    left join user_role role on role.id = u.user_role_id`,
+                `select 
+                u.id,
+                u.code, 
+                u.firstname, 
+                u.lastname, 
+                u.active, 
+                u.weighted_average, 
+                r.id as 'role.id', 
+                r.name as 'role.name'
+                from user u, user_rol ur, role r 
+                where u.id = ur.user_id and
+                r.id = ur.role_id
+                group by u.id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);

@@ -3,7 +3,7 @@ const { mysqlConnection } = require('../connections/mysql');
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'SELECT id, name from user_role',
+            sql: 'SELECT id, name from role',
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);

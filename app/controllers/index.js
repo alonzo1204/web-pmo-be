@@ -1,7 +1,7 @@
 const ClientsController = require('./clientsController');
 const AuthController = require('./AuthController');
 const CareerController = require('./CareerController');
-const CycleController = require('./CycleController');
+const SemesterController = require('./SemesterController');
 const PostulationController = require('./PostulationController');
 const ProjectController = require('./ProjectController');
 const RoleController = require('./RoleController');
@@ -12,7 +12,7 @@ module.exports = {
     ClientsController,
     AuthController,
     CareerController,
-    CycleController,
+    SemesterController,
     PostulationController,
     ProjectController,
     RoleController,

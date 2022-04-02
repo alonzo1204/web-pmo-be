@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 //Import Controller
-var { CycleController } = require('../controllers');
+var { SemesterController } = require('../controllers');
 
 //Import Endpoints Contants
 var { endpoints } = require('../constants');
 
-const CYCLE_URL = endpoints.CYCLE_URL
+const SEMESTER_URL = endpoints.SEMESTER_URL
 
 //GET FULL LIST
-router.get(CYCLE_URL.OPERATIONS.LIST, CycleController.getFullList);
+router.get(SEMESTER_URL.OPERATIONS.LIST, SemesterController.getFullList);
 
 module.exports = router;

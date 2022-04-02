@@ -1,7 +1,7 @@
 var ClientsRoute = require('./clientsRoute');
 var AuthRoutes = require('./authRoutes');
 var CareerRoutes = require('./CareerRoutes');
-var CycleRoutes = require('./CycleRoutes');
+var SemesterRoutes = require('./SemesterRoutes');
 var PostulationRoutes = require('./PostulationRoutes');
 var ProjectRoutes = require('./ProjectRoutes');
 var RoleRoutes = require('./RoleRoutes');
@@ -12,7 +12,7 @@ module.exports = {
     ClientsRoute,
     AuthRoutes,
     CareerRoutes,
-    CycleRoutes,
+    SemesterRoutes,
     PostulationRoutes,
     ProjectRoutes,
     RoleRoutes,

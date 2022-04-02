@@ -1,7 +1,7 @@
-const { CycleService } = require('../services');
+const { SemesterService } = require('../services');
 
 exports.getFullList = function (req, res) {
-    CycleService.getFullList().then(function (result) {
+    SemesterService.getFullList().then(function (result) {
         if (result) {
             return res.status(200).send({
                 data: result
