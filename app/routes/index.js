@@ -7,6 +7,7 @@ var ProjectRoutes = require('./ProjectRoutes');
 var RoleRoutes = require('./RoleRoutes');
 var UserRoutes = require('./UserRoutes');
 var CompanyRoutes = require('./CompanyRoutes');
+var GroupRoutes = require('./groupRoutes')
 
 module.exports = {
     ClientsRoute,
@@ -17,5 +18,6 @@ module.exports = {
     ProjectRoutes,
     RoleRoutes,
     UserRoutes,
-    CompanyRoutes
+    CompanyRoutes,
+    GroupRoutes
 }

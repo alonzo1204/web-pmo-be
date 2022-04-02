@@ -7,6 +7,7 @@ const ProjectService = require('./projectService');
 const RoleService = require('./roleService');
 const UserService = require('./userService');
 const CompanyService = require('./companyService');
+const groupService = require('./groupService')
 
 module.exports = {
     ClientsService,
@@ -17,5 +18,6 @@ module.exports = {
     ProjectService,
     RoleService,
     UserService,
-    CompanyService
+    CompanyService,
+    groupService
 }

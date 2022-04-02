@@ -7,6 +7,7 @@ const ProjectController = require('./ProjectController');
 const RoleController = require('./RoleController');
 const UserController = require('./UserController');
 const CompanyController = require('./CompanyController');
+const groupController = require('./groupController')
 
 module.exports = {
     ClientsController,
@@ -17,5 +18,6 @@ module.exports = {
     ProjectController,
     RoleController,
     UserController,
-    CompanyController
+    CompanyController,
+    groupController
 }

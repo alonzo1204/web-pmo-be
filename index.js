@@ -33,7 +33,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 //ROUTES
-var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes } = require('./app/routes');
+var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes } = require('./app/routes');
 const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION;
 
 //MySQL Database Connection
@@ -57,3 +57,4 @@ app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, ProjectRoutes);
 app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, RoleRoutes);
 app.use(APP_ROUTE + endpoints.USER_URL.MAIN, UserRoutes);
 app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, CompanyRoutes);
+app.use(APP_ROUTE + endpoints.GROUP_URL.MAIN, GroupRoutes);

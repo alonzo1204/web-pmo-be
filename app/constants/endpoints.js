@@ -52,6 +52,14 @@ const endpoints = {
             GET_ONE: '/:idCareer'
         }
     },
+    GROUP_URL: {
+        MAIN: '/group',
+        OPERATIONS: {
+            LIST: '/', //done
+            SAVE: '/save',
+            GET_ONE: '/:idgroup'
+        }
+    },
     ROLE_URL: {
         MAIN: '/roles',
         OPERATIONS: {
