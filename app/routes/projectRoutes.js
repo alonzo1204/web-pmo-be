@@ -23,7 +23,6 @@ const PROJECT_URL = endpoints.PROJECT_URL
  *         paper: 1
  *         devices: 1
  *         career_id: 3
- *         semester_id: 2
  *         project_process_state_id: 1
  *         company: 1
  *         group_id: 1
@@ -64,7 +63,6 @@ router.get(PROJECT_URL.OPERATIONS.LIST, ProjectController.getFullList);
  *            - paper
  *            - devices
  *            - career_id
- *            - semester_id
  *            - project_process_state_id
  *            - company
  *            - group_id
@@ -90,9 +88,6 @@ router.get(PROJECT_URL.OPERATIONS.LIST, ProjectController.getFullList);
  *            career_id:
  *              type: integer
  *              example: 3
- *            semester_id:
- *              type: integer
- *              example: 2
  *            project_process_state_id:
  *              type: integer
  *              example: 1
