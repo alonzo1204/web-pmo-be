@@ -189,3 +189,100 @@ exports.saveExcel = function (project) {
         }
     })
 }
+
+exports.getProyectByStatus = function (idProjectProcess) {
+    var project_process_state_id = idProjectProcess.params.idState;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'SELECT * FROM project p WHERE p.project_process_state_id = ?',
+        }, [project_process_state_id], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+exports.Rechazar = function (project) {
+    var code = project.params.idProject;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE project p SET p.project_process_state_id = 3 WHERE p.code = ?',
+        }, [code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+exports.Aprobar = function (project) {
+    var code = project.params.idProject;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE project p SET p.project_process_state_id = 2 WHERE p.code = ?',
+        }, [code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+exports.AprobarComentarios = function (project, comentarios) {
+    console.log(comentarios)
+    var code = project.params.idProject;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comentarios = ? WHERE p.code = ?',
+        }, [comentarios.comentarios,code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+exports.updateState = function (ids) {
+    var code = ids.params.idProject;
+    var project_process_state_id = ids.params.idState;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE project p SET p.project_process_state_id = ? WHERE p.code = ?',
+        }, [project_process_state_id,code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}

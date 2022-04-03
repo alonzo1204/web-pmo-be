@@ -19,3 +19,23 @@ exports.getFullList = function (req, res) {
         }
     })
 }
+
+exports.darBaja = function (req, res) {
+
+    UserService.Baja(req).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result,
+                message: 'Project with code ' + req.params.idUser + ' state updated succesfully',
+                idStatus: req.params.idState
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}

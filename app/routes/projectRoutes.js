@@ -15,6 +15,21 @@ const PROJECT_URL = endpoints.PROJECT_URL
 //GET FULL LIST
 router.get(PROJECT_URL.OPERATIONS.LIST, ProjectController.getFullList);
 
+//GET PROJECT BY STATUS
+router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus);
+
+//POST DENYING
+router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);
+
+//POST ACCEPTING
+router.post(PROJECT_URL.OPERATIONS.ACCEPT, ProjectController.AprobarState);
+
+//POST ACCEPTING
+router.post(PROJECT_URL.OPERATIONS.ACCETEDWCOMS, ProjectController.AprobarcComsState);
+
+//POST UPDATE PROJECT STATE
+router.post(PROJECT_URL.OPERATIONS.UPDATE_STATE, ProjectController.actualizarState);
+
 //POST SAVE
 router.post(PROJECT_URL.OPERATIONS.SAVE, ProjectController.save);
 

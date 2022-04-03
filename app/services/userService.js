@@ -30,3 +30,22 @@ exports.getFullList = function () {
         })
     })
 }
+
+exports.Baja = function (usuario) {
+    var code = usuario.params.idUser;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE user u SET u.active = 0 WHERE u.code = ?',
+        }, [code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}

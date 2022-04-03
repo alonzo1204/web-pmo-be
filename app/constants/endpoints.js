@@ -23,6 +23,7 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/',//done
             SAVE: '/save',
+            DOWN: '/down/?idUser=:idUser',//done
             GET_ONE: '/:idUser'
         }
     },
@@ -32,7 +33,12 @@ const endpoints = {
             LIST: '/', //done
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
-            SAVEEXCEL: '/saveExcel',//viendo
+            SAVEEXCEL: '/saveExcel',//done
+            GET_STATUS: '/?idState=:idState',//done
+            DENIED: '/denegar/?idProject=:idProject',//working
+            ACCEPT: '/aceptar/?idProject=:idProject',//working
+            ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//working
+            UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
             GET_ONE: '/:idProject'
         }
     },
