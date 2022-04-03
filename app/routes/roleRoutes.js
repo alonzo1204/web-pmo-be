@@ -9,7 +9,21 @@ var { endpoints } = require('../constants');
 
 const ROLE_URL = endpoints.ROLE_URL
 
-//GET FULL LIST
+
+
+/**
+ * @swagger
+ * /roles:
+ *   get:
+ *     summary: Obtener todos los roles
+ *     tags: [Rol]
+ *     responses:
+ *       200:
+ *         description: Los datos de los roles
+ *         contens:
+ *           application/json:
+ */
+
 router.get(ROLE_URL.OPERATIONS.LIST, RoleController.getFullList);
 
 module.exports = router;

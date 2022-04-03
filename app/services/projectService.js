@@ -97,7 +97,7 @@ exports.save = function (project) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
                         project.code, project.name,
                         project.description, project.general_objective,
@@ -107,18 +107,19 @@ exports.save = function (project) {
                         project.url_file, project.url_sharepoint,
                         project.career_id, project.semester_id,
                         project.group_id,
-                        project.product_owner_id, project.portfolio_manager_id,
-                        project.co_autor_id, project.project_process_state_id, project.company], function (error, result, fields) {
-                            if (result) {
-                                resolve(result);
-                            }
-                            if (error) {
-                                reject({
-                                    codeMessage: error.code ? error.code : 'ER_',
-                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                })
-                            }
-                        })
+                        project.portfolio_manager_id,
+                        project.co_autor_id, project.project_process_state_id, project.company
+                    ], function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
                 }
                 if (error) {
                     reject({

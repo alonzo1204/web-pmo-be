@@ -6,7 +6,7 @@ exports.save = function (req, res) {
         if (result) {
             return res.status(200).send({
                 data: result,
-                message: 'group created successfully',
+                message: 'group' + result.insertId + ' created successfully',
                 idPosition: result.groupid
             })
         }

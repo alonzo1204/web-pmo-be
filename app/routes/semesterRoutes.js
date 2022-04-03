@@ -9,7 +9,17 @@ var { endpoints } = require('../constants');
 
 const SEMESTER_URL = endpoints.SEMESTER_URL
 
-//GET FULL LIST
-router.get(SEMESTER_URL.OPERATIONS.LIST, SemesterController.getFullList);
+/**
+ * @swagger
+ * /semester:
+ *   get:
+ *     summary: Obtiene una lista de los semestres
+ *     tags: [Semestre]
+ *     responses:
+ *       200:
+ *         description: Los datos de los semestres
+ *         contens:
+ *           application/json:
+ */router.get(SEMESTER_URL.OPERATIONS.LIST, SemesterController.getFullList);
 
 module.exports = router;
