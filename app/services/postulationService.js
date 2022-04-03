@@ -118,7 +118,7 @@ exports.save = function (postulation) {
                 if (result && result.length > 0) {
                     reject({
                         codeMessage: 'STUDENT_IN_POSTULATION',
-                        message: `The group with id ${postulation.group.id} are already in a postulation`
+                        message: `The group with id ${postulation.group_id} are already in a postulation`
                     })
                 } else {
                     mysqlConnection.query({
