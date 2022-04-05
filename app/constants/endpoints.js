@@ -19,7 +19,7 @@ const endpoints = {
         }
     },
     USER_URL: {
-        MAIN: '/users', 
+        MAIN: '/users',
         OPERATIONS: {
             LIST: '/',//done
             SAVE: '/save',
@@ -58,6 +58,14 @@ const endpoints = {
             GET_ONE: '/:idCareer'
         }
     },
+    GROUP_URL: {
+        MAIN: '/group',
+        OPERATIONS: {
+            LIST: '/', //done
+            SAVE: '/save',
+            GET_ONE: '/:idgroup'
+        }
+    },
     ROLE_URL: {
         MAIN: '/roles',
         OPERATIONS: {
@@ -66,12 +74,12 @@ const endpoints = {
             GET_ONE: '/:idRole'
         }
     },
-    CYCLE_URL: {
-        MAIN: '/cycles',
+    SEMESTER_URL: {
+        MAIN: '/semester',
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save',
-            GET_ONE: '/:idCycle'
+            GET_ONE: '/:idSemester'
         }
     },
     COMPANY_URL: {

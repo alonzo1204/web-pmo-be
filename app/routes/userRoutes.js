@@ -9,7 +9,18 @@ var { endpoints } = require('../constants');
 
 const USER_URL = endpoints.USER_URL
 
-//GET FULL LIST
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Obtener todos los usuarios
+ *     tags: [Usuarios]
+ *     responses:
+ *       200:
+ *         description: Los datos de los usuarios
+ *         contens:
+ *           application/json:
+ */
 router.get(USER_URL.OPERATIONS.LIST, UserController.getFullList);
 
 //POST DAR DE BAJA

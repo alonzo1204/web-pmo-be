@@ -23,7 +23,7 @@ exports.getUserByCode = function (code) {
 
 exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
-        if (user.code && user.password && user.firstname && user.lastname && user.role && user.career) {
+        if (user.code && user.password && user.firstname && user.lastname && user.career) {
 
             mysqlConnection.query({
                 sql: 'SELECT * from user where code = ?',
@@ -35,8 +35,8 @@ exports.registerUser = function (user) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO user (code, password, firstname, lastname, role, career) VALUES (?,?,?,?,?,?)',
-                    }, [user.code, createHash(user.password), user.firstname, user.lastname, user.role, user.career], function (error, result, fields) {
+                        sql: 'INSERT INTO user (code, password, firstname, lastnamew, career) VALUES (?,?,?,?,?,?)',
+                    }, [user.code, createHash(user.password), user.firstname, user.lastname, user.career], function (error, result, fields) {
                         if (result) {
                             resolve(result);
                         }
