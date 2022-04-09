@@ -1,13 +1,18 @@
 const nodemailer = require("nodemailer");
 
+const mail = {
+    user: "correo@correo.com",
+    pass: "12345"
+
+}
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
-        user: "juegaconshiroykuro@gmail.com", //usuario
-        pass: "fvovlshlfgahvcge", // contraseña
+        user: mail.user, //usuario
+        pass: mail.pass, // contraseña
     },
     tls: {
         rejectUnauthorized: false
@@ -19,8 +24,8 @@ const transporter = nodemailer.createTransport({
 const sendMail = async (password, code) => {
     try {
         await transporter.sendMail({
-            from: '"Provisional Password" <foo@example.com>', // sender address
-            to: `vitaljorge2a@gmail.com`, // list of receivers
+            from: `"Provisional Password" <${mail.user}>`, // sender address
+            to: `${code}@upc.edu.pe`, // list of receivers
             subject: "New Password", // Subject line
             html: `
         <b>Su nueva contraseña es: </b>
