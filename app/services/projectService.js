@@ -290,39 +290,40 @@ exports.updateState = function (ids) {
 exports.updateProject = function (project) {
     return new Promise(function (resolve, reject) {
         if (project.code) {
-            mysqlConnection.query({
-                sql: 'SELECT id, code from project where code = ?',
-            }, [project.code], function (error, result, fields) {
-                if (result && result.length == 0) {
-                    reject({
-                        codeMessage: 'INVALID CODE',
-                        message: 'Send a valid code for project'
-                    })
-                } else {
-                    const sqlquery = setQuery(project.column, project.code, project.value)
-                    mysqlConnection.query({
-                        sql: sqlquery
-                    }, [project.value], function (error, result, fields) {
-                        if (result) {
-                            resolve(result);
-                        }
-                        if (error) {
+            const codigos = project.code
+            codigos.map((cod) => {
+                mysqlConnection.query({
+                    sql: `SELECT id, code from project where code = '${cod}'`,
+                }, function (error, result, fields) {
+                    if (result && result.length == 0) {
+                        reject({
+                            codeMessage: 'INVALID CODE',
+                            message: 'Send a valid code for project' + cod
+                        })
+                    } else {
+                        const sqlquery = setQuery(project.column, cod, project.value)
+                        mysqlConnection.query({
+                            sql: sqlquery
+                        }, function (error, result, fields) {
+                            if (error) {
 
-                            reject({
-                                codeMessage: error.code ? error.code : 'ER_',
-                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                            })
-                        }
-                    })
-                }
-                if (error) {
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                        })
+                    }
+                    if (error) {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    }
+                })
 
-                    reject({
-                        codeMessage: error.code ? error.code : 'ER_',
-                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                    })
-                }
-            })
+            }).then(resolve("Completo"))
+
         } else {
             reject({
                 codeMessage: 'MISSING_INFORMATION',
