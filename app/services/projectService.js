@@ -1,4 +1,5 @@
 const { mysqlConnection } = require('../connections/mysql');
+const { setQuery } = require('../constants');
 
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
@@ -252,7 +253,7 @@ exports.AprobarComentarios = function (project, comentarios) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comentarios = ? WHERE p.code = ?',
-        }, [comentarios.comentarios,code], function (error, result, fields) {
+        }, [comentarios.comentarios, code], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
@@ -272,7 +273,7 @@ exports.updateState = function (ids) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'UPDATE project p SET p.project_process_state_id = ? WHERE p.code = ?',
-        }, [project_process_state_id,code], function (error, result, fields) {
+        }, [project_process_state_id, code], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
@@ -283,5 +284,50 @@ exports.updateState = function (ids) {
                 })
             }
         })
+    })
+}
+
+exports.updateProject = function (project) {
+    return new Promise(function (resolve, reject) {
+        if (project.code) {
+            mysqlConnection.query({
+                sql: 'SELECT id, code from project where code = ?',
+            }, [project.code], function (error, result, fields) {
+                if (result && result.length == 0) {
+                    reject({
+                        codeMessage: 'INVALID CODE',
+                        message: 'Send a valid code for project'
+                    })
+                } else {
+                    const sqlquery = setQuery(project.column, project.code, project.value)
+                    mysqlConnection.query({
+                        sql: sqlquery
+                    }, [project.value], function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
+                }
+                if (error) {
+
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
     })
 }

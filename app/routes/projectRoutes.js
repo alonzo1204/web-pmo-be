@@ -131,4 +131,6 @@ router.post(PROJECT_URL.OPERATIONS.SAVE, ProjectController.save);
 
 router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectController.saveExcel);
 
+router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
+
 module.exports = router;

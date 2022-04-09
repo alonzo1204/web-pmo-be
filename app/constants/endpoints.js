@@ -36,6 +36,7 @@ const endpoints = {
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVEEXCEL: '/saveExcel',//done
+            UPDATE: '/update',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//working
             ACCEPT: '/aceptar/?idProject=:idProject',//working

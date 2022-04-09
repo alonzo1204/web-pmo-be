@@ -2,6 +2,7 @@ const { server } = require('./server');
 const { database } = require('./database');
 const { endpoints } = require('./endpoints');
 const { sendMail } = require('./mailer');
+const { setQuery } = require('./columnVerifier')
 const { specs } = require('./swagger');
 
 module.exports = {
@@ -9,5 +10,6 @@ module.exports = {
     database,
     endpoints,
     specs,
-    sendMail
+    sendMail,
+    setQuery
 }
