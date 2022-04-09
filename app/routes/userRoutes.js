@@ -26,4 +26,6 @@ router.get(USER_URL.OPERATIONS.LIST, UserController.getFullList);
 //POST DAR DE BAJA
 router.post(USER_URL.OPERATIONS.DOWN, UserController.darBaja);
 
+
+
 module.exports = router;

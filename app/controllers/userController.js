@@ -1,4 +1,4 @@
-const { UserService } = require('../services');
+const { UserService, AuthService } = require('../services');
 var dot = require('dot-object');
 
 exports.getFullList = function (req, res) {
@@ -39,3 +39,4 @@ exports.darBaja = function (req, res) {
         }
     })
 }
+

@@ -16,5 +16,6 @@ router.post(AUTH_URL.OPERATIONS.LOGIN, AuthController.login);
 //REGISTER
 router.post(AUTH_URL.OPERATIONS.REGISTER, AuthController.register);
 
+router.get(AUTH_URL.OPERATIONS.RECOVER_PASSWORD, AuthController.recoverPass);
 
 module.exports = router;

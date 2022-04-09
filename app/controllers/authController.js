@@ -1,5 +1,8 @@
 const { AuthService } = require('../services');
+const { sendMail } = require('../constants')
+
 const passport = require('passport');
+
 
 exports.login = function (req, res, next) {
     passport.authenticate('local', function (err, user) {
@@ -31,3 +34,22 @@ exports.register = function (req, res) {
         }
     })
 }
+
+exports.recoverPass = function (req, res) {
+    AuthService.recPass(req.body).then(function (result) {
+        if (result) {
+            sendMail(result, req.body.code).then(() => (res.status(200).send({
+                message: "Correo enviado con exito"
+            })))
+
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}
+

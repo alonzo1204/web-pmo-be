@@ -69,3 +69,52 @@ exports.registerUser = function (user) {
 var createHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 }
+
+exports.recPass = function (code) {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `SELECT code from user where code = ?`,
+        }, [code.code], function (error, result, fields) {
+            if (result) {
+                const code = result[0].code
+                const pass = makepass();
+                const cryptedpass = createHash(pass);
+                mysqlConnection.query({
+                    sql: 'UPDATE user u SET u.password = ? WHERE u.code = ?',
+                }, [cryptedpass, code], function (error, result, fields) {
+                    if (result) {
+                        resolve(pass)
+                    }
+                    if (error) {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    }
+                })
+            } else {
+                resolve("Error");
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+
+
+}
+
+var makepass = function () {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < 10; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
+

@@ -15,7 +15,9 @@ const endpoints = {
             LOGIN: '/login',
             REGISTER: '/register',
             REGISTER_BATCH: '/register/batch',
-            LOGOUT: '/logout'
+            LOGOUT: '/logout',
+            RECOVER_PASSWORD: '/recover'
+
         }
     },
     USER_URL: {
@@ -24,7 +26,7 @@ const endpoints = {
             LIST: '/',//done
             SAVE: '/save',
             DOWN: '/down/?idUser=:idUser',//done
-            GET_ONE: '/:idUser'
+            GET_ONE: '/:idUser',
         }
     },
     PROJECT_URL: {
