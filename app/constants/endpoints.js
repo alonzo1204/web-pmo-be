@@ -66,7 +66,8 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save',
-            GET_ONE: '/:idgroup'
+            GET_ONE: '/:idgroup',
+            GET_GROUP: '/mygroup'
         }
     },
     ROLE_URL: {
