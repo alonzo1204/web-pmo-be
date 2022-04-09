@@ -93,6 +93,12 @@ const endpoints = {
             SAVE: '/save',
             GET_ONE: '/:idCompany'
         }
+    },
+    PORTFOLIO_URL: {
+        MAIN: '/portfolios',
+        OPERATIONS: {
+            LIST: '/'
+        }
     }
 }
 
