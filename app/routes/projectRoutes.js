@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var upload = require('../middlewares/upload/uploadExcel');
+var uploadArch = require('../middlewares/upload/uploadArch');
 global.__basedir = __dirname + "/..";
 
 //Import Controller
@@ -181,5 +182,8 @@ router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectCont
  *         description: Muestra los posibles errores
  */
 router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
+//Post save Archivo
+router.post(PROJECT_URL.OPERATIONS.SAVEARCH, uploadArch.single("file"), ProjectController.saveArch);
+
 
 module.exports = router;

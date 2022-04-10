@@ -136,8 +136,8 @@ exports.save = function (project) {
 
 exports.saveExcel = function (project) {
     return new Promise(function (resolve, reject) {
-        if ((project.code && project.name && project.paper && project.devices && project.career_id && project.company) >= 0) {
-
+        if ((project.code && project.name && project.paper && project.devices && project.career_id && project.semester_id && project.company_id)>=0) {
+            
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',
             }, [project.code], function (error, result, fields) {
@@ -148,30 +148,30 @@ exports.saveExcel = function (project) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`,  `group_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, `comments`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
-                        project.code, project.name,
-                        project.description, project.general_objective,
-                        project.specific_objetive_1, project.specific_objetive_2,
-                        project.specific_objetive_3, project.specific_objetive_4,
-                        project.paper, project.devices,
-                        project.url_file, project.url_sharepoint,
-                        project.career_id,
-                        project.group_id,
-                        project.product_owner_id, project.portfolio_manager_id,
-                        project.co_autor_id, project.project_process_state_id, project.company], function (error, result, fields) {
-
-                            if (result) {
-                                resolve(result);
-                            }
-                            if (error) {
-
-                                reject({
-                                    codeMessage: error.code ? error.code : 'ER_',
-                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                })
-                            }
-                        })
+                        project.code, project.name, 
+                        project.description, project.general_objective, 
+                        project.specific_objetive_1, project.specific_objetive_2, 
+                        project.specific_objetive_3, project.specific_objetive_4, 
+                        project.paper, project.devices, 
+                        project.url_file, project.url_sharepoint, 
+                        project.career_id, project.semester_id, 
+                        project.group_id, project.portfolio_id, 
+                        project.product_owner_id, project.portfolio_manager_id, 
+                        project.co_autor_id, project.project_process_state_id, project.company_id, project.comments], function (error, result, fields) {
+                            
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
                 }
                 if (error) {
 
@@ -252,8 +252,26 @@ exports.AprobarComentarios = function (project, comentarios) {
     var code = project.params.idProject;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comentarios = ? WHERE p.code = ?',
-        }, [comentarios.comentarios, code], function (error, result, fields) {
+            sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comments = ? WHERE p.code = ?',
+        }, [comentarios.comentarios,code], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+exports.saveArchivo = function (project,path){
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: 'UPDATE project p SET p.url_file = ?, p.url_sharepoint=? WHERE p.code = ?',
+        }, [project.file.filename,path,project.params.idProject], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }

@@ -16,6 +16,8 @@ router.post(AUTH_URL.OPERATIONS.LOGIN, AuthController.login);
 //REGISTER
 router.post(AUTH_URL.OPERATIONS.REGISTER, AuthController.register);
 
+//CHANGE PASSWORD
+router.post(AUTH_URL.OPERATIONS.CHANGEPASSWORD, AuthController.changePassword);
 
 /**
  * @swagger

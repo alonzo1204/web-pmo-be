@@ -16,8 +16,8 @@ const endpoints = {
             REGISTER: '/register',
             REGISTER_BATCH: '/register/batch',
             LOGOUT: '/logout',
-            RECOVER_PASSWORD: '/recover'
-
+            RECOVER_PASSWORD: '/recover',
+            CHANGEPASSWORD: '/cambioPassword'
         }
     },
     USER_URL: {
@@ -27,6 +27,9 @@ const endpoints = {
             SAVE: '/save',
             DOWN: '/down/?idUser=:idUser',//done
             GET_ONE: '/:idUser',
+            MASIVEREGISTER: '/registroMasivo',//working
+            MREGISTERBLOCK: '/registroMasivoB',//working
+            GET_ONE: '/:idUser'
         }
     },
     PROJECT_URL: {
@@ -38,10 +41,11 @@ const endpoints = {
             SAVEEXCEL: '/saveExcel',//done
             UPDATE: '/update',
             GET_STATUS: '/?idState=:idState',//done
-            DENIED: '/denegar/?idProject=:idProject',//working
-            ACCEPT: '/aceptar/?idProject=:idProject',//working
-            ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//working
-            UPDATE_STATE: '/?idProject=:idProject&idState=:idState',//done
+            DENIED: '/denegar/?idProject=:idProject',//done
+            ACCEPT: '/aceptar/?idProject=:idProject',//done
+            ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//done
+            SAVEARCH: '/saveArch/?idProject=:idProject',//working
+            UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
             GET_ONE: '/:idProject'
         }
     },
