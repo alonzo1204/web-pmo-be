@@ -72,7 +72,7 @@ exports.getgroup = function (code) {
                 } else {
                     reject({
                         codeMessage: 'ER_errcode',
-                        message: 'codigo erroneo'
+                        message: 'No perteneces a ningun grupo'
                     })
                 }
             })

@@ -4,16 +4,23 @@ const { mysqlConnection } = require('../connections/mysql');
 exports.getAll = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'SELECT * from portfolio',
+            sql: `SELECT 
+            po.id as 'Portfolio.id',
+            po.name as 'Portfolio.name',
+            se.id as 'Semester.id',
+            se.name as 'Semester.name',
+            ps.id as 'Portfolio_state.id',
+            ps.state as 'Portfolio_state.state',
+            (select count(*) from  project p where po.id = p.portfolio_id) as Cantidad
+           from
+            portfolio po, semester se, portfolio_state ps
+           where
+            po.semester_id = se.id and po.portfolio_state_id = ps.id 
+           group by po.id
+            `,
         }, function (error, result, fields) {
             if (result) {
-                const arr = result;
-                mysqlConnection.query({
-                    sql: 'SELECT Count(*) as Cantidad from portfolio',
-                }, function (error, result2, fields) {
-                    arr.push(result2[0])
-                    resolve(arr);
-                })
+                resolve(result)
             } else {
                 resolve(null);
             }
