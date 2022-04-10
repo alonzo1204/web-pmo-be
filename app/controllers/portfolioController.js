@@ -1,8 +1,10 @@
 const { portfolioService } = require('../services')
+var dot = require('dot-object');
 
 exports.getFullList = function (req, res) {
     portfolioService.getAll().then(function (result) {
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })

@@ -307,41 +307,44 @@ exports.updateState = function (ids) {
 
 exports.updateProject = function (project) {
     return new Promise(function (resolve, reject) {
-        if (project.code) {
-            const codigos = project.code
-            codigos.map((cod) => {
-                mysqlConnection.query({
-                    sql: `SELECT id, code from project where code = '${cod}'`,
-                }, function (error, result, fields) {
-                    if (result && result.length == 0) {
-                        reject({
-                            codeMessage: 'INVALID CODE',
-                            message: 'Send a valid code for project' + cod
-                        })
-                    } else {
-                        const sqlquery = setQuery(project.column, cod, project.value)
-                        mysqlConnection.query({
-                            sql: sqlquery
-                        }, function (error, result, fields) {
-                            if (error) {
-
-                                reject({
-                                    codeMessage: error.code ? error.code : 'ER_',
-                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                })
-                            }
-                        })
-                    }
-                    if (error) {
-                        reject({
-                            codeMessage: error.code ? error.code : 'ER_',
-                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                        })
-                    }
+        if (project.codes && project.column && project.value) {
+            const codigos = project.codes
+            const res = codigos.map((cod) => {
+                const prom = new Promise(function (resolve, reject) {
+                    mysqlConnection.query({
+                        sql: `SELECT id, code from project where code = '${cod}'`,
+                    }, function (error, result, fields) {
+                        if (result && result.length == 0) {
+                            resolve({
+                                codigo: cod,
+                                error: `El codigo ${cod} no existe en la base de datos`
+                            })
+                        } else {
+                            const sqlquery = setQuery(project.column, cod, project.value)
+                            mysqlConnection.query({
+                                sql: sqlquery
+                            }, function (error, result, fields) {
+                                if (error) {
+                                    if (error.sqlMessage == "Query was empty")
+                                        resolve({
+                                            codigo: cod,
+                                            error: `El valor ${project.value} no coincide con la columna ${project.column}`
+                                        })
+                                }
+                                else {
+                                    resolve({
+                                        codigo: cod,
+                                        message: `El projecto con el codigo ${cod} se alteroen la columna ${project.column} con el valor ${project.value}`
+                                    })
+                                }
+                            })
+                        }
+                    })
                 })
-
-            }).then(resolve("Completo"))
-
+                return prom
+            })
+            const Mess = Promise.all(res);
+            resolve(Mess)
         } else {
             reject({
                 codeMessage: 'MISSING_INFORMATION',
