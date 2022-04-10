@@ -1,4 +1,5 @@
 const { groupService } = require('../services');
+var dot = require('dot-object');
 
 exports.save = function (req, res) {
     groupService.save(req.body).then(function (result) {
@@ -24,8 +25,9 @@ exports.getgroup = function (req, res) {
     groupService.getgroup(req.body).then(function (result) {
 
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
-                data: result,
+                data: result
             })
         }
     }, function (error) {

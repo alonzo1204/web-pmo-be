@@ -306,7 +306,6 @@ exports.updateProject = function (project) {
                             sql: sqlquery
                         }, function (error, result, fields) {
                             if (error) {
-
                                 reject({
                                     codeMessage: error.code ? error.code : 'ER_',
                                     message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'

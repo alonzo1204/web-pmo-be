@@ -55,8 +55,15 @@ exports.getgroup = function (code) {
             }, function (error, result, fields) {
                 if (result[0]) {
                     mysqlConnection.query({
-                        sql: `select g.group_weighted_average, u1.firstname as nombre_1, u1.lastname as apellido_1, u1.code as codigo_1, u1.weighted_average as prom_1,
-                        u2.firstname as nombre_2, u2.lastname as apellido_2, u2.code as codigo_2, u2.weighted_average as prom_2
+                        sql: `select g.group_weighted_average,
+                         u1.firstname as 'alumno1.nombre',
+                         u1.lastname as 'alumno1.apellido',
+                         u1.code as 'alumno1.codigo',
+                         u1.weighted_average as 'alumno1.prom',
+                         u2.firstname as 'alumno2.nombre',
+                         u2.lastname as 'alumno2.apellido',
+                         u2.code as 'alumno2.codigo_2',
+                         u2.weighted_average as 'alumno2.prom_2'
                         from db_pmo_dev.group g, user u1, user u2 where g.student_1_id = u1.id and g.student_2_id = u2.id 
                         and u1.code = "${codigo}" or u2.code = "${codigo}" group by u2.code and u1.code`,
                     }, function (error, result, fields) {
