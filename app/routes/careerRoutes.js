@@ -20,6 +20,7 @@ const CAREER_URL = endpoints.CAREER_URL
  *         description: Los datos de las carreras
  *         contens:
  *           application/json:
- */router.get(CAREER_URL.OPERATIONS.LIST, CareerController.getFullList);
+ */
+router.get(CAREER_URL.OPERATIONS.LIST, CareerController.getFullList);
 
 module.exports = router;

@@ -41,7 +41,7 @@ const endpoints = {
             DENIED: '/denegar/?idProject=:idProject',//working
             ACCEPT: '/aceptar/?idProject=:idProject',//working
             ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//working
-            UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
+            UPDATE_STATE: '/?idProject=:idProject&idState=:idState',//done
             GET_ONE: '/:idProject'
         }
     },

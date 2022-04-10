@@ -28,21 +28,29 @@ const PROJECT_URL = endpoints.PROJECT_URL
  *         group_id: 1
  */
 
+/**
+ * @swagger
+ * components:
+ *     ProjectoUpdate:
+ *       example:
+ *         code: ["PRY20212001","PRY20212002","PRY20212003"]
+ *         name: "general_objective"
+ *         description: "Cambio de projecto"
+ */
 
-//GET PROJECT BY STATUS
-router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus);
+
+router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus); //Revisar
 
 //POST DENYING
-router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);
+router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);//Revisar
 
 //POST ACCEPTING
-router.post(PROJECT_URL.OPERATIONS.ACCEPT, ProjectController.AprobarState);
+router.post(PROJECT_URL.OPERATIONS.ACCEPT, ProjectController.AprobarState);//Revisar
 
 //POST ACCEPTING
-router.post(PROJECT_URL.OPERATIONS.ACCETEDWCOMS, ProjectController.AprobarcComsState);
+router.post(PROJECT_URL.OPERATIONS.ACCETEDWCOMS, ProjectController.AprobarcComsState);//Revisar
 
-//POST UPDATE PROJECT STATE
-router.post(PROJECT_URL.OPERATIONS.UPDATE_STATE, ProjectController.actualizarState);
+router.post(PROJECT_URL.OPERATIONS.UPDATE_STATE, ProjectController.actualizarState); //Revisar
 
 //POST SAVE
 /**
@@ -131,6 +139,47 @@ router.post(PROJECT_URL.OPERATIONS.SAVE, ProjectController.save);
 
 router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectController.saveExcel);
 
+/**
+ * @swagger
+ * path:
+ * /projects/update:
+ *   post:
+ *     summary: Actualiza de forma masiva projectos a partir de su codigo
+ *     tags: [Projectos]
+ *     parameters:
+ *      - in: body
+ *        name: projecto
+ *        description: parametros del projecto
+ *        schema:
+ *          type: object
+ *          required:
+ *            - code  
+ *            - name
+ *            - description
+ *          properties:
+ *            code:
+ *              type: array
+ *              example: ["PRY20212001","PRY20212002","PRY20212003"]
+ *            column:
+ *              type: string
+ *              example: "general_objective"
+ *            value:
+ *              type: string
+ *              example: "Cambio de projecto"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/ProjectoUpdate'
+ *     responses:
+ *       200:
+ *         description: group created successfully
+ *         contents:
+ *           application/json:
+ *       401:
+ *         description: Muestra los posibles errores
+ */
 router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
 
 module.exports = router;
