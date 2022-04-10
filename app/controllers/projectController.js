@@ -197,11 +197,16 @@ exports.actualizarState = function (req, res) {
 
 exports.updateProject = function (req, res) {
     ProjectService.updateProject(req.body).then(function (result) {
-
         if (result) {
+            const data = result.map(r => {
+                return {
+                    codigo: r.code,
+                    error: r.error,
+                    message: r.message
+                }
+            })
             return res.status(200).send({
-                data: result,
-                message: 'Project updated successfully',
+                data: result
             })
         }
     }, function (error) {
