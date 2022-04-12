@@ -35,6 +35,23 @@ exports.register = function (req, res) {
     })
 }
 
+exports.logout = function (req, res) {
+    AuthService.closeSession(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                message: 'La sesión fue cerrada con éxito'
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}
+
 exports.recoverPass = function (req, res) {
     AuthService.recPass(req.body).then(function (result) {
         if (result) {

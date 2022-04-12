@@ -5,10 +5,13 @@ var app = express();
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var expressSession = require('express-session');
-var localPassport = require('./app/middlewares/passport/local-strategy');
 var morgan = require('morgan')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
+
+//Auth middlewares
+require('./app/middlewares/passport/local-strategy');
+require('./app/middlewares/passport/jwt-strategy');
 
 //MySql Database Connection
 var { mysqlConnection } = require('./app/connections');
@@ -88,7 +91,7 @@ const specs2 = swaggerJSDoc(options);
 
 app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, ClientsRoute);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
-app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, CareerRoutes);
+app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
 app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, SemesterRoutes);
 app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, PostulationRoutes);
 app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, ProjectRoutes);

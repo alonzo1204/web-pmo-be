@@ -13,6 +13,9 @@ const AUTH_URL = endpoints.AUTH_URL
 //LOGIN
 router.post(AUTH_URL.OPERATIONS.LOGIN, AuthController.login);
 
+//LOGOUT
+router.post(AUTH_URL.OPERATIONS.LOGOUT, AuthController.logout);
+
 //REGISTER
 router.post(AUTH_URL.OPERATIONS.REGISTER, AuthController.register);
 

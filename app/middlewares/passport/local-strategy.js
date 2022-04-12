@@ -25,18 +25,24 @@ passport.use('local', new LocalStrategy({
     passwordField: 'password'
 },
     function (req, username, password, done) {
-        console.log({
-            username,
-            password
-        })
-        AuthService.getUserByCode(username).then((response) => {
+        AuthService.login(username).then((response) => {
             if (response) {
-                console.log(response)
-                if (!isValidPassword(response, password)) {
+                if (!isValidPassword(response.information, password)) {
                     console.log('Invalid Password');
                     return done({ message: 'Contraseña de usuario incorrecta' }, false);
                 }
-                done(null, response);
+                AuthService.createSession(response).then((payload) => {
+                    if (payload) {
+                        done(null, payload);
+                    } else {
+                        console.log('Cant create session');
+                        return done({ message: 'No se pudo crear la sesión' }, false);
+                    }
+                }).catch((e) => {
+                    if (e) {
+                        done(e, null);
+                    }
+                });
             } else {
                 console.log('User Not Found with username ' + username);
                 return done({ message: 'Código de usuario incorrecto' }, false);
