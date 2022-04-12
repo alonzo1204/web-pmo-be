@@ -1,4 +1,5 @@
 var express = require('express');
+const path = require('path');
 var cors = require('cors')
 var app = express();
 var bodyParser = require('body-parser');
@@ -18,6 +19,9 @@ app.use(morgan())
 // Parse data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//Static Files
+app.use(express.static(path.join(__dirname, 'app/recursos/archivos')));
 
 // Security
 app.use(expressSession({ secret: 'temporal_key' }));
