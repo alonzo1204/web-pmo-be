@@ -1,8 +1,8 @@
 const nodemailer = require("nodemailer");
 
 const mail = {
-    user: "correo@correo.com",
-    pass: "12345"
+    user: "emgore.1410@gmail.com",
+    pass: "krewwlalbmixaost"
 
 }
 

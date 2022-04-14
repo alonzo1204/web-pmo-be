@@ -41,6 +41,10 @@ exports.logout = function (req, res) {
             return res.status(200).send({
                 message: 'La sesión fue cerrada con éxito'
             })
+        }else {
+            return res.status(400).send({
+                message: 'La sesión no existe'
+            })
         }
     }, function (error) {
         if (error) {
