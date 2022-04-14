@@ -13,12 +13,16 @@ passport.use(
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
             passReqToCallback: true
         },
-        async (req, token, done) => {
+        async (req, token, done) => { //TOKEN ES LA INFORMACION DENTRO DEL JWT
             const jwt = req.headers.authorization.split(' ')[1];
             try {
                 AuthService.checkValidToken(jwt).then((response) => {
                     if (response) {
-                        return done(null, token);
+                        //ENVIAR INFORMACION DE CONFIGURACION DEL SISTEMA
+                        let settings = {
+                            value: 'settings'
+                        }
+                        return done(null, { token, settings });
                     } else {
                         return done({ message: 'El token enviado no es válido' }, false);
                     }

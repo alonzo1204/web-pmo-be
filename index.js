@@ -89,15 +89,15 @@ const options = {
 
 const specs2 = swaggerJSDoc(options);
 
-app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, ClientsRoute);
+app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, passport.authenticate('jwt', { session: false }), ClientsRoute);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
 app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
-app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, SemesterRoutes);
-app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, PostulationRoutes);
-app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, ProjectRoutes);
-app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, RoleRoutes);
-app.use(APP_ROUTE + endpoints.USER_URL.MAIN, UserRoutes);
-app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, CompanyRoutes);
-app.use(APP_ROUTE + endpoints.GROUP_URL.MAIN, GroupRoutes);
-app.use(APP_ROUTE + endpoints.PORTFOLIO_URL.MAIN, portfolioRoutes);
+app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, passport.authenticate('jwt', { session: false }), SemesterRoutes);
+app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, passport.authenticate('jwt', { session: false }), PostulationRoutes);
+app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, passport.authenticate('jwt', { session: false }), ProjectRoutes);
+app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, passport.authenticate('jwt', { session: false }), RoleRoutes);
+app.use(APP_ROUTE + endpoints.USER_URL.MAIN, passport.authenticate('jwt', { session: false }), UserRoutes);
+app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, passport.authenticate('jwt', { session: false }), CompanyRoutes);
+app.use(APP_ROUTE + endpoints.GROUP_URL.MAIN, passport.authenticate('jwt', { session: false }), GroupRoutes);
+app.use(APP_ROUTE + endpoints.PORTFOLIO_URL.MAIN, passport.authenticate('jwt', { session: false }), portfolioRoutes);
 app.use(APP_ROUTE + "/api-docs", swaggerUI.serve, swaggerUI.setup(specs2))
