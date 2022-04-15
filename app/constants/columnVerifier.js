@@ -74,51 +74,51 @@ const setQuery = (word, code, value) => {
             WHERE
                 project.code = '${code}';` : '';
             break;
-        case "product_owner_code":
+        case "product_owner_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                product_owner_code = '${value}'
+                product_owner_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
-        case "portfolio_manage_code":
+        case "portfolio_manager_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                portfolio_manage_code = '${value}'
+                portfolio_manager_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
-        case "co_autor_code":
+        case "co_autor_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                co_autor_code = '${value}'
+                co_autor_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
-        case "group_code":
+        case "group_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                group_code = '${value}'
+                group_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
-        case "portfolio_code":
+        case "portfolio_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                portfolio_code = '${value}'
+                portfolio_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
-        case "semester_code":
+        case "portfolio_id":
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                semester_code = '${value}'
+                portfolio_id = '${value}'
             WHERE
                 project.code = '${code}';` : ''
             break;
