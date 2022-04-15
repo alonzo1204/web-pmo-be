@@ -38,7 +38,25 @@ const sendMail = async (password, code) => {
     }
 }
 
+const requestAccess = async (code) => {
+    try {
+        await transporter.sendMail({
+            from: `"Soporte Acceso" <${mail.user}>`, // sender address
+            to: `pmo@upc.edu.pe`, // Correo del PMO
+            subject: "Solicitud de Acceso", // Subject line
+            html: `
+        <b>Estimado encargado, el alumno con el siguiente codigo ha solictado acceso al aplicativo: </b>
+        <a>${code}</a>
+        `, // html body
+        }).then(() => { return true });
+    }
+    catch (err) {
+        return err
+    }
+}
+
 
 module.exports = {
-    sendMail
+    sendMail,
+    requestAccess
 }

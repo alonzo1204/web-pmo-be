@@ -14,6 +14,7 @@ const endpoints = {
         OPERATIONS: {
             LOGIN: '/login',
             REGISTER: '/register',
+            SENDSOL: '/getauth',
             REGISTER_BATCH: '/register/batch',
             LOGOUT: '/logout',
             RECOVER_PASSWORD: '/recover',

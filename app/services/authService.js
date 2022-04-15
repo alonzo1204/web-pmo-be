@@ -1,7 +1,7 @@
 const { mysqlConnection } = require('../connections/mysql');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { security } = require('../constants');
+const { security, requestAccess } = require('../constants');
 
 exports.getUserByCode = function (code) {
     return new Promise(function (resolve, reject) {
@@ -277,3 +277,25 @@ var makepass = function () {
     return result;
 }
 
+exports.solAccess = function (code) {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `SELECT code from user where code = ?`,
+        }, [code.code], function (error, result, fields) {
+            if (result == []) {
+                console.log(result)
+                reject(`El usuario ya existe, prueba recuperando tu contraseña`)
+            } else {
+                console.log("en else")
+                const mail = requestAccess(code.code);
+                mail ? resolve("Correo enviado de manera correcta") : reject("Ocurrio un error")
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
