@@ -287,8 +287,25 @@ exports.solAccess = function (code) {
                 reject(`El usuario ya existe, prueba recuperando tu contraseña`)
             } else {
                 console.log("en else")
-                const mail = requestAccess(code.code);
-                mail ? resolve("Correo enviado de manera correcta") : reject("Ocurrio un error")
+                mysqlConnection.query({
+                    sql: 'select* from user u, user_rol ur where ur.user_id = u.id and ur.role_id =5',
+                }, [], function (error, result, fields) {
+                    if (result) {
+                        const pmos = result
+                        pmos.map(pmo => {
+                            const data = pmo
+                            const mail = requestAccess(code.code, data.code, data.firstname, data.lastname);
+                        })
+                        resolve("Correo enviado correctamente")
+                    }
+                    if (error) {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    }
+                })
+
             }
             if (error) {
                 reject({
