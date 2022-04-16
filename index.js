@@ -94,7 +94,9 @@ app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
 app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
 app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, passport.authenticate('jwt', { session: false }), SemesterRoutes);
 app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, passport.authenticate('jwt', { session: false }), PostulationRoutes);
-app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, passport.authenticate('jwt', { session: false }), ProjectRoutes);
+app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN,
+    //  passport.authenticate('jwt', { session: false }),
+    ProjectRoutes);
 app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, passport.authenticate('jwt', { session: false }), RoleRoutes);
 app.use(APP_ROUTE + endpoints.USER_URL.MAIN, passport.authenticate('jwt', { session: false }), UserRoutes);
 app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, passport.authenticate('jwt', { session: false }), CompanyRoutes);

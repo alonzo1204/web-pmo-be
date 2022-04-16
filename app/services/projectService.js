@@ -1,5 +1,7 @@
 const { mysqlConnection } = require('../connections/mysql');
-const { setQuery } = require('../constants');
+const { setQuery, security } = require('../constants');
+
+const jwt = require('jsonwebtoken');
 
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
@@ -136,8 +138,8 @@ exports.save = function (project) {
 
 exports.saveExcel = function (project) {
     return new Promise(function (resolve, reject) {
-        if ((project.code && project.name && project.paper && project.devices && project.career_id && project.semester_id && project.company_id)>=0) {
-            
+        if ((project.code && project.name && project.paper && project.devices && project.career_id && project.semester_id && project.company_id) >= 0) {
+
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',
             }, [project.code], function (error, result, fields) {
@@ -150,28 +152,28 @@ exports.saveExcel = function (project) {
                     mysqlConnection.query({
                         sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, `comments`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
-                        project.code, project.name, 
-                        project.description, project.general_objective, 
-                        project.specific_objetive_1, project.specific_objetive_2, 
-                        project.specific_objetive_3, project.specific_objetive_4, 
-                        project.paper, project.devices, 
-                        project.url_file, project.url_sharepoint, 
-                        project.career_id, project.semester_id, 
-                        project.group_id, project.portfolio_id, 
-                        project.product_owner_id, project.portfolio_manager_id, 
+                        project.code, project.name,
+                        project.description, project.general_objective,
+                        project.specific_objetive_1, project.specific_objetive_2,
+                        project.specific_objetive_3, project.specific_objetive_4,
+                        project.paper, project.devices,
+                        project.url_file, project.url_sharepoint,
+                        project.career_id, project.semester_id,
+                        project.group_id, project.portfolio_id,
+                        project.product_owner_id, project.portfolio_manager_id,
                         project.co_autor_id, project.project_process_state_id, project.company_id, project.comments], function (error, result, fields) {
-                            
-                        if (result) {
-                            resolve(result);
-                        }
-                        if (error) {
-                            
-                            reject({
-                                codeMessage: error.code ? error.code : 'ER_',
-                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                            })
-                        }
-                    })
+
+                            if (result) {
+                                resolve(result);
+                            }
+                            if (error) {
+
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                        })
                 }
                 if (error) {
 
@@ -253,7 +255,7 @@ exports.AprobarComentarios = function (project, comentarios) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comments = ? WHERE p.code = ?',
-        }, [comentarios.comentarios,code], function (error, result, fields) {
+        }, [comentarios.comentarios, code], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
@@ -267,11 +269,11 @@ exports.AprobarComentarios = function (project, comentarios) {
     })
 }
 
-exports.saveArchivo = function (project,path){
+exports.saveArchivo = function (project, path) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'UPDATE project p SET p.url_file = ?, p.url_sharepoint=? WHERE p.code = ?',
-        }, [project.file.filename,path,project.params.idProject], function (error, result, fields) {
+        }, [project.file.filename, path, project.params.idProject], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
@@ -345,6 +347,59 @@ exports.updateProject = function (project) {
             })
             const Mess = Promise.all(res);
             resolve(Mess)
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
+
+exports.solUpdate = function (project, headers) {
+    return new Promise(function (resolve, reject) {
+        if (project.project_id && project.value && project.column) {
+            console.log(headers)
+            const user = headers.authorization.split("Bearer ")[1]
+            const duser = jwt.verify(user, security.JWT_SECRET).information.id
+            mysqlConnection.query({
+                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${duser} or g.student_2_id = ${duser}) group by p.id`,
+            }, function (error, result, fields) {
+                if (result && result.length == 0) {
+                    resolve({
+                        error: `El projecto no concuerda con el codigo de usuario`
+                    })
+                } else {
+                    const verificar = setQuery(project.column, result[0].code, project.value)
+                    if (verificar == '') {
+                        resolve({
+                            error: `El valor ${project.value} no coincide con la columna ${project.column}`
+                        })
+                    }
+                    else {
+                        mysqlConnection.query({
+                            sql: `Insert into edit_request 
+                            (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
+                            values 
+                            (${project.user_id},${project.project_id},"${project.column}", "${project.value}", null, CURRENT_TIMESTAMP)
+                            `
+                        }, function (error, result, fields) {
+                            if (error) {
+                                if (error.sqlMessage == "Query was empty")
+                                    resolve({
+                                        error: `El valor ${project.value} no coincide con la columna ${project.column}`
+                                    })
+                                else (resolve(error))
+                            }
+                            else {
+                                resolve({
+                                    message: `El projecto se altero en la columna ${project.column} con el valor ${project.value}`
+                                })
+                            }
+                        })
+                    }
+                }
+            })
         } else {
             reject({
                 codeMessage: 'MISSING_INFORMATION',

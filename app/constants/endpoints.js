@@ -37,6 +37,7 @@ const endpoints = {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
+            SEND_SOL: '/request_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVEEXCEL: '/saveExcel',//done

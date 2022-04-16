@@ -176,19 +176,19 @@ exports.AprobarcComsState = function (req, res) {
     })
 }
 
-exports.saveArch = function (req, res)  {
-    try{
-        if(req.file == undefined){
+exports.saveArch = function (req, res) {
+    try {
+        if (req.file == undefined) {
             return res.status(400).send("Please upload a file!");
         }
         let path =
-        __basedir + "/recursos/archivos/" + req.file.filename;
-        
-        ProjectService.saveArchivo(req,path).then(function (result) {
+            __basedir + "/recursos/archivos/" + req.file.filename;
+
+        ProjectService.saveArchivo(req, path).then(function (result) {
             if (result) {
                 return res.status(200).send({
                     data: result,
-                    message: "Se subio correctamente el archivo: " + req.file.originalname,   
+                    message: "Se subio correctamente el archivo: " + req.file.originalname,
                 })
             }
         }, function (error) {
@@ -199,14 +199,14 @@ exports.saveArch = function (req, res)  {
                 })
             }
         })
-    }catch(error){
-        
+    } catch (error) {
+
         console.log(error);
         return res.status(500).send({
-        message: "Could not upload the file: " + req.file.originalname,
+            message: "Could not upload the file: " + req.file.originalname,
         });
     }
-    
+
 }
 
 exports.actualizarState = function (req, res) {
@@ -252,3 +252,21 @@ exports.updateProject = function (req, res) {
     })
 }
 
+
+exports.sendUpdateReq = function (req, res) {
+    ProjectService.solUpdate(req.body, req.headers).then(function (result) {
+        if (result) {
+
+            return res.status(200).send({
+                error: result.error,
+                message: result.message
+            })
+        }
+        else {
+            return res.status(401).send({
+                error: result.error,
+                message: result.message
+            })
+        }
+    })
+}

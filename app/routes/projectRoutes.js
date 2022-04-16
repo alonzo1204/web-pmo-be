@@ -42,6 +42,9 @@ const PROJECT_URL = endpoints.PROJECT_URL
 
 router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus); //Revisar
 
+
+router.post(PROJECT_URL.OPERATIONS.SEND_SOL, ProjectController.sendUpdateReq);
+
 //POST DENYING
 router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);//Revisar
 
@@ -182,6 +185,8 @@ router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectCont
  *         description: Muestra los posibles errores
  */
 router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
+
+
 //Post save Archivo
 router.post(PROJECT_URL.OPERATIONS.SAVEARCH, uploadArch.single("file"), ProjectController.saveArch);
 
