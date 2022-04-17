@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var uploadImage = require('../middlewares/upload/uploadImage');
 //Import Controller
 var { CompanyController } = require('../controllers');
 
@@ -22,5 +23,8 @@ const COMPANY_URL = endpoints.COMPANY_URL
  *           application/json:
  */
 router.get(COMPANY_URL.OPERATIONS.LIST, CompanyController.getFullList);
+
+//SAVE COMPANY
+router.post(COMPANY_URL.OPERATIONS.SAVE, uploadImage.single("image"),  CompanyController.saveCompany)
 
 module.exports = router;

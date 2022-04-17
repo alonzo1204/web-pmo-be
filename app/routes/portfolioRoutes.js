@@ -23,4 +23,7 @@ const PORTFOLIO_URL = endpoints.PORTFOLIO_URL
  */
 router.get(PORTFOLIO_URL.OPERATIONS.LIST, portfolioController.getFullList);
 
+//POST SAVE PORTFOLIO
+router.post(PORTFOLIO_URL.OPERATIONS.SAVE, portfolioController.savePortfolio);
+
 module.exports = router;

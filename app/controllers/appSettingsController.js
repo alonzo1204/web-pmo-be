@@ -1,10 +1,8 @@
-const { portfolioService } = require('../services')
-var dot = require('dot-object');
+const { AppSettingsService } = require('../services');
 
-exports.getFullList = function (req, res) {
-    portfolioService.getAll().then(function (result) {
+exports.getConfig = function (req, res) {
+    AppSettingsService.getConfiguration(req.params.idConfig).then(function (result) {
         if (result) {
-            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
@@ -19,13 +17,11 @@ exports.getFullList = function (req, res) {
     })
 }
 
-exports.savePortfolio = function (req, res) {
-    portfolioService.savePortfolio(req.body).then(function (result) {
+exports.editConfig = function (req, res) {
+    AppSettingsService.editConfiguration(req).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result,
-                message: 'Portfolio with id ' + result.insertId + ' created successfully',
-                idPosition: result.insertId
+                data: result
             })
         }
     }, function (error) {

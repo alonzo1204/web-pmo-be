@@ -185,5 +185,13 @@ router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
 //Post save Archivo
 router.post(PROJECT_URL.OPERATIONS.SAVEARCH, uploadArch.single("file"), ProjectController.saveArch);
 
+//GET VARIOUS STATUS
+router.get(PROJECT_URL.OPERATIONS.GET_VARIOUS_STATUS, ProjectController.getProyectsbyStatusVarious);
+
+//GET MY EDIT REQUEST
+router.get(PROJECT_URL.OPERATIONS.GET_MY_EDIT, ProjectController.getMyEditRequest);
+
+//GET EDITS REQUESTS
+router.get(PROJECT_URL.OPERATIONS.GET_EDITS, ProjectController.getEditsRequest);
 
 module.exports = router;

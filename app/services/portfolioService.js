@@ -33,3 +33,28 @@ exports.getAll = function () {
         })
     })
 }
+
+exports.savePortfolio = function (portfolio) {
+    return new Promise(function (resolve, reject) {
+        if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
+            mysqlConnection.query({
+                sql: 'INSERT INTO portfolio (`name`, `semester_id`, `portfolio_state_id`) VALUES (?,?,?)',
+            }, [portfolio.name, portfolio.semester_id, portfolio.portfolio_state_id], function (error, result, fields) {
+                if (result) {
+                    resolve(result);
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
