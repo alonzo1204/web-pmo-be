@@ -20,9 +20,8 @@ exports.register = function (req, res) {
     AuthService.registerUser(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result,
-                message: 'User with id ' + result.insertId + ' created successfully',
-                idPosition: result.insertId
+                message: 'User with id ' + result + ' created successfully',
+                idPosition: result
             })
         }
     }, function (error) {
