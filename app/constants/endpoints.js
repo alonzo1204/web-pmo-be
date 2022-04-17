@@ -38,6 +38,7 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/', //done
             SEND_SOL: '/request_update',
+            HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVEEXCEL: '/saveExcel',//done

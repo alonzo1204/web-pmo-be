@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections/mysql');
-const { setQuery, security } = require('../constants');
+const { setQuery, security, setHandleQuery } = require('../constants');
 
 const jwt = require('jsonwebtoken');
 
@@ -381,7 +381,7 @@ exports.solUpdate = function (project, headers) {
                             sql: `Insert into edit_request 
                             (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
                             values 
-                            (${project.user_id},${project.project_id},"${project.column}", "${project.value}", null, CURRENT_TIMESTAMP)
+                            (${project.user_id},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
                             `
                         }, function (error, result, fields) {
                             if (error) {
@@ -404,6 +404,83 @@ exports.solUpdate = function (project, headers) {
             reject({
                 codeMessage: 'MISSING_INFORMATION',
                 message: 'Send the complete body for project'
+            })
+        }
+    })
+}
+
+
+exports.handleUpdate = function (req) {
+    return new Promise(function (resolve, reject) {
+        if (req.id) {
+            mysqlConnection.query({
+                sql: `
+                    select* from edit_request where id = ${req.id} and accepted = 0
+                    `,
+            }, function (error, result, fields) {
+                if (result && result.length == 1) {
+                    const column = result[0].attribute_to_change
+                    const code = result[0].project_id
+                    const value = result[0].value
+                    if (req.state == "Aprobado") {
+                        let query = setHandleQuery(column, code, value)
+                        if (query == '') {
+                            query = setHandleQuery(column, code, parseInt(value))
+                        }
+                        mysqlConnection.query({
+                            sql: query
+                        }, function (error, result, fields) {
+                            if (error) {
+                                if (error.sqlMessage == "Query was empty")
+                                    resolve({
+                                        error: `El valor ${value} no coincide con la columna ${column}`
+                                    })
+                            }
+                            else {
+                                mysqlConnection.query({
+                                    sql: `update edit_request set accepted = 1 where id = ${req.id}`
+                                }, function (error, result, fields) {
+                                    if (error) {
+                                        if (error.sqlMessage == "Query was empty")
+                                            resolve({
+                                                error: `El valor ${value} no coincide con la columna ${column}`
+                                            })
+                                    }
+                                    else {
+                                        resolve({
+                                            message: `El projecto con el codigo ${req.id} se alteroen la columna ${column} con el valor ${value}`
+                                        })
+                                    }
+                                })
+
+                            }
+                        })
+                    }
+                    if (req.state == "Desaprobado") {
+                        mysqlConnection.query({
+                            sql: `update edit_request set accepted = 2 where id = ${req.id}`
+                        }, function (error, result, fields) {
+                            if (result) {
+                                resolve({
+                                    message: `Se rechazo la solicitud de cambio del proyecto con codigo ${req.id} de manera correcta`
+                                })
+                            }
+                            else {
+                                resolve({
+                                    message: `Se rechazo la solicitud de cambio del proyecto con codigo ${req.id} de manera correcta`
+                                })
+                            }
+                        })
+                    }
+                } else {
+                    resolve({
+                        error: `El projecto con id ${req.id} ya fue atendido`
+                    })
+                }
+            })
+        } else {
+            resolve({
+                error: 'Send the complete body for project'
             })
         }
     })

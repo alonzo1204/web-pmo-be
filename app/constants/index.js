@@ -5,6 +5,7 @@ const { sendMail, requestAccess } = require('./mailer');
 const { setQuery } = require('./columnVerifier')
 const { specs } = require('./swagger');
 const { security } = require('./security');
+const { setHandleQuery } = require('./handleQuery')
 
 module.exports = {
     server,
@@ -14,5 +15,6 @@ module.exports = {
     security,
     sendMail,
     setQuery,
-    requestAccess
+    requestAccess,
+    setHandleQuery
 }

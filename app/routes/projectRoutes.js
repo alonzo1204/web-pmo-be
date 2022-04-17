@@ -45,6 +45,8 @@ router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbySta
 
 router.post(PROJECT_URL.OPERATIONS.SEND_SOL, ProjectController.sendUpdateReq);
 
+router.post(PROJECT_URL.OPERATIONS.HANDLE_UPDATE, ProjectController.handleUpdate);
+
 //POST DENYING
 router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);//Revisar
 

@@ -270,3 +270,20 @@ exports.sendUpdateReq = function (req, res) {
         }
     })
 }
+
+exports.handleUpdate = function (req, res) {
+    ProjectService.handleUpdate(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                error: result.error,
+                message: result.message
+            })
+        }
+        else {
+            return res.status(401).send({
+                error: result.error,
+                message: result.message
+            })
+        }
+    })
+}
