@@ -63,30 +63,55 @@ exports.login = function (code) {
 //cambios a role y sacar career y cambios al query
 exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
-        if (user.code && user.password && user.firstname && user.lastname && user.role_id) {
+        if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
             mysqlConnection.query({
-                sql: 'SELECT * from user where code = ?',
-            }, [user.code], function (error, result, fields) {
+                sql: `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 0`,
+            }, function (error, result, fields) {
                 if (result && result.length > 0) {
-                    reject({
-                        codeMessage: 'ERR_USER_ALREADY_EXISTS',
-                        message: 'El usuario con el código ' + user.code + ' ya existe en el sistema.'
-                    })
-                } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`) VALUES (?,?,?,?)',
-                    }, [user.code, createHash(user.password), user.firstname, user.lastname], function (error, result, fields) {
-                        if (result) {
+                        sql: 'SELECT * from user where code = ?',
+                    }, [user.code], function (error, result, fields) {
+                        if (result && result.length > 0) {
+                            reject({
+                                codeMessage: 'ERR_USER_ALREADY_EXISTS',
+                                message: 'El usuario con el código ' + user.code + ' ya existe en el sistema.'
+                            })
+                        } else {
                             mysqlConnection.query({
-                                sql: `select* from user where code = "${user.code}"`,
-                            }, function (error, result, fields) {
+                                sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`) VALUES (?,?,?,?)',
+                            }, [user.code, createHash(user.password), user.firstname, user.lastname], function (error, result, fields) {
                                 if (result) {
-                                    const uid = result[0].id
                                     mysqlConnection.query({
-                                        sql: 'INSERT INTO user_rol (`user_id`, `role_id`) VALUES (?,?)',
-                                    }, [uid, user.role_id], function (error, result, fields) {
+                                        sql: `select* from user where code = "${user.code}"`,
+                                    }, function (error, result, fields) {
                                         if (result) {
-                                            resolve(uid);
+                                            const uid = result[0].id
+                                            mysqlConnection.query({
+                                                sql: 'INSERT INTO user_rol (`user_id`, `role_id`) VALUES (?,?)',
+                                            }, [uid, user.role_id], function (error, result, fields) {
+                                                if (result) {
+                                                    mysqlConnection.query({
+                                                        sql: `Update registration_permissions set enabled = 1 where code = "${user.code}"`,
+                                                    }, function (error, result, fields) {
+                                                        if (result) {
+                                                            resolve(uid)
+                                                        }
+                                                        if (error) {
+                                                            reject({
+                                                                codeMessage: error.code ? error.code : 'ER_',
+                                                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                                            })
+                                                        }
+                                                    }
+                                                    )
+                                                }
+                                                if (error) {
+                                                    reject({
+                                                        codeMessage: error.code ? error.code : 'ER_',
+                                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                                    })
+                                                }
+                                            })
                                         }
                                         if (error) {
                                             reject({
@@ -111,23 +136,22 @@ exports.registerUser = function (user) {
                             })
                         }
                     })
-                }
-                if (error) {
+                } else {
                     reject({
-                        codeMessage: error.code ? error.code : 'ER_',
-                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+
+                        codeMessage: 'WRONG CODE',
+                        message: 'The code sended wasnt in the list'
                     })
                 }
             })
-
-
         } else {
             reject({
-                codeMessage: 'MISSING_INFORMATION',
-                message: 'Send the complete body for register'
+                codeMessage: 'ERR_USER_NO_ALLOWED',
+                message: 'El usuario con el código ' + user.code + ' No tiene permisos de para usar el aplicativo'
             })
         }
     })
+
 }
 
 exports.changePassword = function (user) {
