@@ -510,25 +510,35 @@ exports.mutipleUpdates = (arr) => {
                                 project.co_autor_id && project.project_process_state_id &&
                                 project.company_id && project.portfolio_id &&
                                 project.semester_id && project.group_id) {
-                                mysqlConnection.query({
-                                    sql: `update project set 
-                                    name = "${project.name}", description= "${project.description}", general_objective= "${project.general_objective}", specific_objetive_1= "${project.specific_objetive_1}", specific_objetive_2= "${project.specific_objetive_2}", specific_objetive_3= "${project.specific_objetive_3}", specific_objetive_4= "${project.specific_objetive_4}",
-                                     paper= ${project.paper}, devices= ${project.devices}, url_file= "${project.url_file}", url_sharepoint= "${project.url_sharepoint}" , career_id= ${project.career_id}, product_owner_id= ${project.product_owner_id}, portfolio_manager_id=${project.portfolio_manager_id}, co_autor_id= ${project.co_autor_id}, project_process_state_id=${project.project_process_state_id},
-                                     company_id= ${project.company_id}, group_id= ${project.group_id}, portfolio_id= ${project.portfolio_id}, semester_id= ${project.semester_id}, comments = "${project.comments}" where code = "${project.code}"`
-                                }, function (error, result, fields) {
-                                    if (error) {
-                                        resolve({
-                                            codigo: project.code,
-                                            error: error
-                                        })
-                                    }
-                                    else {
-                                        resolve({
-                                            codigo: project.code,
-                                            message: `El projecto con el codigo ${project.code} se cambio correctamente`
-                                        })
-                                    }
-                                })
+                                const validacion = validProject(project);
+                                if (validacion) {
+                                    mysqlConnection.query({
+                                        sql: `update project set 
+                                        name = "${project.name}", description= "${project.description}", general_objective= "${project.general_objective}", specific_objetive_1= "${project.specific_objetive_1}", specific_objetive_2= "${project.specific_objetive_2}", specific_objetive_3= "${project.specific_objetive_3}", specific_objetive_4= "${project.specific_objetive_4}",
+                                         paper= ${project.paper}, devices= ${project.devices}, url_file= "${project.url_file}", url_sharepoint= "${project.url_sharepoint}" , career_id= ${project.career_id}, product_owner_id= ${project.product_owner_id}, portfolio_manager_id=${project.portfolio_manager_id}, co_autor_id= ${project.co_autor_id}, project_process_state_id=${project.project_process_state_id},
+                                         company_id= ${project.company_id}, group_id= ${project.group_id}, portfolio_id= ${project.portfolio_id}, semester_id= ${project.semester_id}, comments = "${project.comments}" where code = "${project.code}"`
+                                    }, function (error, result, fields) {
+                                        if (error) {
+                                            resolve({
+                                                codigo: project.code,
+                                                error: error
+                                            })
+                                        }
+                                        else {
+                                            resolve({
+                                                codigo: project.code,
+                                                message: `El projecto con el codigo ${project.code} se cambio correctamente`
+                                            })
+                                        }
+                                    })
+                                }
+                                else {
+                                    resolve({
+                                        error: project.code,
+                                        message: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
+                                    })
+                                }
+
                             }
 
                             else {
