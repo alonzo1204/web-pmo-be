@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections/mysql');
-const { setQuery, security, setHandleQuery } = require('../constants');
+const { setQuery, security, setHandleQuery, validProject } = require('../constants');
 
 const jwt = require('jsonwebtoken');
 
@@ -485,3 +485,73 @@ exports.handleUpdate = function (req) {
         }
     })
 }
+
+exports.mutipleUpdates = (arr) => {
+    const data = arr.projects
+    return new Promise(function (resolve, reject) {
+        const projects = data.map((project) => {
+            if (project.code) {
+                const prom = new Promise(function (resolve, reject) {
+                    mysqlConnection.query({
+                        sql: `SELECT id, code from project where code = '${project.code}'`,
+                    }, function (error, result, fields) {
+                        if (result && result.length == 0) {
+                            resolve({
+                                codigo: cod,
+                                error: `El codigo ${cod} no existe en la base de datos`
+                            })
+                        } else {
+                            if (project.name && project.description && project.general_objective &&
+                                project.specific_objetive_1 && project.specific_objetive_2 &&
+                                project.specific_objetive_3 && project.specific_objetive_4 &&
+                                project.url_file && project.url_sharepoint && project.comments &&
+                                project.paper && project.devices && project.career_id &&
+                                project.product_owner_id && project.portfolio_manager_id &&
+                                project.co_autor_id && project.project_process_state_id &&
+                                project.company_id && project.portfolio_id &&
+                                project.semester_id && project.group_id) {
+                                mysqlConnection.query({
+                                    sql: `update project set 
+                                    name = "${project.name}", description= "${project.description}", general_objective= "${project.general_objective}", specific_objetive_1= "${project.specific_objetive_1}", specific_objetive_2= "${project.specific_objetive_2}", specific_objetive_3= "${project.specific_objetive_3}", specific_objetive_4= "${project.specific_objetive_4}",
+                                     paper= ${project.paper}, devices= ${project.devices}, url_file= "${project.url_file}", url_sharepoint= "${project.url_sharepoint}" , career_id= ${project.career_id}, product_owner_id= ${project.product_owner_id}, portfolio_manager_id=${project.portfolio_manager_id}, co_autor_id= ${project.co_autor_id}, project_process_state_id=${project.project_process_state_id},
+                                     company_id= ${project.company_id}, group_id= ${project.group_id}, portfolio_id= ${project.portfolio_id}, semester_id= ${project.semester_id}, comments = "${project.comments}" where code = "${project.code}"`
+                                }, function (error, result, fields) {
+                                    if (error) {
+                                        resolve({
+                                            codigo: project.code,
+                                            error: error
+                                        })
+                                    }
+                                    else {
+                                        resolve({
+                                            codigo: project.code,
+                                            message: `El projecto con el codigo ${project.code} se cambio correctamente`
+                                        })
+                                    }
+                                })
+                            }
+
+                            else {
+                                return resolve({
+                                    codigo: project.code,
+                                    error: `El proyecto con codigo ${project.code} no se envio con los datos completos`
+                                })
+                            }
+                        }
+                    })
+                })
+                return prom
+            }
+            else {
+                return resolve({
+                    codigo: 'ERR_CODE',
+                    error: `El proyecto se envio sin codigo`
+                })
+            }
+
+        })
+        const resps = Promise.all(projects);
+        resolve(resps)
+    })
+}
+

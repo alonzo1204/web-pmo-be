@@ -287,3 +287,26 @@ exports.handleUpdate = function (req, res) {
         }
     })
 }
+exports.mutipleUpdates = function (req, res) {
+    ProjectService.mutipleUpdates(req.body).then(function (result) {
+        if (result) {
+            const data = result.map(r => {
+                return {
+                    codigo: r.code,
+                    error: r.error,
+                    message: r.message
+                }
+            })
+            return res.status(200).send({
+                data: result
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}

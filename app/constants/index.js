@@ -6,6 +6,7 @@ const { setQuery } = require('./columnVerifier')
 const { specs } = require('./swagger');
 const { security } = require('./security');
 const { setHandleQuery } = require('./handleQuery')
+const { validProject } = require('./validateProject')
 
 module.exports = {
     server,
@@ -16,5 +17,6 @@ module.exports = {
     sendMail,
     setQuery,
     requestAccess,
-    setHandleQuery
+    setHandleQuery,
+    validProject
 }

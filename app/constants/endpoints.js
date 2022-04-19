@@ -43,6 +43,7 @@ const endpoints = {
             SAVE: '/save', //done
             SAVEEXCEL: '/saveExcel',//done
             UPDATE: '/update',
+            MUPDATE: '/mupdate',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//done
             ACCEPT: '/aceptar/?idProject=:idProject',//done
