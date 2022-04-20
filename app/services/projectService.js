@@ -497,8 +497,8 @@ exports.mutipleUpdates = (arr) => {
                     }, function (error, result, fields) {
                         if (result && result.length == 0) {
                             resolve({
-                                codigo: cod,
-                                error: `El codigo ${cod} no existe en la base de datos`
+                                codigo: project.code,
+                                error: `El codigo ${project.code} no existe en la base de datos`
                             })
                         } else {
                             if (project.name && project.description && project.general_objective &&
