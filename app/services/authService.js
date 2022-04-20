@@ -65,7 +65,7 @@ exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
         if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
             mysqlConnection.query({
-                sql: `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 0`,
+                sql: `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 1`,
             }, function (error, result, fields) {
                 if (result && result.length > 0) {
                     mysqlConnection.query({
@@ -90,20 +90,7 @@ exports.registerUser = function (user) {
                                                 sql: 'INSERT INTO user_rol (`user_id`, `role_id`) VALUES (?,?)',
                                             }, [uid, user.role_id], function (error, result, fields) {
                                                 if (result) {
-                                                    mysqlConnection.query({
-                                                        sql: `Update registration_permissions set enabled = 1 where code = "${user.code}"`,
-                                                    }, function (error, result, fields) {
-                                                        if (result) {
-                                                            resolve(uid)
-                                                        }
-                                                        if (error) {
-                                                            reject({
-                                                                codeMessage: error.code ? error.code : 'ER_',
-                                                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                                            })
-                                                        }
-                                                    }
-                                                    )
+                                                    resolve(uid)
                                                 }
                                                 if (error) {
                                                     reject({
