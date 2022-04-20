@@ -564,3 +564,59 @@ exports.mutipleUpdates = (arr) => {
     })
 }
 
+exports.getProyectByStatusVarious = function (idProjectProcess) {
+    var state_ids = idProjectProcess.params.idState;
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `SELECT * FROM project p WHERE p.project_process_state_id in (${state_ids})`,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+//Solicitud de mi Cambio
+exports.getMyEditRequest = function (idUser) {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `SELECT * FROM edit_request e WHERE e.user_id = ?`,
+        },[idUser], function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
+//Solicitudes de cambiosssssssssssss
+exports.getEditRequest = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `SELECT * FROM edit_request`,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}

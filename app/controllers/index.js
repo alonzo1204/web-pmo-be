@@ -9,6 +9,8 @@ const UserController = require('./UserController');
 const CompanyController = require('./CompanyController');
 const groupController = require('./groupController')
 const portfolioController = require('./portfolioController')
+const appSettingsController = require('./appSettingsController')
+
 
 module.exports = {
     ClientsController,
@@ -21,5 +23,6 @@ module.exports = {
     UserController,
     CompanyController,
     groupController,
-    portfolioController
+    portfolioController,
+    appSettingsController
 }

@@ -50,6 +50,9 @@ const endpoints = {
             ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//done
             SAVEARCH: '/saveArch/?idProject=:idProject',//working
             UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
+            GET_VARIOUS_STATUS:'/status/:idState',
+            GET_MY_EDIT: '/edit/:idUser',
+            GET_EDITS: '/edits',
             GET_ONE: '/:idProject'
         }
     },
@@ -105,7 +108,15 @@ const endpoints = {
     PORTFOLIO_URL: {
         MAIN: '/portfolios',
         OPERATIONS: {
+            SAVE: '/save',
             LIST: '/'
+        }
+    },
+    APP_SETTINGS_URL: {
+        MAIN: '/config',
+        OPERATIONS: {
+            GET_ONE: '/:idConfig',
+            EDIT:'/edit/:idConfig'
         }
     }
 }
