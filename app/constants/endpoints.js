@@ -14,7 +14,7 @@ const endpoints = {
         OPERATIONS: {
             LOGIN: '/login',
             REGISTER: '/register',
-            SENDSOL: '/getauth',
+            REQUEST_ACCESS: '/getauth',
             REGISTER_BATCH: '/register/batch',
             LOGOUT: '/logout',
             RECOVER_PASSWORD: '/recover',
@@ -50,7 +50,7 @@ const endpoints = {
             ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//done
             SAVEARCH: '/saveArch/?idProject=:idProject',//working
             UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
-            GET_VARIOUS_STATUS:'/status/:idState',
+            GET_VARIOUS_STATUS: '/status/:idState',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
             GET_ONE: '/:idProject'
@@ -116,7 +116,7 @@ const endpoints = {
         MAIN: '/config',
         OPERATIONS: {
             GET_ONE: '/:idConfig',
-            EDIT:'/edit/:idConfig'
+            EDIT: '/edit/:idConfig'
         }
     }
 }

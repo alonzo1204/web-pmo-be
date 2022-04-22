@@ -92,9 +92,9 @@ exports.changePassword = function (req, res, next) {
     })
 }
 
-exports.solAccess = function (req, res, next) {
+exports.requestAccess = function (req, res, next) {
 
-    AuthService.solAccess(req.body).then(function (result) {
+    AuthService.requestAccess(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
                 data: result,

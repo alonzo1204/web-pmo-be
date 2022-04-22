@@ -300,7 +300,7 @@ var makepass = function () {
     return result;
 }
 
-exports.solAccess = function (code) {
+exports.requestAccess = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT code from user where code = ?`,

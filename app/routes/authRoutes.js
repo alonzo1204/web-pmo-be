@@ -20,7 +20,7 @@ router.post(AUTH_URL.OPERATIONS.LOGOUT, AuthController.logout);
 router.post(AUTH_URL.OPERATIONS.REGISTER, AuthController.register);
 
 //SendRequestAccess
-router.post(AUTH_URL.OPERATIONS.SENDSOL, AuthController.solAccess);
+router.post(AUTH_URL.OPERATIONS.REQUEST_ACCESS, AuthController.requestAccess);
 
 //CHANGE PASSWORD
 router.post(AUTH_URL.OPERATIONS.CHANGEPASSWORD, AuthController.changePassword);
