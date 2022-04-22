@@ -254,7 +254,7 @@ exports.updateProject = function (req, res) {
 
 
 exports.sendUpdateReq = function (req, res) {
-    ProjectService.solUpdate(req.body, req.headers).then(function (result) {
+    ProjectService.solUpdate(req.body, req.user).then(function (result) {
         if (result) {
 
             return res.status(200).send({

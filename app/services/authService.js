@@ -79,26 +79,14 @@ exports.registerUser = function (user) {
                         } else {
                             mysqlConnection.query({
                                 sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`) VALUES (?,?,?,?)',
-                            }, [user.code, createHash(user.password), user.firstname, user.lastname], function (error, result, fields) {
-                                if (result) {
+                            }, [user.code, createHash(user.password), user.firstname, user.lastname], function (error, r, fields) {
+                                if (r) {
+                                    const uid = r.insertId
                                     mysqlConnection.query({
-                                        sql: `select* from user where code = "${user.code}"`,
-                                    }, function (error, result, fields) {
+                                        sql: 'INSERT INTO user_rol (`user_id`, `role_id`) VALUES (?,?)',
+                                    }, [uid, user.role_id], function (error, result, fields) {
                                         if (result) {
-                                            const uid = result[0].id
-                                            mysqlConnection.query({
-                                                sql: 'INSERT INTO user_rol (`user_id`, `role_id`) VALUES (?,?)',
-                                            }, [uid, user.role_id], function (error, result, fields) {
-                                                if (result) {
-                                                    resolve(uid)
-                                                }
-                                                if (error) {
-                                                    reject({
-                                                        codeMessage: error.code ? error.code : 'ER_',
-                                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                                    })
-                                                }
-                                            })
+                                            resolve(uid)
                                         }
                                         if (error) {
                                             reject({

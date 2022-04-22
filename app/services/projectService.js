@@ -356,13 +356,12 @@ exports.updateProject = function (project) {
     })
 }
 
-exports.solUpdate = function (project, headers) {
+exports.solUpdate = function (project, token_inf) {
     return new Promise(function (resolve, reject) {
         if (project.project_id && project.value && project.column) {
-            const user = headers.authorization.split("Bearer ")[1]
-            const duser = jwt.verify(user, security.JWT_SECRET).information.id
+            const uid = token_inf
             mysqlConnection.query({
-                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${duser} or g.student_2_id = ${duser}) group by p.id`,
+                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${uid} or g.student_2_id = ${uid}) group by p.id`,
             }, function (error, result, fields) {
                 if (result && result.length == 0) {
                     resolve({
@@ -380,7 +379,7 @@ exports.solUpdate = function (project, headers) {
                             sql: `Insert into edit_request 
                             (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
                             values 
-                            (${project.user_id},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
+                            (${project.duser},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
                             `
                         }, function (error, result, fields) {
                             if (error) {
