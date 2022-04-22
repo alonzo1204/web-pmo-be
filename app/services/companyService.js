@@ -17,3 +17,29 @@ exports.getFullList = function () {
         })
     })
 }
+
+exports.saveCompany = function (company,path) {
+    console.log(company.body.name)
+    return new Promise(function (resolve, reject) {
+        if (company.body.name && path) {
+            mysqlConnection.query({
+                sql: 'INSERT INTO company (`name`, `image`) VALUES (?,?)',
+            }, [company.body.name, path], function (error, result, fields) {
+                if (result) {
+                    resolve(result);
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
