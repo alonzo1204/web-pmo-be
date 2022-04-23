@@ -69,7 +69,7 @@ router.post(GROUP_URL.OPERATIONS.SAVE, groupController.save);
 /**
  * @swagger
  * /group/mygroup:
- *   get:
+ *   post:
  *     summary: Obtiene una lista de las carreras
  *     tags: [Grupos]
  *     parameters:
@@ -98,6 +98,6 @@ router.post(GROUP_URL.OPERATIONS.SAVE, groupController.save);
  *       401:
  *         description: Muestra los posibles errores
  */
-router.get(GROUP_URL.OPERATIONS.GET_GROUP, groupController.getgroup);
+router.post(GROUP_URL.OPERATIONS.GET_GROUP, groupController.getgroup);
 
 module.exports = router;
