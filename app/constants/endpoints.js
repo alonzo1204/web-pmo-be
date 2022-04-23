@@ -37,13 +37,13 @@ const endpoints = {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
-            SEND_SOL: '/request_update',
+            REQUEST_UPDATE: '/request_update',
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVEEXCEL: '/saveExcel',//done
             UPDATE: '/update',
-            MUPDATE: '/mupdate',
+            MULTIPLE_UPDATE: '/mupdate',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//done
             ACCEPT: '/aceptar/?idProject=:idProject',//done
