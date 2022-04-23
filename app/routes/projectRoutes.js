@@ -44,7 +44,7 @@ router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbySta
 
 router.post(PROJECT_URL.OPERATIONS.MUPDATE, ProjectController.mutipleUpdates);
 
-router.post(PROJECT_URL.OPERATIONS.SEND_SOL, ProjectController.sendUpdateReq);
+router.post(PROJECT_URL.OPERATIONS.SEND_SOL, ProjectController.sendUpdateRequest);
 
 router.post(PROJECT_URL.OPERATIONS.HANDLE_UPDATE, ProjectController.handleUpdate);
 
