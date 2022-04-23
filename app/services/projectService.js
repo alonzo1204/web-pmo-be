@@ -532,8 +532,8 @@ exports.mutipleUpdates = (arr) => {
                                 }
                                 else {
                                     resolve({
-                                        error: project.code,
-                                        message: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
+                                        codigo: project.code,
+                                        error: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
                                     })
                                 }
 
@@ -587,7 +587,7 @@ exports.getMyEditRequest = function (idUser) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT * FROM edit_request e WHERE e.user_id = ?`,
-        },[idUser], function (error, result, fields) {
+        }, [idUser], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
