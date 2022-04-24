@@ -3,11 +3,21 @@ const { mysqlConnection } = require('../connections/mysql');
 exports.getConfiguration = function(configID){
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `SELECT a.front_url, a.back_url, 
-            p.name as 'name_portfolio',
-            ps.state as 'portfolio_state',
-            s.name as 'semester', s.date_from, s.date_until
+            sql: `SELECT 
+            a.front_url, 
+            a.back_url, 
+
+            p.id as 'portfolio.id',
+            p.name as 'portfolio.name',
+            ps.id as 'portfolio_state.id',
+            ps.state as 'portfolio_state.state',
+            s.id as 'semester.id', 
+            s.name as 'semester.name', 
+            s.date_from as 'semester.date_from', 
+            s.date_until as 'semester.date_until'
+
             from application_settings a, portfolio p, semester s, portfolio_state ps
+
             where a.id = ? and p.id=a.portfolio_id and s.id=p.semester_id and ps.id = p.portfolio_state_id`,
         }, [configID], function (error, result, fields) {
             if (result) {

@@ -21,17 +21,21 @@ exports.getFullList = function (req, res) {
 }
 
 exports.saveCompany = function (req, res)  {
+    var direccion = req.user.settings.back_url
+    //console.log(req.user.settings.then((resolve)=>{resolve.back_url}).catch(err=>{console.log(err)}))
     try{
         if(req.file == undefined){
             return res.status(400).send("Please upload a image!");
         }
+        console.log(direccion)
         let path =
-        __basedir + "/recursos/images/" + req.file.filename;
+        direccion + "/recursos/images/" + req.file.filename;
         
         CompanyService.saveCompany(req,path).then(function (result) {
             if (result) {
                 return res.status(200).send({
                     data: result,
+                    confirmation: "Se guardo correctamente la empresa.",
                     message: "Se subio correctamente el archivo: " + req.file.originalname,   
                 })
             }

@@ -49,7 +49,7 @@ router.post(PROJECT_URL.OPERATIONS.DENIED, ProjectController.DenegarState);//Rev
 router.post(PROJECT_URL.OPERATIONS.ACCEPT, ProjectController.AprobarState);//Revisar
 
 //POST ACCEPTING
-router.post(PROJECT_URL.OPERATIONS.ACCETEDWCOMS, ProjectController.AprobarcComsState);//Revisar
+router.post(PROJECT_URL.OPERATIONS.ACCETED_COMMENTS, ProjectController.AprobarcComsState);//Revisar
 
 router.post(PROJECT_URL.OPERATIONS.UPDATE_STATE, ProjectController.actualizarState); //Revisar
 
@@ -138,7 +138,7 @@ router.get(PROJECT_URL.OPERATIONS.LIST, ProjectController.getFullList);
  */
 router.post(PROJECT_URL.OPERATIONS.SAVE, ProjectController.save);
 
-router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectController.saveExcel);
+router.post(PROJECT_URL.OPERATIONS.SAVE_EXCEL, upload.single("file"), ProjectController.saveExcel);
 
 /**
  * @swagger
@@ -183,15 +183,18 @@ router.post(PROJECT_URL.OPERATIONS.SAVEEXCEL, upload.single("file"), ProjectCont
  */
 router.post(PROJECT_URL.OPERATIONS.UPDATE, ProjectController.updateProject);
 //Post save Archivo
-router.post(PROJECT_URL.OPERATIONS.SAVEARCH, uploadArch.single("file"), ProjectController.saveArch);
+router.post(PROJECT_URL.OPERATIONS.SAVE_ARCH, uploadArch.single("file"), ProjectController.saveArch);
 
 //GET VARIOUS STATUS
 router.get(PROJECT_URL.OPERATIONS.GET_VARIOUS_STATUS, ProjectController.getProyectsbyStatusVarious);
 
 //GET MY EDIT REQUEST
-router.get(PROJECT_URL.OPERATIONS.GET_MY_EDIT, ProjectController.getMyEditRequest);
+router.get(PROJECT_URL.OPERATIONS.GET_MY_REQUEST_EDITS, ProjectController.getMyEditRequest);
 
 //GET EDITS REQUESTS
-router.get(PROJECT_URL.OPERATIONS.GET_EDITS, ProjectController.getEditsRequest);
+router.get(PROJECT_URL.OPERATIONS.GET_ALL_REQUEST_EDITS, ProjectController.getEditsRequest);
+
+//SAVE NEW PROJECT WITH ARCHIVE
+router.post(PROJECT_URL.OPERATIONS.SAVE_NEW_WITH_ARCHIVE, uploadArch.single("file"), ProjectController.saveWithArchive);
 
 module.exports = router;

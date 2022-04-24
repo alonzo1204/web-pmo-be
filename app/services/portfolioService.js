@@ -5,13 +5,13 @@ exports.getAll = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT 
-            po.id as 'Portfolio.id',
-            po.name as 'Portfolio.name',
-            se.id as 'Semester.id',
-            se.name as 'Semester.name',
-            ps.id as 'Portfolio_state.id',
-            ps.state as 'Portfolio_state.state',
-            (select count(*) from  project p where po.id = p.portfolio_id) as Cantidad
+            po.id as 'portfolio.id',
+            po.name as 'portfolio.name',
+            se.id as 'semester.id',
+            se.name as 'semester.name',
+            ps.id as 'portfolio_state.id',
+            ps.state as 'portfolio_state.state',
+            (select count(*) from  project p where po.id = p.portfolio_id) as cantidad
            from
             portfolio po, semester se, portfolio_state ps
            where
