@@ -36,7 +36,7 @@ passport.use(
                     if (response) {
                         
                         //ENVIAR INFORMACION DE CONFIGURACION DEL SISTEMA
-                        console.log(settings);
+                        //console.log(settings);
                         return done(null, { token, settings });
                     } else {
                         return done({ message: 'El token enviado no es válido' }, false);

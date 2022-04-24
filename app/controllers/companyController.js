@@ -27,7 +27,7 @@ exports.saveCompany = function (req, res)  {
         if(req.file == undefined){
             return res.status(400).send("Please upload a image!");
         }
-        console.log(direccion)
+        //console.log(direccion)
         let path =
         direccion + "/recursos/images/" + req.file.filename;
         

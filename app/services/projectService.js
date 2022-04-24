@@ -649,7 +649,25 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
 exports.getMyEditRequest = function (idUser) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `SELECT * FROM edit_request e WHERE e.user_id = ?`,
+            sql: `SELECT er.id,
+            er.attribute_to_change,
+            er.value, 
+            er.accepted, 
+            er.request_date,
+
+            u.id as 'user.id',
+            u.firstname as 'user.firstname',
+            u.lastname as 'user.lastname',
+
+            p.id as 'project.id', 
+            p.code as 'project.code', 
+            p.name as 'project.name', 
+            p.description as 'project.description' 
+
+            FROM edit_request er, user u, project p
+            WHERE er.user_id = ? and
+            u.id=er.user_id and
+            p.id=er.project_id`,
         },[idUser], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -668,7 +686,22 @@ exports.getMyEditRequest = function (idUser) {
 exports.getEditRequest = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `SELECT * FROM edit_request`,
+            sql: `SELECT er.id,
+             er.attribute_to_change,
+             er.value, 
+             er.accepted, 
+             er.request_date,
+
+             u.id as 'user.id',
+             u.firstname as 'user.firstname',
+             u.lastname as 'user.lastname',
+
+             p.id as 'project.id', 
+             p.code as 'project.code', 
+             p.name as 'project.name', 
+             p.description as 'project.description' 
+
+             FROM edit_request er, user u, project p`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);

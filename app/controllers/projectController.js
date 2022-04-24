@@ -313,6 +313,7 @@ exports.getMyEditRequest = function (req, res) {
     
     ProjectService.getMyEditRequest(req.user.token.information.id).then(function (result) {
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
@@ -352,9 +353,11 @@ exports.mutipleUpdates = function (req, res) {
 }
 
 exports.getEditsRequest = function (req, res) {
-    console.log(req.user.settings);
+    //console.log(req.user.settings);
     ProjectService.getEditRequest().then(function (result) {
+        
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
