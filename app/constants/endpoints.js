@@ -14,6 +14,7 @@ const endpoints = {
         OPERATIONS: {
             LOGIN: '/login',
             REGISTER: '/register',
+            SENDSOL: '/getauth',
             REGISTER_BATCH: '/register/batch',
             LOGOUT: '/logout',
             RECOVER_PASSWORD: '/recover',
@@ -36,10 +37,13 @@ const endpoints = {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
+            SEND_SOL: '/request_update',
+            HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
+            MUPDATE: '/mupdate',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//done
             ACCEPT: '/aceptar/?idProject=:idProject',//done

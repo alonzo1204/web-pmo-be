@@ -19,6 +19,9 @@ router.post(AUTH_URL.OPERATIONS.LOGOUT, AuthController.logout);
 //REGISTER
 router.post(AUTH_URL.OPERATIONS.REGISTER, AuthController.register);
 
+//SendRequestAccess
+router.post(AUTH_URL.OPERATIONS.SENDSOL, AuthController.solAccess);
+
 //CHANGE PASSWORD
 router.post(AUTH_URL.OPERATIONS.CHANGEPASSWORD, AuthController.changePassword);
 

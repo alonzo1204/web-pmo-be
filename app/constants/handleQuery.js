@@ -1,4 +1,4 @@
-const setQuery = (word, code, value) => {
+const setHandleQuery = (word, id, value) => {
     let query = "";
     switch (word) {
         case "name":
@@ -7,7 +7,7 @@ const setQuery = (word, code, value) => {
             SET 
                 name = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "description":
             typeof (value) === 'string' ?
@@ -16,7 +16,7 @@ const setQuery = (word, code, value) => {
             SET 
                 description = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "general_objective":
             query = typeof (value) === 'string' ? `
@@ -24,7 +24,7 @@ const setQuery = (word, code, value) => {
             SET 
                 general_objective = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "specific_objective_1":
             query = typeof (value) === 'string' ? `
@@ -32,7 +32,7 @@ const setQuery = (word, code, value) => {
             SET 
                 specific_objective_1 = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "specific_objective_2":
             query = typeof (value) === 'string' ? `
@@ -40,7 +40,7 @@ const setQuery = (word, code, value) => {
             SET 
                 specific_objective_2 = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "specific_objective_3":
             query = typeof (value) === 'string' ? `
@@ -48,7 +48,7 @@ const setQuery = (word, code, value) => {
             SET 
                 specific_objective_3 = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "specific_objective_4":
             query = typeof (value) === 'string' ? `
@@ -56,7 +56,7 @@ const setQuery = (word, code, value) => {
             SET 
                 specific_objective_4 = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "url_file":
             query = typeof (value) === 'string' ? `
@@ -64,7 +64,7 @@ const setQuery = (word, code, value) => {
             SET 
                 url_file = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "url_sharepoint":
             query = typeof (value) === 'string' ? `
@@ -72,7 +72,7 @@ const setQuery = (word, code, value) => {
             SET 
                 url_sharepoint = '${value}'
             WHERE
-                project.code = '${code}';` : '';
+                project.id = '${id}';` : '';
             break;
         case "product_owner_id":
             query = typeof (value) === 'number' ? `
@@ -80,7 +80,7 @@ const setQuery = (word, code, value) => {
             SET 
                 product_owner_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "portfolio_manager_id":
             query = typeof (value) === 'number' ? `
@@ -88,7 +88,7 @@ const setQuery = (word, code, value) => {
             SET 
                 portfolio_manager_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "co_autor_id":
             query = typeof (value) === 'number' ? `
@@ -96,7 +96,7 @@ const setQuery = (word, code, value) => {
             SET 
                 co_autor_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "group_id":
             query = typeof (value) === 'number' ? `
@@ -104,7 +104,7 @@ const setQuery = (word, code, value) => {
             SET 
                 group_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "portfolio_id":
             query = typeof (value) === 'number' ? `
@@ -112,7 +112,7 @@ const setQuery = (word, code, value) => {
             SET 
                 portfolio_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         case "portfolio_id":
             query = typeof (value) === 'number' ? `
@@ -120,7 +120,7 @@ const setQuery = (word, code, value) => {
             SET 
                 portfolio_id = '${value}'
             WHERE
-                project.code = '${code}';` : ''
+                project.id = '${id}';` : ''
             break;
         default:
             query = "error"
@@ -130,5 +130,5 @@ const setQuery = (word, code, value) => {
 
 }
 module.exports = {
-    setQuery
+    setHandleQuery
 }

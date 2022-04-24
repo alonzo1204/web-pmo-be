@@ -20,9 +20,8 @@ exports.register = function (req, res) {
     AuthService.registerUser(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result,
-                message: 'User with id ' + result.insertId + ' created successfully',
-                idPosition: result.insertId
+                message: 'User with id ' + result + ' created successfully',
+                idPosition: result
             })
         }
     }, function (error) {
@@ -41,7 +40,7 @@ exports.logout = function (req, res) {
             return res.status(200).send({
                 message: 'La sesión fue cerrada con éxito'
             })
-        }else {
+        } else {
             return res.status(400).send({
                 message: 'La sesión no existe'
             })
@@ -74,7 +73,7 @@ exports.recoverPass = function (req, res) {
 }
 
 exports.changePassword = function (req, res, next) {
-    
+
     AuthService.changePassword(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
@@ -93,3 +92,21 @@ exports.changePassword = function (req, res, next) {
     })
 }
 
+exports.solAccess = function (req, res, next) {
+
+    AuthService.solAccess(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result,
+                message: 'Mensaje enviado correctamente',
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}

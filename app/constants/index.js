@@ -1,10 +1,12 @@
 const { server } = require('./server');
 const { database } = require('./database');
 const { endpoints } = require('./endpoints');
-const { sendMail } = require('./mailer');
+const { sendMail, requestAccess } = require('./mailer');
 const { setQuery } = require('./columnVerifier')
 const { specs } = require('./swagger');
 const { security } = require('./security');
+const { setHandleQuery } = require('./handleQuery')
+const { validProject } = require('./validateProject')
 
 module.exports = {
     server,
@@ -13,5 +15,8 @@ module.exports = {
     specs,
     security,
     sendMail,
-    setQuery
+    setQuery,
+    requestAccess,
+    setHandleQuery,
+    validProject
 }
