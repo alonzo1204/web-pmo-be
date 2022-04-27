@@ -14,7 +14,7 @@ const endpoints = {
         OPERATIONS: {
             LOGIN: '/login',
             REGISTER: '/register',
-            SENDSOL: '/getauth',
+            REQUEST_ACCESS: '/getauth',
             REGISTER_BATCH: '/register/batch',
             LOGOUT: '/logout',
             RECOVER_PASSWORD: '/recover',
@@ -37,23 +37,25 @@ const endpoints = {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
-            SEND_SOL: '/request_update',
+            REQUEST_UPDATE: '/request_update',
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
             SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
-            MUPDATE: '/mupdate',
+            MULTIPLE_UPDATE: '/mupdate',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//done
             ACCEPT: '/aceptar/?idProject=:idProject',//done
             ACCETED_COMMENTS: '/aceptarComens/?idProject=:idProject',//done
             SAVE_ARCH: '/saveArch/?idProject=:idProject',//working
             UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
-            GET_VARIOUS_STATUS:'/status/:idState',
             GET_MY_REQUEST_EDITS: '/my_request_edits',
             GET_ALL_REQUEST_EDITS: '/all_request_edits',
             SAVE_NEW_WITH_ARCHIVE: '/save_with_archive',
+            GET_VARIOUS_STATUS: '/status/:idState',
+            GET_MY_EDIT: '/edit/:idUser',
+            GET_EDITS: '/edits',
             GET_ONE: '/:idProject'
         }
     },
@@ -117,7 +119,7 @@ const endpoints = {
         MAIN: '/config',
         OPERATIONS: {
             GET_ONE: '/:idConfig',
-            EDIT:'/edit/:idConfig'
+            EDIT: '/edit/:idConfig'
         }
     }
 }

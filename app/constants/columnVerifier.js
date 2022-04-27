@@ -123,7 +123,7 @@ const setQuery = (word, code, value) => {
                 project.code = '${code}';` : ''
             break;
         default:
-            query = "error"
+            query = ""
             break;
     }
     return query;

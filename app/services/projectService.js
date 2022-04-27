@@ -356,20 +356,20 @@ exports.updateProject = function (project) {
     })
 }
 
-exports.solUpdate = function (project, headers) {
+exports.sendUpdateRequest = function (project, token_inf) {
     return new Promise(function (resolve, reject) {
         if (project.project_id && project.value && project.column) {
-            const user = headers.authorization.split("Bearer ")[1]
-            const duser = jwt.verify(user, security.JWT_SECRET).information.id
+            const uid = token_inf.token.information.id
             mysqlConnection.query({
-                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${duser} or g.student_2_id = ${duser}) group by p.id`,
+                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${uid} or g.student_2_id = ${uid}) group by p.id`,
             }, function (error, result, fields) {
-                if (result && result.length == 0) {
+                if (result && result.length == 0 || error) {
                     resolve({
                         error: `El projecto no concuerda con el codigo de usuario`
                     })
                 } else {
-                    const verificar = setQuery(project.column, result[0].code, project.value)
+                    const code = result[0].code
+                    const verificar = setQuery(project.column, code, project.value)
                     if (verificar == '') {
                         resolve({
                             error: `El valor ${project.value} no coincide con la columna ${project.column}`
@@ -380,7 +380,7 @@ exports.solUpdate = function (project, headers) {
                             sql: `Insert into edit_request 
                             (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
                             values 
-                            (${project.user_id},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
+                            (${uid},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
                             `
                         }, function (error, result, fields) {
                             if (error) {
@@ -392,7 +392,7 @@ exports.solUpdate = function (project, headers) {
                             }
                             else {
                                 resolve({
-                                    message: `El projecto se altero en la columna ${project.column} con el valor ${project.value}`
+                                    message: `Se solicito el cambio del proyecto ${code} la columna ${project.column} con el valor: ${project.value}`
                                 })
                             }
                         })
@@ -533,8 +533,8 @@ exports.mutipleUpdates = (arr) => {
                                 }
                                 else {
                                     resolve({
-                                        error: project.code,
-                                        message: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
+                                        codigo: project.code,
+                                        error: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
                                     })
                                 }
 
@@ -682,7 +682,7 @@ exports.getMyEditRequest = function (idUser) {
     })
 }
 
-//Solicitudes de cambiosssssssssssss
+//Solicitudes de cambios
 exports.getEditRequest = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({

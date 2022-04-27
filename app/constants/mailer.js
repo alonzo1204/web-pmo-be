@@ -22,20 +22,23 @@ const transporter = nodemailer.createTransport({
 
 
 const sendMail = async (password, code) => {
-    try {
-        await transporter.sendMail({
-            from: `"Provisional Password" <${mail.user}>`, // sender address
-            to: `${code}@upc.edu.pe`, // list of receivers
-            subject: "New Password", // Subject line
-            html: `
-        <b>Su nueva contraseña es: </b>
-        <a>${password}</a>
-        `, // html body
-        }).then(() => { return true });
+    if (code = "u201718971") {
+        try {
+            await transporter.sendMail({
+                from: `"Provisional Password" <${mail.user}>`, // sender address
+                to: `${code}@upc.edu.pe`, // list of receivers
+                subject: "New Password", // Subject line
+                html: `
+            <b>Su nueva contraseña es: </b>
+            <a>${password}</a>
+            `, // html body
+            }).then(() => { return true });
+        }
+        catch (err) {
+            return err
+        }
     }
-    catch (err) {
-        return err
-    }
+    return (true)
 }
 
 const requestAccess = async (code, pmocode, pmoname, pmolastname) => {

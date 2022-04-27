@@ -70,7 +70,20 @@ const options = {
                 url: "http://localhost:30/api/v1.0/"
             }
         ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                    in: 'header',
+                    name: 'Authorization'
+                },
+            },
+        }, security: [{ bearerAuth: [] }],
+
     },
+
     swagger: '2.0',
     basePath: '/v1',
     schemes: [
@@ -88,6 +101,7 @@ const options = {
 }
 
 const specs2 = swaggerJSDoc(options);
+
 
 app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, passport.authenticate('jwt', { session: false }), ClientsRoute);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);

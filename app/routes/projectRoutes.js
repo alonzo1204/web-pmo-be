@@ -38,13 +38,11 @@ const PROJECT_URL = endpoints.PROJECT_URL
  *         name: "general_objective"
  *         description: "Cambio de projecto"
  */
-
-
 router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus); //Revisar
 
-router.post(PROJECT_URL.OPERATIONS.MUPDATE, ProjectController.mutipleUpdates);
+router.post(PROJECT_URL.OPERATIONS.MULTIPLE_UPDATE, ProjectController.mutipleUpdates);
 
-router.post(PROJECT_URL.OPERATIONS.SEND_SOL, ProjectController.sendUpdateReq);
+router.post(PROJECT_URL.OPERATIONS.REQUEST_UPDATE, ProjectController.sendUpdateRequest);
 
 router.post(PROJECT_URL.OPERATIONS.HANDLE_UPDATE, ProjectController.handleUpdate);
 
@@ -66,6 +64,7 @@ router.post(PROJECT_URL.OPERATIONS.UPDATE_STATE, ProjectController.actualizarSta
  *   get:
  *     summary: Obtiene una lista de los projectos
  *     tags: [Projectos]
+ *     parameters:
  *     responses:
  *       200:
  *         description: Los datos de los projectos

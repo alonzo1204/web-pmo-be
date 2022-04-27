@@ -233,16 +233,22 @@ exports.actualizarState = function (req, res) {
 
 exports.updateProject = function (req, res) {
     ProjectService.updateProject(req.body).then(function (result) {
+        let errors = [];
+        let success = [];
         if (result) {
             const data = result.map(r => {
-                return {
-                    codigo: r.code,
-                    error: r.error,
-                    message: r.message
+                if (r.error) {
+                    errors.push(r.codigo)
+                    return ""
+                }
+                else {
+                    success.push(r.codigo)
+                    return ""
                 }
             })
             return res.status(200).send({
-                data: result
+                success,
+                errors
             })
         }
     }, function (error) {
@@ -256,8 +262,8 @@ exports.updateProject = function (req, res) {
 }
 
 
-exports.sendUpdateReq = function (req, res) {
-    ProjectService.solUpdate(req.body, req.headers).then(function (result) {
+exports.sendUpdateRequest = function (req, res) {
+    ProjectService.sendUpdateRequest(req.body, req.user).then(function (result) {
         if (result) {
 
             return res.status(200).send({
@@ -330,16 +336,22 @@ exports.getMyEditRequest = function (req, res) {
 
 exports.mutipleUpdates = function (req, res) {
     ProjectService.mutipleUpdates(req.body).then(function (result) {
+        let errors = []
+        let success = []
         if (result) {
             const data = result.map(r => {
-                return {
-                    codigo: r.code,
-                    error: r.error,
-                    message: r.message
+                if (r.error) {
+                    errors.push(r.codigo)
+                    return ""
+                }
+                else {
+                    success.push(r.codigo)
+                    return ""
                 }
             })
             return res.status(200).send({
-                data: result
+                success,
+                errors
             })
         }
     }, function (error) {
