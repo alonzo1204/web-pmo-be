@@ -215,7 +215,7 @@ exports.Rechazar = function (project) {
     var code = project.params.idProject;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.project_process_state_id = 3 WHERE p.code = ?',
+            sql: 'UPDATE project p SET p.project_process_state_id = 3, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
         }, [code], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -234,7 +234,7 @@ exports.Aprobar = function (project) {
     var code = project.params.idProject;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.project_process_state_id = 2 WHERE p.code = ?',
+            sql: 'UPDATE project p SET p.project_process_state_id = 2, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
         }, [code], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -254,7 +254,7 @@ exports.AprobarComentarios = function (project, comentarios) {
     var code = project.params.idProject;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comments = ? WHERE p.code = ?',
+            sql: 'UPDATE project p SET p.project_process_state_id = 4, p.comments = ?, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
         }, [comentarios.comentarios, code], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -272,7 +272,7 @@ exports.AprobarComentarios = function (project, comentarios) {
 exports.saveArchivo = function (project, path) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.url_file = ?, p.url_sharepoint=? WHERE p.code = ?',
+            sql: 'UPDATE project p SET p.url_file = ?, p.url_sharepoint=?, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
         }, [project.file.filename, path, project.params.idProject], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -292,7 +292,7 @@ exports.updateState = function (ids) {
     var project_process_state_id = ids.params.idState;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: 'UPDATE project p SET p.project_process_state_id = ? WHERE p.code = ?',
+            sql: 'UPDATE project p SET p.project_process_state_id = ?, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
         }, [project_process_state_id, code], function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -515,7 +515,7 @@ exports.mutipleUpdates = (arr) => {
                                         sql: `update project set 
                                         name = "${project.name}", description= "${project.description}", general_objective= "${project.general_objective}", specific_objetive_1= "${project.specific_objetive_1}", specific_objetive_2= "${project.specific_objetive_2}", specific_objetive_3= "${project.specific_objetive_3}", specific_objetive_4= "${project.specific_objetive_4}",
                                         paper= ${project.paper}, devices= ${project.devices}, url_file= "${project.url_file}", url_sharepoint= "${project.url_sharepoint}" , career_id= ${project.career_id}, product_owner_id= ${project.product_owner_id}, portfolio_manager_id=${project.portfolio_manager_id}, co_autor_id= ${project.co_autor_id}, project_process_state_id=${project.project_process_state_id},
-                                        company_id= ${project.company_id}, group_id= ${project.group_id}, portfolio_id= ${project.portfolio_id}, semester_id= ${project.semester_id}, comments = "${project.comments}" where code = "${project.code}"`
+                                        company_id= ${project.company_id}, group_id= ${project.group_id}, portfolio_id= ${project.portfolio_id}, semester_id= ${project.semester_id}, comments = "${project.comments}, update_date = CURRENT_TIMESTAMP" where code = "${project.code}"`
                                     }, function (error, result, fields) {
                                         if (error) {
                                             resolve({

@@ -5,7 +5,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                name = '${value}'
+                name = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -14,7 +15,8 @@ const setHandleQuery = (word, id, value) => {
                 query = `
             UPDATE project 
             SET 
-                description = '${value}'
+                description = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -22,7 +24,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                general_objective = '${value}'
+                general_objective = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -30,7 +33,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                specific_objective_1 = '${value}'
+                specific_objective_1 = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -38,7 +42,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                specific_objective_2 = '${value}'
+                specific_objective_2 = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -46,7 +51,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                specific_objective_3 = '${value}'
+                specific_objective_3 = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -54,7 +60,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                specific_objective_4 = '${value}'
+                specific_objective_4 = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -62,7 +69,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                url_file = '${value}'
+                url_file = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -70,7 +78,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'string' ? `
             UPDATE project 
             SET 
-                url_sharepoint = '${value}'
+                url_sharepoint = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : '';
             break;
@@ -78,7 +87,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                product_owner_id = '${value}'
+                product_owner_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -86,7 +96,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                portfolio_manager_id = '${value}'
+                portfolio_manager_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -94,7 +105,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                co_autor_id = '${value}'
+                co_autor_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -102,7 +114,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                group_id = '${value}'
+                group_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -110,7 +123,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                portfolio_id = '${value}'
+                portfolio_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
@@ -118,7 +132,8 @@ const setHandleQuery = (word, id, value) => {
             query = typeof (value) === 'number' ? `
             UPDATE project 
             SET 
-                portfolio_id = '${value}'
+                portfolio_id = '${value}',
+                update_date = CURRENT_TIMESTAMP
             WHERE
                 project.id = '${id}';` : ''
             break;
