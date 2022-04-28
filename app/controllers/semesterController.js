@@ -16,3 +16,21 @@ exports.getFullList = function (req, res) {
         }
     })
 }
+exports.createSemester = function (req, res) {
+    SemesterService.createSemester(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result,
+                message: 'semester ' + result.insertId + ' created successfully',
+                idPosition: result.groupid
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}

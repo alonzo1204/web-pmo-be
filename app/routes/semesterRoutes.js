@@ -22,4 +22,6 @@ const SEMESTER_URL = endpoints.SEMESTER_URL
  *           application/json:
  */router.get(SEMESTER_URL.OPERATIONS.LIST, SemesterController.getFullList);
 
+router.post(SEMESTER_URL.OPERATIONS.SAVE, SemesterController.createSemester);
+
 module.exports = router;
