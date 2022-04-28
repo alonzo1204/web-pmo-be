@@ -5,6 +5,7 @@ var xlsx = require("xlsx");
 const { EOL } = require('os');
 
 exports.getFullList = function (req, res) {
+    
     ProjectService.getFullList().then(function (result) {
 
         if (result) {
@@ -21,6 +22,7 @@ exports.getFullList = function (req, res) {
             })
         }
     })
+    
 }
 
 exports.save = function (req, res) {
@@ -176,15 +178,16 @@ exports.AprobarcComsState = function (req, res) {
     })
 }
 
-exports.saveArch = function (req, res) {
-    try {
-        if (req.file == undefined) {
+exports.saveArch = function (req, res)  {
+    var direccion = req.user.settings.back_url
+    try{
+        if(req.file == undefined){
             return res.status(400).send("Please upload a file!");
         }
         let path =
-            __basedir + "/recursos/archivos/" + req.file.filename;
-
-        ProjectService.saveArchivo(req, path).then(function (result) {
+        direccion + "/recursos/archivos/" + req.file.filename;
+        
+        ProjectService.saveArchivo(req,path).then(function (result) {
             if (result) {
                 return res.status(200).send({
                     data: result,
@@ -280,6 +283,7 @@ exports.sendUpdateRequest = function (req, res) {
 exports.getProyectsbyStatusVarious = function (req, res) {
     ProjectService.getProyectByStatusVarious(req).then(function (result) {
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
@@ -312,9 +316,10 @@ exports.handleUpdate = function (req, res) {
 }
 
 exports.getMyEditRequest = function (req, res) {
-    console.log(req.params.idUser)
-    ProjectService.getMyEditRequest(req.params.idUser).then(function (result) {
+    
+    ProjectService.getMyEditRequest(req.user.token.information.id).then(function (result) {
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
@@ -360,8 +365,11 @@ exports.mutipleUpdates = function (req, res) {
 }
 
 exports.getEditsRequest = function (req, res) {
+    //console.log(req.user.settings);
     ProjectService.getEditRequest().then(function (result) {
+        
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
@@ -374,4 +382,39 @@ exports.getEditsRequest = function (req, res) {
             })
         }
     })
+}
+
+exports.saveWithArchive = function (req, res) {
+    var direccion = req.user.settings.back_url
+    try{
+        if(req.file == undefined){
+            return res.status(400).send("Please upload a file!");
+        }
+        let path =
+        direccion + "/recursos/archivos/" + req.file.filename;
+        
+        ProjectService.saveWithArchive(req.body,path).then(function (result) {
+            if (result) {
+                return res.status(200).send({
+                    data: result,
+                    confirmacion: 'Project with id ' + result.insertId + ' created successfully',
+                    idPosition: result.insertId,
+                    message: "Se subio correctamente el archivo: " + req.file.originalname,   
+                })
+            }
+        }, function (error) {
+            if (error) {
+                return res.status(401).send({
+                    code: error.codeMessage,
+                    message: error.message
+                })
+            }
+        })
+    }catch(error){
+        
+        console.log(error);
+        return res.status(500).send({
+        message: "Could not upload the file: " + req.file.originalname,
+        });
+    }
 }

@@ -26,8 +26,9 @@ exports.getUserByCode = function (code) {
 exports.login = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `SELECT ur.user_id, u.code, u.firstname, u.lastname, u.weighted_average, u.password, u.active, ur.role_id, r.name as role_name, r.access as role_access
-                        from user_rol as ur
+            sql: `SELECT ur.user_id, u.code, u.firstname, u.lastname, u.weighted_average, u.password, u.active, ur.role_id, r.name as role_name, r.access as role_access,
+            app.portfolio_id, app.front_url, app.back_url
+                        from application_settings as app, user_rol as ur
                         join role as r on r.id = ur.role_id 
                         join user as u on u.id = ur.user_id
                         where u.code = ?;`,
@@ -43,9 +44,11 @@ exports.login = function (code) {
                     active: result[0].active
                 };
                 let roles = result.map((i) => { return { id: i.role_id, name: i.role_name, access: i.role_access.split(',') } });
+               
                 resolve({
                     information: user,
                     roles
+ 
                 });
             } else {
                 resolve(null);

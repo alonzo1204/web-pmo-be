@@ -1,10 +1,15 @@
 const { AppSettingsService } = require('../services');
+var dot = require('dot-object');
 
 exports.getConfig = function (req, res) {
     AppSettingsService.getConfiguration(req.params.idConfig).then(function (result) {
         if (result) {
+            console.log(result)
+            result.map(r => dot.object(r));
             return res.status(200).send({
-                data: result
+                
+                data: result,
+                
             })
         }
     }, function (error) {
@@ -21,7 +26,8 @@ exports.editConfig = function (req, res) {
     AppSettingsService.editConfiguration(req).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result
+                data: result,
+                message: "Se consiguio cambiar la configuracion del sistema con exito."
             })
         }
     }, function (error) {

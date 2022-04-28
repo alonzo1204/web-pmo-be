@@ -41,15 +41,18 @@ const endpoints = {
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
             SAVE: '/save', //done
-            SAVEEXCEL: '/saveExcel',//done
+            SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
             MULTIPLE_UPDATE: '/mupdate',
             GET_STATUS: '/?idState=:idState',//done
             DENIED: '/denegar/?idProject=:idProject',//done
             ACCEPT: '/aceptar/?idProject=:idProject',//done
-            ACCETEDWCOMS: '/aceptarComens/?idProject=:idProject',//done
-            SAVEARCH: '/saveArch/?idProject=:idProject',//working
+            ACCETED_COMMENTS: '/aceptarComens/?idProject=:idProject',//done
+            SAVE_ARCH: '/saveArch/?idProject=:idProject',//working
             UPDATE_STATE: '/?idProject=:idProject?idState=:idState',//done
+            GET_MY_REQUEST_EDITS: '/my_request_edits',
+            GET_ALL_REQUEST_EDITS: '/all_request_edits',
+            SAVE_NEW_WITH_ARCHIVE: '/save_with_archive',
             GET_VARIOUS_STATUS: '/status/:idState',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
