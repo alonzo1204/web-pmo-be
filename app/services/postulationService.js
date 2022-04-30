@@ -122,21 +122,23 @@ exports.save = function (postulation) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO postulation (`group_id`, `project_1_id`, `project_2_id`, `project_3_id`, `project_4_id`) VALUES (?,?,?,?,?)',
-                    }, [
-                        postulation.group_id,
-                        postulation.project_1_id, postulation.project_2_id,
-                        postulation.project_3_id, postulation.project_4_id,], function (error, result, fields) {
-                            if (result) {
-                                resolve(result);
-                            }
-                            if (error) {
-                                reject({
-                                    codeMessage: error.code ? error.code : 'ER_',
-                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                })
-                            }
-                        })
+                        sql: `
+                        INSERT INTO db_pmo_dev.postulation
+                        (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id)
+                        select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id
+                        from db_pmo_dev.group g where g.id = ${postulation.group_id}
+                        `,
+                    }, function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
                 }
                 if (error) {
                     reject({
