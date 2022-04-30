@@ -86,4 +86,5 @@ router.get(POSTULATION_URL.OPERATIONS.LIST, PostulationController.getFullList);
  */
 router.post(POSTULATION_URL.OPERATIONS.SAVE, PostulationController.save);
 
+router.get(POSTULATION_URL.OPERATIONS.GET_MY, PostulationController.myPostulation);
 module.exports = router;
