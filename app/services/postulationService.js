@@ -157,7 +157,6 @@ exports.save = function (postulation) {
 }
 
 exports.myPostulation = function (user) {
-    console.log(user)
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql:
@@ -265,3 +264,176 @@ exports.myPostulation = function (user) {
         })
     })
 }
+
+exports.setProyects = function () {
+    var ret
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `select po.id, po.project_1_id , po.project_2_id, po.project_3_id, po.project_4_id, po.group_id,po.group_weighted_average from postulation po, project p1,project p2,project p3, project p4, db_pmo_dev.group g
+            where
+            po.project_1_id = p1.id and po.project_2_id = p2.id and po.project_3_id = p3.id and po.project_4_id = p4.id and po.group_id = g.id and po.project_assigned is null 
+            order by po.group_weighted_average desc;
+            `
+        }, function (error, result, fields) {
+            if (error) {
+                reject({
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+            if (result.length > 0) {
+                const next = {
+                    correctas: "Postulaciones asignadas: ",
+                    no_concretadas: "Postulaciones sin asignar: "
+                }
+                loop(result, 0, next, resolve)
+
+            }
+            else {
+                resolve('No hay postulaciones pendientes')
+            }
+
+        })
+    })
+}
+
+
+
+async function loop(r, current, next, callback) {
+    if (current == r.length) {
+        next.correctas = next.correctas.substring(0, next.correctas.length - 2)
+        next.no_concretadas = next.no_concretadas.substring(0, next.no_concretadas.length - 2)
+        callback(next)
+        return
+    }
+    var retr
+    setTimeout(() => {
+        const res = r[current]
+        mysqlConnection.query({
+            sql: `select id from project where
+            group_id is null and (id = ${res.project_1_id} or id = ${res.project_2_id} 
+            or id = ${res.project_3_id} or id = ${res.project_4_id}) ;`
+        }, function (error, result, fields) {
+            if (error) {
+                log = {
+                    correctas: next.correctas,
+                    no_concretadas: `${next.no_concretadas}${res.id}, `
+                }
+                if (current < r.length) {
+
+                    retr = loop(r, current + 1, log, callback);
+                }
+            }
+            if (result.length > 0) {
+                const proj_id = result[0].id
+                mysqlConnection.query({
+                    sql: `update project set group_id = ${res.group_id} where id = ${proj_id}`
+                }, function (error, result, fields) {
+                    if (result) {
+                        mysqlConnection.query({
+                            sql: `update postulation set project_assigned = ${proj_id} where id = ${res.id}`
+                        }, function (error, result, fields) {
+                            if (result) {
+                                mysqlConnection.query({
+                                    sql: `update db_pmo_dev.group set project_assigned = ${proj_id} where id = ${res.group_id}`
+                                }, function (error, result, fields) {
+                                    if (error) {
+                                        console.log(error)
+                                        log = {
+                                            correctas: next.correctas,
+                                            no_concretadas: `${next.no_concretadas}${res.id}, `
+                                        }
+                                        if (current < r.length) {
+
+                                            retr = loop(r, current + 1, log, callback);
+                                        }
+                                    }
+                                    if (result) {
+                                        log = {
+                                            correctas: `${next.correctas}${res.id}, `,
+                                            no_concretadas: next.no_concretadas
+                                        }
+                                        if (current < r.length) {
+
+                                            retr = loop(r, current + 1, log, callback);
+                                        }
+                                    }
+                                })
+                            }
+                            if (error) {
+                                log = {
+                                    correctas: next.correctas,
+                                    no_concretadas: `${next.no_concretadas}${res.id}, `
+                                }
+                                if (current < r.length) {
+
+                                    retr = loop(r, current + 1, log, callback);
+                                }
+                            }
+                        })
+                    }
+
+                    if (error) {
+                        log = {
+                            correctas: next.correctas,
+                            no_concretadas: `${next.no_concretadas}${res.id}, `
+                        }
+                        if (current < r.length) {
+
+                            retr = loop(r, current + 1, log, callback);
+                        }
+
+                    }
+                })
+            }
+            else {
+                mysqlConnection.query({
+                    sql: `update postulation set project_assigned = 0 where id = ${res.id}`
+                }, function (error, result, fields) {
+                    if (result) {
+                        mysqlConnection.query({
+                            sql: `update db_pmo_dev.group set project_assigned = 0 where id = ${res.group_id}`
+                        }, function (error, result, fields) {
+                            if (error) {
+                                console.log(error)
+                                log = {
+                                    correctas: next.correctas,
+                                    no_concretadas: `${next.no_concretadas}${res.id}, `
+                                }
+                                if (current < r.length) {
+
+                                    retr = loop(r, current + 1, log, callback);
+                                }
+                            }
+                            if (result) {
+                                log = {
+                                    correctas: next.correctas,
+                                    no_concretadas: `${next.no_concretadas}${res.id}, `
+                                }
+                                if (current < r.length) {
+
+                                    retr = loop(r, current + 1, log, callback);
+                                }
+                            }
+                        })
+
+
+                    }
+                    if (error) {
+                        log = {
+                            correctas: next.correctas,
+                            no_concretadas: `${next.no_concretadas}${res.id}, `
+                        }
+                        if (current < r.length) {
+
+                            retr = loop(r, current + 1, log, callback);
+                        }
+
+                    }
+                })
+            }
+        })
+
+    }, 2000);
+    return retr
+}
+
