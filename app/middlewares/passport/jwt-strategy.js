@@ -21,9 +21,12 @@ passport.use(
                 let settings = {
                     front_url: result[0].front_url,
                     back_url: result[0].back_url,
-                    name_portfolio: result[0]['portfolio.name'],
+                    portfolio_id: result[0]['portfolio.id'],
+                    portfolio_name: result[0]['portfolio.name'],
+                    portfolio_state_id: result[0]['portfolio_state.id'],
                     portfolio_state: result[0]['portfolio_state.state'],
-                    semester: result[0]['semester.name'],
+                    semester_id: result[0]['semester.id'],
+                    semester_name: result[0]['semester.name'],
                     date_from: result[0]['semester.date_from'],
                     date_until: result[0]['semester.date_until']
                 };

@@ -10,6 +10,7 @@ var { ProjectController } = require('../controllers');
 
 //Import Endpoints Contants
 var { endpoints } = require('../constants');
+const { route } = require('./clientsRoute');
 
 const PROJECT_URL = endpoints.PROJECT_URL
 /**
@@ -203,5 +204,7 @@ router.get(PROJECT_URL.OPERATIONS.GET_ALL_REQUEST_EDITS, ProjectController.getEd
 
 //SAVE NEW PROJECT WITH ARCHIVE
 router.post(PROJECT_URL.OPERATIONS.SAVE_NEW_WITH_ARCHIVE, uploadArch.single("file"), ProjectController.saveWithArchive);
+
+router.get(PROJECT_URL.OPERATIONS.DOWNLOAD_PROJECTS, ProjectController.downloadExcel)
 
 module.exports = router;

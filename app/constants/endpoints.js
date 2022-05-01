@@ -28,8 +28,8 @@ const endpoints = {
             SAVE: '/save',
             DOWN: '/down/?idUser=:idUser',//done
             GET_ONE: '/:idUser',
-            MASIVEREGISTER: '/registroMasivo',//working
-            MREGISTERBLOCK: '/registroMasivoB',//working
+            MASIVE_REGISTER_ACCEPT: '/masive_register_accept',//working
+            MASIVE_REGISTER_BLOCK: '/masive_register_block',//working
             GET_ONE: '/:idUser'
         }
     },
@@ -54,9 +54,8 @@ const endpoints = {
             GET_ALL_REQUEST_EDITS: '/all_request_edits',
             SAVE_NEW_WITH_ARCHIVE: '/save_with_archive',
             GET_VARIOUS_STATUS: '/status/:idState',
-            GET_MY_EDIT: '/edit/:idUser',
-            GET_EDITS: '/edits',
-            GET_ONE: '/:idProject'
+            GET_ONE: '/:idProject',
+            DOWNLOAD_PROJECTS: '/download_projects'
         }
     },
     POSTULATION_URL: {
@@ -81,7 +80,7 @@ const endpoints = {
             LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idgroup',
-            GET_GROUP: '/mygroup'
+            GET_MY_GROUP: '/mygroup'
         }
     },
     ROLE_URL: {

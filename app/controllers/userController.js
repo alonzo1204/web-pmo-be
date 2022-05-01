@@ -40,14 +40,14 @@ exports.darBaja = function (req, res) {
         }
     })
 }
-global.nCorrectos = 0;
-global.Incorrectos = [];
+
 // Para el register_permission
-exports.RegistroMasivo = function (req, res, callback)  {
+exports.RegistroMasivoAceptar =async function (req, res, callback)  {
     try{
         if(req.file == undefined){
             return res.status(400).send("Please upload an excel file!");
         }
+        var resultados={ correctos : [], incorrectos : []};
         let path =
       __basedir + "/recursos/uploads/" + req.file.filename;
         var workbook = xlsx.readFile(path);
@@ -57,14 +57,15 @@ exports.RegistroMasivo = function (req, res, callback)  {
         var datos = xlsx.utils.sheet_to_json(worksheet);
         for (let index = 0; index < datos.length; index++) {
             const element = datos[index];
-            if (element.project_process_state_id==null)element.project_process_state_id=6;
-            UserService.CargaMasivaPermisos(element).then(function (result) {
+            
+            if (element.semester_id == null || element.semester_id == undefined) element.semester_id = req.user.settings.semester_name;
+            await UserService.CargaMasivaPermisos(element).then(function (result) {
                 if (result) {
-                    nCorrectos+=1;
+                    resultados.correctos.push(element.code);
                 }
             }, function (error) {
                 if (error) {
-                    console.log(element.code);
+                    resultados.incorrectos.push(element.code);
                 }
             })
         
@@ -76,10 +77,13 @@ exports.RegistroMasivo = function (req, res, callback)  {
             }
             console.log("File is deleted.");
         });
-        console.log(Incorrectos)
+        
         return res.status(200).send({
-           confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,   
-           })
+            confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            message: "Se ha cargado el registro",
+            correctos: resultados.correctos,
+            incorrectos:resultados.incorrectos
+        })
     }catch(error){
         
         console.log(error);
@@ -91,11 +95,12 @@ exports.RegistroMasivo = function (req, res, callback)  {
 }
 
 // Para el register_permission
-exports.RegistroMasivoBloqueados = function (req, res, callback)  {
+exports.RegistroMasivoBloqueados =async function (req, res, callback)  {
     try{
         if(req.file == undefined){
             return res.status(400).send("Please upload an excel file!");
         }
+        var resultados={ correctos : [], incorrectos : []};
         let path =
       __basedir + "/recursos/uploads/" + req.file.filename;
         var workbook = xlsx.readFile(path);
@@ -105,14 +110,14 @@ exports.RegistroMasivoBloqueados = function (req, res, callback)  {
         var datos = xlsx.utils.sheet_to_json(worksheet);
         for (let index = 0; index < datos.length; index++) {
             const element = datos[index];
-            if (element.project_process_state_id==null)element.project_process_state_id=6;
-            UserService.CargaMasivaPermisosBloqueados(element).then(function (result) {
+            if (element.semester_id == null || element.semester_id == undefined) element.semester_id = req.user.settings.semester_name;
+            await UserService.CargaMasivaPermisosBloqueados(element).then(function (result) {
                 if (result) {
-                    nCorrectos+=1;
+                    resultados.correctos.push(element.code);
                 }
             }, function (error) {
                 if (error) {
-                    console.log(element.code);
+                    resultados.incorrectos.push(element.code);
                 }
             })
         
@@ -124,10 +129,13 @@ exports.RegistroMasivoBloqueados = function (req, res, callback)  {
             }
             console.log("File is deleted.");
         });
-        console.log(Incorrectos)
+        
         return res.status(200).send({
-           confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,   
-           })
+            confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            message: "Se ha cargado el registro",
+            correctos: resultados.correctos,
+            incorrectos: resultados.incorrectos
+        })
     }catch(error){
         
         console.log(error);

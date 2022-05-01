@@ -45,13 +45,12 @@ exports.save = function (req, res) {
     })
 }
 
-exports.saveExcel = function (req, res, callback) {
-    global.nCorrectos = 0;
-    global.Incorrectos = [];
+exports.saveExcel =async function (req, res, callback) {
     try {
         if (req.file == undefined) {
             return res.status(400).send("Please upload an excel file!");
         }
+        var resultados={ correctos : [], incorrectos : []};
         let path =
             __basedir + "/recursos/uploads/" + req.file.filename;
         var workbook = xlsx.readFile(path);
@@ -59,31 +58,22 @@ exports.saveExcel = function (req, res, callback) {
         //Solo funcionara cuando haya una hoja llamada CargaMasiva
         var worksheet = workbook.Sheets["CargaMasiva"];
         var datos = xlsx.utils.sheet_to_json(worksheet);
-        for (let index = 0; index < datos.length; index++) {
-            const element = datos[index];
-            if (element.project_process_state_id == null) element.project_process_state_id = 6;
-            ProjectService.saveExcel(element).then(function (result) {
+        for (const element of datos) {
+            element.project_process_state_id = 1;
+            if (element.portfolio_id == null || element.portfolio_id == undefined) element.portfolio_id = req.user.settings.portfolio_name;
+            await ProjectService.saveExcel(element).then(function (result) {
                 if (result) {
-                    nCorrectos += 1;
-                    //send no funciona por alguna razon
-                    //res.status(200).status({
-                    //    data: result,
-                    //    message: 'Project with id ' + result.insertId + ' created successfully',
-                    //    idPosition: result.insertId
-                    //})
-                    //return;
+                    resultados.correctos.push(element.code);
+                    return element.code;
                 }
             }, function (error) {
                 if (error) {
-                    console.log(element.code);
-                    //send no funciona por alguna razon
-                    //return res.status(401).send({
-                    //    code: error.codeMessage,
-                    //    message: error.message,
-                    //});
+                    resultados.incorrectos.push(element.code);
+                    
+                    return element.code;
                 }
             })
-
+  
         }
         //borra el excel
         fs.unlink(path, (err) => {
@@ -92,9 +82,13 @@ exports.saveExcel = function (req, res, callback) {
             }
             console.log("File is deleted.");
         });
-        console.log(Incorrectos)
+
         return res.status(200).send({
+
             confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            message: "Se han cargado los proyectos",
+            correctos: resultados.correctos,
+            incorrectos:resultados.incorrectos
         })
     } catch (error) {
 
@@ -417,4 +411,29 @@ exports.saveWithArchive = function (req, res) {
         message: "Could not upload the file: " + req.file.originalname,
         });
     }
+}
+
+exports.downloadExcel =function (req, res, callback) {
+    //console.log([req.body])
+    const ws = xlsx.utils.json_to_sheet(req.body)
+    const wb = xlsx.utils.book_new()
+    xlsx.utils.book_append_sheet(wb, ws, 'Proyectos')
+    xlsx.writeFile(wb, __basedir+'/recursos/uploads/Proyectos.xlsx')
+
+    res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+    res.setHeader('Content-disposition', `attachment;filename=Proyectos.xlsx`);
+    res.charset = 'UTF-8';
+    return res.status(200).download(__basedir+'/recursos/uploads/Proyectos.xlsx') 
+    fs.unlink(path, (err) => {
+        if (err) {
+            throw err;
+        }
+        console.log("File is deleted.");
+    });
+    return res.status(200).send({
+        message: "Excel descargado"
+    })
 }

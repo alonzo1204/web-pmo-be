@@ -46,8 +46,8 @@ exports.save = function (group) {
 
 exports.getgroup = function (code) {
     return new Promise(function (resolve, reject) {
-        if (code.code) {
-            const codigo = code.code;
+        if (code) {
+            const codigo = code;
             mysqlConnection.query({
                 sql: `SELECT g.id 
                 from db_pmo_dev.group g, user u1, user u2 where g.student_1_id = u1.id and g.student_2_id = u2.id 

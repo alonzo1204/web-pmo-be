@@ -64,10 +64,23 @@ exports.CargaMasivaPermisos = function(user){
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,1,?)',
-                    },[user.code,user.semester_id], function (error, result, fields){
+                        sql: 'SELECT id as semester_id from semester where semester.name = ?',
+                    },[user.semester_id], function (error, result, fields){
                         if (result) {
-                            resolve(result);
+                            mysqlConnection.query({
+                                sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,1,?)',
+                            },[user.code,result[0].semester_id], function (error, result, fields){
+                                if (result) {
+                                    resolve(result);
+                                }
+                                if (error) {
+                                    
+                                    reject({
+                                        codeMessage: error.code ? error.code : 'ER_',
+                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                    })
+                                }
+                            })
                         }
                         if (error) {
                             
@@ -77,6 +90,8 @@ exports.CargaMasivaPermisos = function(user){
                             })
                         }
                     })
+
+                    
                 }
                 if (error) {
                     
@@ -109,10 +124,23 @@ exports.CargaMasivaPermisosBloqueados = function(user){
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,0,?)',
-                    },[user.code,user.semester_id], function (error, result, fields){
+                        sql: 'SELECT id as semester_id from semester where semester.name = ?',
+                    },[user.semester_id], function (error, result, fields){
                         if (result) {
-                            resolve(result);
+                            mysqlConnection.query({
+                                sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,0,?)',
+                            },[user.code,result[0].semester_id], function (error, result, fields){
+                                if (result) {
+                                    resolve(result);
+                                }
+                                if (error) {
+                                    
+                                    reject({
+                                        codeMessage: error.code ? error.code : 'ER_',
+                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                    })
+                                }
+                            })
                         }
                         if (error) {
                             

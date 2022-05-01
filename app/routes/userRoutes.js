@@ -29,9 +29,9 @@ router.get(USER_URL.OPERATIONS.LIST, UserController.getFullList);
 router.post(USER_URL.OPERATIONS.DOWN, UserController.darBaja);
 
 //POST CARGA MASIVA DE REGISTRO
-router.post(USER_URL.OPERATIONS.MASIVEREGISTER, upload.single("file"), UserController.RegistroMasivo);
+router.post(USER_URL.OPERATIONS.MASIVE_REGISTER_ACCEPT, upload.single("file"), UserController.RegistroMasivoAceptar);
 
 //POST CARGA MASIVA DE REGISTRO DE LOS BLOQUEADOS
-router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
+router.post(USER_URL.OPERATIONS.MASIVE_REGISTER_BLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
 
 module.exports = router;
