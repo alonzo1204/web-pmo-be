@@ -6,7 +6,7 @@ exports.save = function (group) {
         if (group.student_1_id && group.student_2_id) {
 
             mysqlConnection.query({
-                sql: 'SELECT* from db_pmo_dev_2.group where student_1_id = ? OR student_2_id = ?',
+                sql: 'SELECT* from db_pmo_dev.group where student_1_id = ? OR student_2_id = ?',
             }, [group.student_1_id, group.student_2_id], function (error, result, fields) {
                 if (result && result.length > 0) {
                     reject({
@@ -15,7 +15,7 @@ exports.save = function (group) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO db_pmo_dev_2.group (`student_1_id`,`student_2_id`, `group_weighted_average`) select u1.id , u2.id, ((u1.weighted_average)+(u2.weighted_average))/2 as group_weighted_average from user u1, user u2 where u1.id = ? and u2.id = ?',
+                        sql: 'INSERT INTO db_pmo_dev.group (`student_1_id`,`student_2_id`, `group_weighted_average`) select u1.id , u2.id, ((u1.weighted_average)+(u2.weighted_average))/2 as group_weighted_average from user u1, user u2 where u1.id = ? and u2.id = ?',
                     }, [group.student_1_id, group.student_2_id], function (error, result, fields) {
                         if (result) {
                             resolve(result);
@@ -50,7 +50,7 @@ exports.getgroup = function (code) {
             const codigo = code.code;
             mysqlConnection.query({
                 sql: `SELECT g.id 
-                from db_pmo_dev_2.group as g 
+                from db_pmo_dev.group as g 
                 left join user u1 on u1.id = g.student_1_id
                 left join user u2 on u2.id = g.student_2_id
                 where u1.code = "${codigo}" or u2.code = "${codigo}"
@@ -70,7 +70,7 @@ exports.getgroup = function (code) {
                          u2.lastname as 'alumno2.apellido',
                          u2.code as 'alumno2.codigo_2',
                          u2.weighted_average as 'alumno2.prom_2'
-                        from db_pmo_dev_2.group g 
+                        from db_pmo_dev.group g 
                         left join user u1 on u1.id = g.student_1_id
                         left join user u2 on u2.id = g.student_2_id
                         where g.id = ${result[0].id}

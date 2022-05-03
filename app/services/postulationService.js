@@ -90,7 +90,7 @@ exports.getFullList = function () {
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
                 
-                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev_2.group g, user u1, user u2
+                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev.group g, user u1, user u2
                 where p.project_1_id = p1.id and p.project_2_id = p2.id and p.project_3_id = p3.id and
                  p.project_4_id = p4.id and pa.id and g.id = p.group_id and g.student_1_id = u1.id and
                  g.student_2_id = u2.id
@@ -123,10 +123,10 @@ exports.save = function (postulation) {
                 } else {
                     mysqlConnection.query({
                         sql: `
-                        INSERT INTO db_pmo_dev_2.postulation
+                        INSERT INTO db_pmo_dev.postulation
                         (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id)
                         select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id
-                        from db_pmo_dev_2.group g where g.id = ${postulation.group_id}
+                        from db_pmo_dev.group g where g.id = ${postulation.group_id}
                         `,
                     }, function (error, result, fields) {
                         if (result) {
@@ -245,7 +245,7 @@ exports.myPostulation = function (user) {
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
-                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev_2.group g, user u1, user u2
+                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev.group g, user u1, user u2
                 where p.project_1_id = p1.id and p.project_2_id = p2.id and p.project_3_id = p3.id and
                  p.project_4_id = p4.id and pa.id and g.id = p.group_id and g.student_1_id = u1.id and
                  g.student_2_id = u2.id
@@ -269,7 +269,7 @@ exports.setProyects = function () {
     var ret
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `select po.id, po.project_1_id , po.project_2_id, po.project_3_id, po.project_4_id, po.group_id,po.group_weighted_average from postulation po, project p1,project p2,project p3, project p4, db_pmo_dev_2.group g
+            sql: `select po.id, po.project_1_id , po.project_2_id, po.project_3_id, po.project_4_id, po.group_id,po.group_weighted_average from postulation po, project p1,project p2,project p3, project p4, db_pmo_dev.group g
             where
             po.project_1_id = p1.id and po.project_2_id = p2.id and po.project_3_id = p3.id and po.project_4_id = p4.id and po.group_id = g.id and po.project_assigned is null 
             order by po.group_weighted_average desc;
@@ -334,7 +334,7 @@ async function loop(r, current, next, callback) {
                         }, function (error, result, fields) {
                             if (result) {
                                 mysqlConnection.query({
-                                    sql: `update db_pmo_dev_2.group set project_assigned = ${proj_id} where id = ${res.group_id}`
+                                    sql: `update db_pmo_dev.group set project_assigned = ${proj_id} where id = ${res.group_id}`
                                 }, function (error, result, fields) {
                                     if (error) {
                                         console.log(error)
@@ -391,7 +391,7 @@ async function loop(r, current, next, callback) {
                 }, function (error, result, fields) {
                     if (result) {
                         mysqlConnection.query({
-                            sql: `update db_pmo_dev_2.group set project_assigned = null where id = ${res.group_id}`
+                            sql: `update db_pmo_dev.group set project_assigned = null where id = ${res.group_id}`
                         }, function (error, result, fields) {
                             if (error) {
                                 console.log(error)

@@ -59,7 +59,7 @@ exports.getFullList = function () {
                 FROM project p
                 left join career ca on ca.id = p.career_id
                 left join  project_process_state state on state.id = p.project_process_state_id
-                left join db_pmo_dev_2.group g on g.id = p.group_id
+                left join db_pmo_dev.group g on g.id = p.group_id
                 left join user u1 on u1.id = g.student_1_id
                 left join user u2 on u2.id = g.student_2_id
                 left join user pmanager on pmanager.id = p.portfolio_manager_id
@@ -360,7 +360,7 @@ exports.sendUpdateRequest = function (project, token_inf) {
         if (project.project_id && project.value && project.column) {
             const uid = token_inf.token.information.id
             mysqlConnection.query({
-                sql: `select p.code from db_pmo_dev_2.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${uid} or g.student_2_id = ${uid}) group by p.id`,
+                sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${uid} or g.student_2_id = ${uid}) group by p.id`,
             }, function (error, result, fields) {
                 if (result && result.length == 0 || error) {
                     resolve({
@@ -619,7 +619,7 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
 			FROM project p
             left join career ca on ca.id = p.career_id
             left join  project_process_state state on state.id = p.project_process_state_id
-            left join db_pmo_dev_2.group g on g.id = p.group_id
+            left join db_pmo_dev.group g on g.id = p.group_id
             left join user u1 on u1.id = g.student_1_id
             left join user u2 on u2.id = g.student_2_id
             left join user pmanager on pmanager.id = p.portfolio_manager_id
