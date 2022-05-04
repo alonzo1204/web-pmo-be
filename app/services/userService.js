@@ -14,8 +14,7 @@ exports.getFullList = function () {
                 r.id as 'role.id', 
                 r.name as 'role.name'
                 from user u, user_rol ur, role r 
-                where u.id = ur.user_id and
-                r.id = ur.role_id`,
+                where u.id = ur.user_id and r.id = ur.role_id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);
