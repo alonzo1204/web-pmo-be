@@ -6,12 +6,12 @@ exports.save = function (group) {
         if (group.student_1_id && group.student_2_id) {
 
             mysqlConnection.query({
-                sql: 'SELECT* from db_pmo_dev.group where student_1_id = ? OR student_2_id = ?',
-            }, [group.student_1_id, group.student_2_id], function (error, result, fields) {
+                sql: 'SELECT* from db_pmo_dev.group where student_1_id = ? OR student_2_id = ? OR student_1_id = ? OR student_2_id = ?',
+            }, [group.student_1_id, group.student_1_id, group.student_2_id, group.student_2_id], function (error, result, fields) {
                 if (result && result.length > 0) {
                     reject({
-                        codeMessage: 'STUDENT DUPLICCATED',
-                        message: 'One of your students is duplicated'
+                        codeMessage: 'STUDENT DUPLICATED',
+                        message: 'Uno de los estudiantes ya se encuentra en el grupo'
                     })
                 } else {
                     mysqlConnection.query({
