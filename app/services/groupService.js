@@ -53,8 +53,7 @@ exports.getgroup = function (code) {
                 from db_pmo_dev.group as g 
                 left join user u1 on u1.id = g.student_1_id
                 left join user u2 on u2.id = g.student_2_id
-                where u1.code = "${codigo}" or u2.code = "${codigo}"
-                group by u2.code and u1.code`,
+                where u1.code = "${codigo}" or u2.code = "${codigo}"`,
             }, function (error, result, fields) {
                 console.log(error);
                 if (result && result.length > 0) {
