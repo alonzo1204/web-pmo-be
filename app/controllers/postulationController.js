@@ -37,3 +37,22 @@ exports.save = function (req, res) {
         }
     })
 }
+
+exports.getpostulations = function (req, res) {
+    PostulationService.getpostulations(req).then(function (result) {
+
+        if (result) {
+            result.map(r => dot.object(r));
+            return res.status(200).send({
+                data: result
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}
