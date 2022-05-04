@@ -64,7 +64,8 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save', //done
-            GET_ONE: '/:idPostulation'
+            GET_ONE: '/:idPostulation',
+            GET_POSTULATIONS: '/mypostulations/:code'
         }
     },
     CAREER_URL: {
@@ -81,7 +82,7 @@ const endpoints = {
             LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idgroup',
-            GET_GROUP: '/mygroup'
+            GET_GROUP: '/mygroup/:code'
         }
     },
     ROLE_URL: {

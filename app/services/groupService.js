@@ -45,9 +45,9 @@ exports.save = function (group) {
 }
 
 exports.getgroup = function (code) {
+    const codigo = code.params.code;
     return new Promise(function (resolve, reject) {
-        if (code.code) {
-            const codigo = code.code;
+        if (codigo) {
             mysqlConnection.query({
                 sql: `SELECT g.id 
                 from db_pmo_dev.group g, user u1, user u2 where g.student_1_id = u1.id and g.student_2_id = u2.id 
@@ -55,17 +55,35 @@ exports.getgroup = function (code) {
             }, function (error, result, fields) {
                 if (result[0]) {
                     mysqlConnection.query({
-                        sql: `select g.group_weighted_average,
+                        sql: `select g.id as 'group_id',
+                         g.group_weighted_average,
+
                          u1.firstname as 'alumno1.nombre',
                          u1.lastname as 'alumno1.apellido',
                          u1.code as 'alumno1.codigo',
                          u1.weighted_average as 'alumno1.prom',
+
                          u2.firstname as 'alumno2.nombre',
                          u2.lastname as 'alumno2.apellido',
-                         u2.code as 'alumno2.codigo_2',
-                         u2.weighted_average as 'alumno2.prom_2'
-                        from db_pmo_dev.group g, user u1, user u2 where g.student_1_id = u1.id and g.student_2_id = u2.id 
-                        and u1.code = "${codigo}" or u2.code = "${codigo}" group by u2.code and u1.code`,
+                         u2.code as 'alumno2.codigo',
+                         u2.weighted_average as 'alumno2.prom',
+
+                         pa.id as 'project_assigned.id', 
+                         pa.code as 'project_assigned.code', 
+                         pa.name as 'project_assigned.name', 
+                         pa.description as 'project_assigned.description', 
+                         pa.general_objective as 'project_assigned.general_objective', 
+                         pa.specific_objetive_1 as 'project_assigned.specific_objective_1',
+                         pa.specific_objetive_2 as 'project_assigned.specific_objective_2',
+                         pa.specific_objetive_3 as 'project_assigned.specific_objective_3',
+                         pa.specific_objetive_4 as 'project_assigned.specific_objective_4',
+                         pa.paper as 'project_assigned.paper',
+                         pa.devices as 'project_assigned.devices',
+                         pa.url_file as 'project_assigned.url_file',
+                         pa.url_sharepoint as 'project_assigned.url_sharepoint'
+
+                        from db_pmo_dev.group g, user u1, user u2, project pa where g.student_1_id = u1.id and g.student_2_id = u2.id 
+                        and g.project_assigned = pa.id and u1.code = "${codigo}" or u2.code = "${codigo}" group by u2.code and u1.code`,
                     }, function (error, result, fields) {
                         resolve(result)
                     })
