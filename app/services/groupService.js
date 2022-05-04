@@ -90,8 +90,7 @@ exports.getgroup = function (code) {
                         left join project p on p.id = g.project_assigned
                         left join company comp on comp.id = p.company_id
                         left join career ca on ca.id = p.career_id
-                        where g.id = ${result[0].id}
-                        group by u2.code and u1.code`,
+                        where g.id = ${result[0].id}`,
                     }, function (error, result, fields) {
                         console.log(error);
                         resolve(result)
