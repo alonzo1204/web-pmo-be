@@ -310,9 +310,9 @@ async function loop(r, current, next, callback) {
         const res = r[current]
         mysqlConnection.query({
             sql: `select id from project where
-            group_id is null and (id = ${res.project_1_id} or id = ${res.project_2_id} 
+            group_id is null and (id = ${res.project_1_id} or id = ${res.project_2_id}
             or id = ${res.project_3_id} or id = ${res.project_4_id}) ;`
-        }, function (error, result, fields) {
+        }, function (error, result, fields) { //AÑADIR CONDICION DE ESTADO DE PROYECTO
             if (error) {
                 log = {
                     correctas: next.correctas,
@@ -326,7 +326,7 @@ async function loop(r, current, next, callback) {
             if (result.length > 0) {
                 const proj_id = result[0].id
                 mysqlConnection.query({
-                    sql: `update project set group_id = ${res.group_id} where id = ${proj_id}`
+                    sql: `update project set group_id = ${res.group_id}, project_process_state_id = 5 where id = ${proj_id}`
                 }, function (error, result, fields) {
                     if (result) {
                         mysqlConnection.query({
@@ -387,11 +387,11 @@ async function loop(r, current, next, callback) {
             }
             else {
                 mysqlConnection.query({
-                    sql: `update postulation set project_assigned = 0 where id = ${res.id}`
+                    sql: `update postulation set project_assigned = null where id = ${res.id}`
                 }, function (error, result, fields) {
                     if (result) {
                         mysqlConnection.query({
-                            sql: `update db_pmo_dev.group set project_assigned = 0os where id = ${res.group_id}`
+                            sql: `update db_pmo_dev.group set project_assigned = null where id = ${res.group_id}`
                         }, function (error, result, fields) {
                             if (error) {
                                 console.log(error)

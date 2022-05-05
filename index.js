@@ -17,7 +17,7 @@ require('./app/middlewares/passport/jwt-strategy');
 var { mysqlConnection } = require('./app/connections');
 
 //MORGAN
-app.use(morgan())
+app.use(morgan('tiny'))
 
 // Parse data
 app.use(bodyParser.json());

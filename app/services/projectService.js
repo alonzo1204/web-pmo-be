@@ -7,7 +7,7 @@ exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql:
-                `select
+                `SELECT 
                 p.id, 
                 p.code, 
                 p.name, 
@@ -56,17 +56,16 @@ exports.getFullList = function () {
                 comp.id as 'company.id',
                 comp.name as 'company.name',
                 comp.image as 'company.image'
-                from project p, career ca, project_process_state state, db_pmo_dev.group g, user u1, user u2, user pmanager, user coautor, user powner, company comp
-                where
-                p.career_id = ca.id and 
-                state.id = p.project_process_state_id and 
-                u1.id = g.student_1_id and 
-                u2.id = student_2_id and 
-                g.id = p.group_id and 
-                powner.id = p.product_owner_id and 
-                pmanager.id = p.portfolio_manager_id and 
-                coautor.id = p.co_autor_id and 
-                comp.id = p.company_id
+                FROM project p
+                left join career ca on ca.id = p.career_id
+                left join  project_process_state state on state.id = p.project_process_state_id
+                left join db_pmo_dev.group g on g.id = p.group_id
+                left join user u1 on u1.id = g.student_1_id
+                left join user u2 on u2.id = g.student_2_id
+                left join user pmanager on pmanager.id = p.portfolio_manager_id
+                left join user coautor on coautor.id = p.co_autor_id
+                left join user powner on powner.id = p.product_owner_id
+                left join company comp on comp.id = p.company_id
                 group by p.id`,
         }, function (error, result, fields) {
             if (result) {
@@ -568,8 +567,8 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
     var state_ids = idProjectProcess.params.idState;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
-            sql: `select
-            p.id, 
+            sql: `SELECT 
+			p.id, 
             p.code, 
             p.name, 
             p.description, 
@@ -617,19 +616,17 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
             comp.id as 'company.id',
             comp.name as 'company.name',
             comp.image as 'company.image'
-            from project p, career ca, project_process_state state, db_pmo_dev.group g, user u1, user u2, user pmanager, user coautor, user powner, company comp
-            where
-            
-            p.career_id = ca.id and 
-            state.id = p.project_process_state_id and 
-            u1.id = g.student_1_id and 
-            u2.id = student_2_id and 
-            g.id = p.group_id and 
-            powner.id = p.product_owner_id and 
-            pmanager.id = p.portfolio_manager_id and 
-            coautor.id = p.co_autor_id and 
-            comp.id = p.company_id and
-            p.project_process_state_id in (${state_ids})
+			FROM project p
+            left join career ca on ca.id = p.career_id
+            left join  project_process_state state on state.id = p.project_process_state_id
+            left join db_pmo_dev.group g on g.id = p.group_id
+            left join user u1 on u1.id = g.student_1_id
+            left join user u2 on u2.id = g.student_2_id
+            left join user pmanager on pmanager.id = p.portfolio_manager_id
+            left join user coautor on coautor.id = p.co_autor_id
+            left join user powner on powner.id = p.product_owner_id
+            left join company comp on comp.id = p.company_id
+            where p.project_process_state_id in (${state_ids})
             group by p.id `,
         }, function (error, result, fields) {
             if (result) {

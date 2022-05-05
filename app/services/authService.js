@@ -81,8 +81,8 @@ exports.registerUser = function (user) {
                             })
                         } else {
                             mysqlConnection.query({
-                                sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`) VALUES (?,?,?,?)',
-                            }, [user.code, createHash(user.password), user.firstname, user.lastname], function (error, r, fields) {
+                                sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`, `weighted_average`) VALUES (?,?,?,?,?)',
+                            }, [user.code, createHash(user.password), user.firstname, user.lastname, 15.00], function (error, r, fields) {
                                 if (r) {
                                     const uid = r.insertId
                                     mysqlConnection.query({

@@ -65,7 +65,7 @@ const endpoints = {
             LIST: '/', //done
             SAVE: '/save', //done
             GET_MY: '/mypostulations',
-            SET_PROYECT: '/setproject'
+            SET_PROYECT: '/runPostulationProcess'
         }
     },
     CAREER_URL: {
