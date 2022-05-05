@@ -391,7 +391,7 @@ async function loop(r, current, next, callback) {
                 }, function (error, result, fields) {
                     if (result) {
                         mysqlConnection.query({
-                            sql: `update db_pmo_dev.group set project_assigned = 0 where id = ${res.group_id}`
+                            sql: `update db_pmo_dev.group set project_assigned = 0os where id = ${res.group_id}`
                         }, function (error, result, fields) {
                             if (error) {
                                 console.log(error)

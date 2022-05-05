@@ -41,6 +41,7 @@ exports.save = function (req, res) {
 exports.myPostulation = function (req, res) {
     PostulationService.myPostulation(req.user.token.information).then(function (result) {
         if (result) {
+            result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })
