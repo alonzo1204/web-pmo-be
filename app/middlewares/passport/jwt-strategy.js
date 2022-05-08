@@ -17,7 +17,8 @@ passport.use(
         },
         async (req, token, done) => { //TOKEN ES LA INFORMACION DENTRO DEL JWT
             const jwt = req.headers.authorization.split(' ')[1];
-            var settings = await AppSettingsService.getConfiguration('1').then(function(result) {
+            /*
+            var settings = await AppSettingsService.getConfiguration().then(function(result) {
                 let settings = {
                     front_url: result[0].front_url,
                     back_url: result[0].back_url,
@@ -29,8 +30,8 @@ passport.use(
                 };
                 //console.log(result)
                 return settings
-            })
-            
+            })*/
+            var settings=await AppSettingsService.getConfiguration();
             try {
                 AuthService.checkValidToken(jwt).then((response) => {
                     if (response) {

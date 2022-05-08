@@ -118,7 +118,7 @@ const endpoints = {
     APP_SETTINGS_URL: {
         MAIN: '/config',
         OPERATIONS: {
-            GET_ONE: '/:idConfig',
+            GET_ONE: '/',
             EDIT: '/edit/:idConfig'
         }
     }

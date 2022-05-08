@@ -1,5 +1,16 @@
+const Sequelize = require('sequelize')
 var mysql = require('mysql2');
 const { database } = require('../constants');
+
+const sequelize = new Sequelize(database.DATABASE, database.USER, database.PASSWORD, {
+    host: database.HOST,
+    dialect: 'mysql',
+    define: {
+        timestamps: false
+    }
+  });
+  
+/*
 var connection = mysql.createConnection({
     host: database.HOST,
     user: database.USER,
@@ -8,7 +19,7 @@ var connection = mysql.createConnection({
     supportBigNumbers: true,
     bigNumberStrings: true
 });
-
+*/
 module.exports = {
-    mysqlConnection: connection
+    sequelize
 };

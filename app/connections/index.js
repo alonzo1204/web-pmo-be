@@ -1,5 +1,5 @@
-const { mysqlConnection } = require('./mysql');
+const { sequelize } = require('./mysql');
 
 module.exports = {
-    mysqlConnection
+    sequelize
 }

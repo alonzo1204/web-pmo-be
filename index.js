@@ -13,8 +13,11 @@ const swaggerJSDoc = require('swagger-jsdoc');
 require('./app/middlewares/passport/local-strategy');
 require('./app/middlewares/passport/jwt-strategy');
 
+//sequelize Database Connection
+const {sequelize}=require('./app/connections');
+
 //MySql Database Connection
-var { mysqlConnection } = require('./app/connections');
+//var { mysqlConnection } = require('./app/connections');
 
 //MORGAN
 app.use(morgan())
@@ -45,6 +48,19 @@ app.use(cors(corsOptions));
 var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes, portfolioRoutes, appSettingsRoutes } = require('./app/routes');
 const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION;
 
+//sequelize Database Connection
+app.listen(server.PORT, function(){
+    console.log('Server Running on port ' + server.PORT);
+    sequelize.authenticate().then(() => {
+        console.log('Connection has been established successfully.');
+      })
+      .catch(err => {
+        console.error('Unable to connect to the database:', err);
+      });
+      
+})
+
+/*
 //MySQL Database Connection
 mysqlConnection.connect(function (err) {
     if (err) {
@@ -56,7 +72,7 @@ mysqlConnection.connect(function (err) {
         console.log('Server Running on port ' + server.PORT);
     })
 });
-
+*/
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -108,7 +124,7 @@ app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
 app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
 app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, passport.authenticate('jwt', { session: false }), SemesterRoutes);
 app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, passport.authenticate('jwt', { session: false }), PostulationRoutes);
-app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, passport.authenticate('jwt', { session: false }), ProjectRoutes);
+app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, /*passport.authenticate('jwt', { session: false }),*/ ProjectRoutes);
 app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, passport.authenticate('jwt', { session: false }), RoleRoutes);
 app.use(APP_ROUTE + endpoints.USER_URL.MAIN, passport.authenticate('jwt', { session: false }), UserRoutes);
 app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, passport.authenticate('jwt', { session: false }), CompanyRoutes);

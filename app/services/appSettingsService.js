@@ -1,5 +1,16 @@
 const { mysqlConnection } = require('../connections/mysql');
+const { appSettingsModel } = require('../models/appSettingsModel');
 
+
+exports.getConfiguration =async function(){
+    await appSettingsModel.findAll().then(configuracion=>{
+        return configuracion;
+    }).catch(error=>{
+        return error;
+    })
+    
+};
+/*
 exports.getConfiguration = function(configID){
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -32,7 +43,7 @@ exports.getConfiguration = function(configID){
         })
     })
 }
-
+*/
 exports.editConfiguration = function(config){
     console.log(config.params.idConfig)
     return new Promise(function (resolve, reject) {

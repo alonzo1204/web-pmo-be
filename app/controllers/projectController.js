@@ -1,10 +1,26 @@
 const { ProjectService } = require('../services');
+
 var dot = require('dot-object');
 const fs = require('fs');
 var xlsx = require("xlsx");
 const { EOL } = require('os');
+const { projectModel } = require('../models/projectModel');
 
 exports.getFullList = function (req, res) {
+    projectModel.findAll().then(project=>{
+        project.map(r => dot.object(r));
+            return res.status(200).send({
+                data: project
+            })
+    }).catch(error=>{
+        return res.status(401).send({
+            code: error.codeMessage,
+            message: error.message
+        })
+    }) 
+}
+
+/*exports.getFullList = function (req, res) {
     
     ProjectService.getFullList().then(function (result) {
 
@@ -24,7 +40,7 @@ exports.getFullList = function (req, res) {
     })
     
 }
-
+*/
 exports.save = function (req, res) {
     ProjectService.save(req.body).then(function (result) {
 
