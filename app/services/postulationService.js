@@ -437,3 +437,71 @@ async function loop(r, current, next, callback) {
     return retr
 }
 
+
+exports.getHistory = function (requirements) {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql:
+                `
+                select
+                hpo.id,
+                hpo.accepted,
+                p1.id as 'project1.id',
+                p1.name as 'project1.name',
+                p1.description as 'project1.description',
+                p1.general_objective as 'project1.general_objective',
+                p1.specific_objetive_1 as 'project1.specific_objetive_1',
+                p1.specific_objetive_2 as 'project1.specific_objetive_2',
+                p1.specific_objetive_3 as 'project1.specific_objetive_3',
+                p1.specific_objetive_4 as 'project1.specific_objetive_4',
+                p2.id as 'project2.id',
+                p2.name as 'project2.name',
+                p2.description as 'project2.description',
+                p2.general_objective as 'project2.general_objective',
+                p2.specific_objetive_1 as 'project2specific_objetive_1',
+                p2.specific_objetive_2 as 'project2.specific_objetive_2',
+                p2.specific_objetive_3 as 'project2.specific_objetive_3',
+                p2.specific_objetive_4 as 'project2.specific_objetive_4',
+                p3.id as 'project3.id',
+                p3.name as 'project3.name',
+                p3.description as 'project3.description',
+                p3.general_objective as 'project3.general_objective',
+                p3.specific_objetive_1 as 'project3.specific_objetive_1',
+                p3.specific_objetive_2 as 'project3.specific_objetive_2',
+                p3.specific_objetive_3 as 'project3.specific_objetive_3',
+                p3.specific_objetive_4 as 'project3.specific_objetive_4',
+                p4.id as 'project4.id',
+                p4.name as 'project4.name',
+                p4.description as 'project4.description',
+                p4.general_objective as 'project4.general_objective',
+                p4.specific_objetive_1 as 'project4.specific_objetive_1',
+                p4.specific_objetive_2 as 'project4.specific_objetive_2',
+                p4.specific_objetive_3 as 'project4.specific_objetive_3',
+                p4.specific_objetive_4 as 'project4.specific_objetive_4',
+                hpo.iteration,
+                hpo.postulation_date,
+                hpo.group_weighted_average,
+                hpo.project_assigned,
+                hpo.group_id,
+                hpo.update_date,
+                hpo.id_postulation_row
+                FROM history_postulations hpo
+                left join project p1 on p1.id = hpo.project_1_id 
+                left join project p2 on p2.id = hpo.project_2_id 
+                left join project p3 on p3.id = hpo.project_3_id 
+                left join project p4 on p4.id = hpo.project_4_id
+                where  hpo.id_postulation_row = ${requirements.id_postulation_row}
+                `,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}

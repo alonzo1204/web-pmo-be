@@ -64,6 +64,7 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save', //done
+            HISTORY: '/history', //done
             GET_MY: '/mypostulations',
             SET_PROYECT: '/runPostulationProcess'
         }
