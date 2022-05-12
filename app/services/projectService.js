@@ -665,7 +665,7 @@ exports.getMyEditRequest = function (idUser) {
             WHERE er.user_id = ? and
             u.id=er.user_id and
             p.id=er.project_id`,
-        },[idUser], function (error, result, fields) {
+        }, [idUser], function (error, result, fields) {
             if (result) {
                 resolve(result);
             }
@@ -713,7 +713,7 @@ exports.getEditRequest = function () {
     })
 }
 
-exports.saveWithArchive = function (project,path) {
+exports.saveWithArchive = function (project, path) {
     return new Promise(function (resolve, reject) {
         if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.project_process_state_id && project.company_id) {
 
@@ -766,3 +766,58 @@ exports.saveWithArchive = function (project,path) {
         }
     })
 }
+
+exports.getHistory = function (requirements) {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql:
+                `
+                SELECT 
+                p.id,
+                p.code,
+                p.name,
+                p.description,
+                p.general_objective,
+                p.specific_objetive_1,
+                p.specific_objetive_2,
+                p.specific_objetive_3,
+                p.specific_objetive_4,
+                g.id as 'g.id',
+                g.group_weighted_average as 'g.group_weighted_average',
+                g.student_1_id as 'g.student_1_id',
+                g.student_2_id as 'g.student_2_id',
+                g.project_assigned as '',
+                p.paper,
+                p.devices,
+                p.url_file,
+                p.url_sharepoint,
+                p.career_id,
+                p.product_owner_id,
+                p.portfolio_manager_id,
+                p.co_autor_id,
+                p.project_process_state_id,
+                p.company_id,
+                p.group_id,
+                p.portfolio_id,
+                p.semester_id,
+                p.comments,
+                p.update_date,
+                p.id_project_row
+                FROM history_projects p 
+                left join db_pmo_dev.group g on p.group_id = g.id
+                where p.id_project_row = ${requirements.id_postulation_row}
+                `,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+

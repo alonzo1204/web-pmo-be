@@ -40,6 +40,9 @@ const PROJECT_URL = endpoints.PROJECT_URL
  */
 router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbyStatus); //Revisar
 
+router.get(PROJECT_URL.OPERATIONS.HISTORY, ProjectController.getHistory);
+
+
 router.post(PROJECT_URL.OPERATIONS.MULTIPLE_UPDATE, ProjectController.mutipleUpdates);
 
 router.post(PROJECT_URL.OPERATIONS.REQUEST_UPDATE, ProjectController.sendUpdateRequest);

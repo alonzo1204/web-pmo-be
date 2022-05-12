@@ -40,7 +40,8 @@ const endpoints = {
             REQUEST_UPDATE: '/request_update',
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
-            SAVE: '/save', //done
+            SAVE: '/save', //done,
+            HISTORY: '/history',
             SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
             MULTIPLE_UPDATE: '/mupdate',
