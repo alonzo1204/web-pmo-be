@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //Static Files
 app.use(express.static(path.join(__dirname, 'app/recursos/archivos')));
+app.use(express.static(path.join(__dirname, 'app/recursos/images')));
 
 // Security
 app.use(expressSession({ secret: 'temporal_key' }));
