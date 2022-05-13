@@ -111,7 +111,7 @@ exports.getFullList = function () {
 
 exports.save = function (postulation) {
     return new Promise(function (resolve, reject) {
-        if (postulation.first === true) {
+        if (!postulation.repostulation) {
             if (postulation.group_id && postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
                 mysqlConnection.query({
                     sql: 'SELECT id, group_id from postulation where group_id = ?',
@@ -127,7 +127,7 @@ exports.save = function (postulation) {
                             INSERT INTO db_pmo_dev.postulation
                             (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id)
                             select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id
-                            from db_pmo_dev.group g where g.id = ${postulation.group_id}
+                            from db_pmo_dev.group g where g.id = ${postulation.group_id};
                             `,
                         }, function (error, result, fields) {
                             if (result) {
@@ -567,6 +567,7 @@ exports.getHistory = function (requirements) {
 
 exports.getpostulations = function (code) {
     const codigo = code.params.code;
+    console.log(codigo);
     return new Promise(function (resolve, reject) {
         if (codigo) {
             mysqlConnection.query({
@@ -585,7 +586,7 @@ exports.getpostulations = function (code) {
                 u2.id as 'student_2.id',
                 u2.code as 'student_2.code',
                 u2.firstname as 'student_2.firstname',
-                u2.lastname as 'student_2.lastname'
+                u2.lastname as 'student_2.lastname',
                 p.project_1_id,
                 p.project_2_id,
                 p.project_3_id,
