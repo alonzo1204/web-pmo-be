@@ -22,7 +22,7 @@ exports.save = function (req, res) {
 }
 
 exports.getgroup = function (req, res) {
-    groupService.getgroup(req.body).then(function (result) {
+    groupService.getgroup(req).then(function (result) {
 
         if (result) {
             result.map(r => dot.object(r));

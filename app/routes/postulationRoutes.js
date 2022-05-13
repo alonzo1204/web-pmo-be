@@ -35,6 +35,8 @@ const POSTULATION_URL = endpoints.POSTULATION_URL
  */
 router.get(POSTULATION_URL.OPERATIONS.LIST, PostulationController.getFullList);
 
+router.get(POSTULATION_URL.OPERATIONS.GET_POSTULATIONS, PostulationController.getpostulations);
+
 /**
  * @swagger
  * path:
