@@ -156,7 +156,7 @@ exports.save = function (postulation) {
             }
         }
         else {
-            if (postulation.group_id && (postulation.project_1_id || postulation.project_2_id || postulation.project_3_id || postulation.project_4_id)) {
+            if (postulation.group_id && postulation.project_1_id) {
                 mysqlConnection.query({
                     sql: `SELECT id, group_id, iteration,accepted from postulation where group_id = ${postulation.group_id} order by iteration desc limit 1 `,
                 }, function (error, result, fields) {
@@ -167,13 +167,16 @@ exports.save = function (postulation) {
                         })
                     }
                     else {
+                        const project_2_id = postulation.project_2_id ? postulation.project_2_id : null
+                        const project_3_id = postulation.project_3_id ? postulation.project_3_id : null
+                        const project_4_id = postulation.project_4_id ? postulation.project_4_id : null
                         const iter = result[0].iteration + 1
                         if (result && result.length > 0) {
                             mysqlConnection.query({
                                 sql: `
                                 INSERT INTO db_pmo_dev.postulation
                                 (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id, iteration)
-                                select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id,${iter}
+                                select ${postulation.project_1_id},${project_2_id},${project_3_id},${project_4_id}, g.group_weighted_average, id,${iter}
                                 from db_pmo_dev.group g where g.id = ${postulation.group_id}
                                 `,
                             }, function (error, result, fields) {
