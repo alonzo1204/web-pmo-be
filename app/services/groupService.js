@@ -64,11 +64,10 @@ exports.getgroup = function (code) {
                         u1.lastname as 'alumno1.apellido',
                         u1.code as 'alumno1.codigo',
                         u1.weighted_average as 'alumno1.prom',
-                        u2.id as 'alumno2.id',
                         u2.firstname as 'alumno2.nombre',
                         u2.lastname as 'alumno2.apellido',
-                        u2.code as 'alumno2.codigo_2',
-                        u2.weighted_average as 'alumno2.prom_2',
+                        u2.code as 'alumno2.codigo',
+                        u2.weighted_average as 'alumno2.prom',
 
                         p.id as 'project_assigned.id', 
                         p.code as 'project_assigned.code',  
