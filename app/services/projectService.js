@@ -81,10 +81,9 @@ exports.getFullList = function () {
     })
 }
 
-exports.save = function (project) {
+exports.save = function (project, settings) {
     return new Promise(function (resolve, reject) {
         if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.project_process_state_id && project.company) {
-
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',
             }, [project.code], function (error, result, fields) {
@@ -95,7 +94,7 @@ exports.save = function (project) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, portfolio_id, semester_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
                         project.code, project.name,
                         project.description, project.general_objective,
@@ -106,7 +105,8 @@ exports.save = function (project) {
                         project.career_id,
                         project.group_id,
                         project.portfolio_manager_id,
-                        project.co_autor_id, project.project_process_state_id, project.company
+                        project.co_autor_id, project.project_process_state_id, project.company,
+                        settings.portfolio_id, settings.semester_id
                     ], function (error, result, fields) {
                         if (result) {
                             resolve(result);

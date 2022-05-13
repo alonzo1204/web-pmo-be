@@ -26,7 +26,8 @@ exports.getFullList = function (req, res) {
 }
 
 exports.save = function (req, res) {
-    ProjectService.save(req.body).then(function (result) {
+    const settings = req.user.settings;
+    ProjectService.save(req.body, settings).then(function (result) {
 
         if (result) {
             return res.status(200).send({
