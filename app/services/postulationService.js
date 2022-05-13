@@ -570,43 +570,39 @@ exports.getpostulations = function (code) {
     return new Promise(function (resolve, reject) {
         if (codigo) {
             mysqlConnection.query({
-                sql: `SELECT p.id 
-                from postulation p, db_pmo_dev.group g, user u1, user u2 where p.group_id = g.id and g.student_1_id = u1.id and g.student_2_id = u2.id 
-                and u1.code = "${codigo}" or u2.code = "${codigo}" group by u2.code and u1.code; `,
+                sql: `SELECT 
+                p.id, 
+                p.accepted, 
+                p.iteration, 
+                p.postulation_date, 
+                p.group_weighted_average,
+                
+                u1.id as 'student_1.id',
+                u1.code as 'student_1.code',
+                u1.firstname as 'student_1.firstname',
+                u1.lastname as 'student_1.lastname',
+                
+                u2.id as 'student_2.id',
+                u2.code as 'student_2.code',
+                u2.firstname as 'student_2.firstname',
+                u2.lastname as 'student_2.lastname'
+                p.project_1_id,
+                p.project_2_id,
+                p.project_3_id,
+                p.project_4_id
+                        
+                from postulation p
+                left join db_pmo_dev.group g on g.id = p.group_id
+                left join user u1 on u1.id = g.student_1_id 
+                left join user u2 on u2.id = g.student_2_id 
+                where u1.code = "${codigo}" or u2.code = "${codigo}";`,
             }, function (error, result, fields) {
-                if (result[0]) {
-                    mysqlConnection.query({
-                        sql: `select
-                        p.id, 
-                        p.accepted, 
-                        p.iteration, 
-                        p.postulation_date, 
-                        p.group_weighted_average,
-                        
-                        u1.id as 'student_1.id',
-                        u1.code as 'student_1.code',
-                        u1.firstname as 'student_1.firstname',
-                        u1.lastname as 'student_1.lastname',
-                        
-                        u2.id as 'student_2.id',
-                        u2.code as 'student_2.code',
-                        u2.firstname as 'student_2.firstname',
-                        u2.lastname as 'student_2.lastname',
-
-                        p.project_1_id,
-                        p.project_2_id,
-                        p.project_3_id,
-                        p.project_4_id
-                                                
-                        from postulation p, db_pmo_dev.group g, user u1, user u2 where p.group_id = g.id and g.student_1_id = u1.id and g.student_2_id = u2.id 
-                        and u1.code = "${codigo}" or u2.code = "${codigo}" group by u2.code and u1.code; `,
-                    }, function (error, result, fields) {
-                        resolve(result)
-                    })
+                if (result && result.length > 0) {
+                    resolve(result)
                 } else {
                     reject({
                         codeMessage: 'ER_errcode',
-                        message: 'No perteneces a ningun grupo'
+                        message: 'No tienes ninguna postulación pendiente'
                     })
                 }
             })
