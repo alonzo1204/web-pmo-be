@@ -29,6 +29,39 @@ exports.getFullList = function () {
     })
 }
 
+exports.getFullListTeachers = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql:
+                `select 
+                u.id,
+                u.code, 
+                u.firstname, 
+                u.lastname,
+                CONCAT(u.code,' - ',u.firstname,' ',u.lastname) as fullInformation,
+                u.active, 
+                u.weighted_average, 
+                r.id as 'role.id', 
+                r.name as 'role.name'
+                from user u
+                left join user_rol ur on ur.user_id = u.id
+                left join role r on r.id = ur.role_id
+                where ur.role_id in (4,5)
+                group by u.id`,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
 exports.Baja = function (usuario) {
     var code = usuario.params.idUser;
     return new Promise(function (resolve, reject) {

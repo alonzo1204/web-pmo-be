@@ -34,4 +34,7 @@ router.post(USER_URL.OPERATIONS.MASIVEREGISTER, upload.single("file"), UserContr
 //POST CARGA MASIVA DE REGISTRO DE LOS BLOQUEADOS
 router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
 
+//GET LISTA DE PROFESORES Y MIEMBROS DE COMITE
+router.get(USER_URL.OPERATIONS.GET_TEACHERS, UserController.getFullListTeachers);
+
 module.exports = router;

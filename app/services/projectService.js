@@ -145,7 +145,7 @@ exports.saveExcel = function (project) {
                 if (result && result.length > 0) {
                     reject({
                         codeMessage: 'CODE_DUPLICATED',
-                        message: 'Send an unique code for project'
+                        message: 'Envie un código unico de proyecto'
                     })
                 } else {
                     mysqlConnection.query({
@@ -821,3 +821,32 @@ exports.getHistory = function (requirements) {
     })
 }
 
+exports.saveTeachers = function (body) {
+    return new Promise(function (resolve, reject) {
+        if (!body.code || !body.product_owner_id || !body.portfolio_manager_id || !body.co_autor_id) {
+            reject({
+                message: 'No se ha enviado la información completa'
+            })
+        } else {
+            var code = body.code;
+            var product_owner_id = body.product_owner_id;
+            var portfolio_manager_id = body.portfolio_manager_id;
+            var co_autor_id = body.co_autor_id;
+            mysqlConnection.query({
+                sql: 'UPDATE project p SET p.project_process_state_id = 6, p.product_owner_id = ?, p.portfolio_manager_id = ?, p.co_autor_id = ?, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
+            }, [product_owner_id, portfolio_manager_id, co_autor_id, code], function (error, result, fields) {
+                if (result) {
+                    resolve(result);
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        }
+
+    })
+
+}

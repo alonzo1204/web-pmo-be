@@ -30,7 +30,8 @@ const endpoints = {
             GET_ONE: '/:idUser',
             MASIVEREGISTER: '/registroMasivo',//working
             MREGISTERBLOCK: '/registroMasivoB',//working
-            GET_ONE: '/:idUser'
+            GET_ONE: '/:idUser',
+            GET_TEACHERS: '/teachers',
         }
     },
     PROJECT_URL: {
@@ -57,7 +58,8 @@ const endpoints = {
             GET_VARIOUS_STATUS: '/status/:idState',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
-            GET_ONE: '/:idProject'
+            GET_ONE: '/:idProject',
+            SAVE_TEACHERS: '/save_teachers',
         }
     },
     POSTULATION_URL: {

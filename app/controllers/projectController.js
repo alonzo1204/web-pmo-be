@@ -76,6 +76,7 @@ exports.saveExcel = function (req, res, callback) {
                 }
             }, function (error) {
                 if (error) {
+                    console.log(error);
                     console.log(element.code);
                     //send no funciona por alguna razon
                     //return res.status(401).send({
@@ -426,6 +427,25 @@ exports.getHistory = function (req, res) {
             result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}
+
+exports.saveTeachers = function (req, res) {
+    ProjectService.saveTeachers(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result,
+                message: 'Se han asignado los docentes al proyecto ' + req.params.idProject + ' de manera correcta',
+                idStatus: req.params.idState
             })
         }
     }, function (error) {
