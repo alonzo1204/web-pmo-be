@@ -40,9 +40,7 @@ exports.getFullListTeachers = function () {
                 u.lastname,
                 CONCAT(u.code,' - ',u.firstname,' ',u.lastname) as fullInformation,
                 u.active, 
-                u.weighted_average, 
-                r.id as 'role.id', 
-                r.name as 'role.name'
+                u.weighted_average
                 from user u
                 left join user_rol ur on ur.user_id = u.id
                 left join role r on r.id = ur.role_id
