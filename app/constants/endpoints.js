@@ -57,7 +57,8 @@ const endpoints = {
             GET_VARIOUS_STATUS: '/status/:idState',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
-            GET_ONE: '/:idProject'
+            GET_ONE: '/:idProject',
+            DOWNLOAD_PROJECTS: '/download'
         }
     },
     POSTULATION_URL: {

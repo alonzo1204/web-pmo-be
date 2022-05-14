@@ -1,72 +1,76 @@
 const { mysqlConnection } = require('../connections/mysql');
 const { setQuery, security, setHandleQuery, validProject } = require('../constants');
+const fs = require('fs');
+const _ = require('lodash');
+const json2xls = require('json2xls');
+const path = require('path');
+const filename = path.join(__dirname, '../reports/report.xlsx');
 
-const jwt = require('jsonwebtoken');
 
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql:
                 `SELECT 
-                p.id, 
-                p.code, 
-                p.name, 
-                p.description, 
-                p.general_objective, 
-                p.specific_objetive_1 as specific_objective_1,
-                p.specific_objetive_2 as specific_objective_2,
-                p.specific_objetive_3 as specific_objective_3,
-                p.specific_objetive_4 as specific_objective_4,
-                p.paper,
-                p.devices,
-                p.url_file,
-                p.url_sharepoint,
-                
-                ca.id as 'career.id',
-                ca.name as 'career.name',
-                
-                state.id as 'project_process_state.id',
-                state.name as 'project_process_state.name',
-                
-                u1.id as 'student_1.id',
-                u1.code as 'student_1.code',
-                u1.firstname as 'student_1.firstname',
-                u1.lastname as 'student_1.lastname',
-                
-                u2.id as 'student_2.id',
-                u2.code as 'student_2.code',
-                u2.firstname as 'student_2.firstname',
-                u2.lastname as 'student_2.lastname',
-                
-                powner.id as 'product_owner.id',
-                powner.code as 'product_owner.code',
-                powner.firstname as 'product_owner.firstname',
-                powner.lastname as 'product_owner.lastname',
-                
-                pmanager.id as 'portfolio_manager.id',
-                pmanager.code as 'portfolio_manager.code',
-                pmanager.firstname as 'portfolio_manager.firstname',
-                pmanager.lastname as 'portfolio_manager.lastname',
-                
-                coautor.id as 'co_autor.id',
-                coautor.code as 'co_autor.code',
-                coautor.firstname as 'co_autor.firstname',
-                coautor.lastname as 'co_autor.lastname',
-                
-                comp.id as 'company.id',
-                comp.name as 'company.name',
-                comp.image as 'company.image'
-                FROM project p
-                left join career ca on ca.id = p.career_id
-                left join  project_process_state state on state.id = p.project_process_state_id
-                left join db_pmo_dev.group g on g.id = p.group_id
-                left join user u1 on u1.id = g.student_1_id
-                left join user u2 on u2.id = g.student_2_id
-                left join user pmanager on pmanager.id = p.portfolio_manager_id
-                left join user coautor on coautor.id = p.co_autor_id
-                left join user powner on powner.id = p.product_owner_id
-                left join company comp on comp.id = p.company_id
-                group by p.id`,
+                    p.id, 
+                    p.code, 
+                    p.name, 
+                    p.description, 
+                    p.general_objective, 
+                    p.specific_objetive_1 as specific_objective_1,
+                    p.specific_objetive_2 as specific_objective_2,
+                    p.specific_objetive_3 as specific_objective_3,
+                    p.specific_objetive_4 as specific_objective_4,
+                    p.paper,
+                    p.devices,
+                    p.url_file,
+                    p.url_sharepoint,
+
+                    ca.id as 'career.id',
+                    ca.name as 'career.name',
+
+                    state.id as 'project_process_state.id',
+                    state.name as 'project_process_state.name',
+
+                    u1.id as 'student_1.id',
+                    u1.code as 'student_1.code',
+                    u1.firstname as 'student_1.firstname',
+                    u1.lastname as 'student_1.lastname',
+
+                    u2.id as 'student_2.id',
+                    u2.code as 'student_2.code',
+                    u2.firstname as 'student_2.firstname',
+                    u2.lastname as 'student_2.lastname',
+
+                    powner.id as 'product_owner.id',
+                    powner.code as 'product_owner.code',
+                    powner.firstname as 'product_owner.firstname',
+                    powner.lastname as 'product_owner.lastname',
+
+                    pmanager.id as 'portfolio_manager.id',
+                    pmanager.code as 'portfolio_manager.code',
+                    pmanager.firstname as 'portfolio_manager.firstname',
+                    pmanager.lastname as 'portfolio_manager.lastname',
+
+                    coautor.id as 'co_autor.id',
+                    coautor.code as 'co_autor.code',
+                    coautor.firstname as 'co_autor.firstname',
+                    coautor.lastname as 'co_autor.lastname',
+
+                    comp.id as 'company.id',
+                    comp.name as 'company.name',
+                    comp.image as 'company.image'
+                    FROM project p
+                    left join career ca on ca.id = p.career_id
+                    left join  project_process_state state on state.id = p.project_process_state_id
+                    left join db_pmo_dev.group g on g.id = p.group_id
+                    left join user u1 on u1.id = g.student_1_id
+                    left join user u2 on u2.id = g.student_2_id
+                    left join user pmanager on pmanager.id = p.portfolio_manager_id
+                    left join user coautor on coautor.id = p.co_autor_id
+                    left join user powner on powner.id = p.product_owner_id
+                    left join company comp on comp.id = p.company_id
+                    group by p.id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -377,10 +381,10 @@ exports.sendUpdateRequest = function (project, token_inf) {
                     else {
                         mysqlConnection.query({
                             sql: `Insert into edit_request 
-                            (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
-                            values 
-                            (${uid},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
-                            `
+                                (user_id,project_id,attribute_to_change, edit_request.value, accepted, request_date) 
+                                values 
+                                (${uid},${project.project_id},"${project.column}", "${project.value}", 0, CURRENT_TIMESTAMP)
+                                `
                         }, function (error, result, fields) {
                             if (error) {
                                 if (error.sqlMessage == "Query was empty")
@@ -616,7 +620,7 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
             comp.id as 'company.id',
             comp.name as 'company.name',
             comp.image as 'company.image'
-			FROM project p
+                    FROM project p
             left join career ca on ca.id = p.career_id
             left join  project_process_state state on state.id = p.project_process_state_id
             left join db_pmo_dev.group g on g.id = p.group_id
@@ -684,21 +688,21 @@ exports.getEditRequest = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT er.id,
-             er.attribute_to_change,
-             er.value, 
-             er.accepted, 
-             er.request_date,
+                er.attribute_to_change,
+                er.value, 
+                er.accepted, 
+                er.request_date,
 
-             u.id as 'user.id',
-             u.firstname as 'user.firstname',
-             u.lastname as 'user.lastname',
+                u.id as 'user.id',
+                u.firstname as 'user.firstname',
+                u.lastname as 'user.lastname',
 
-             p.id as 'project.id', 
-             p.code as 'project.code', 
-             p.name as 'project.name', 
-             p.description as 'project.description' 
+                p.id as 'project.id', 
+                p.code as 'project.code', 
+                p.name as 'project.name', 
+                p.description as 'project.description' 
 
-             FROM edit_request er, user u, project p`,
+                FROM edit_request er, user u, project p`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -821,3 +825,70 @@ exports.getHistory = function (requirements) {
     })
 }
 
+
+exports.downloadProjects = function (arr) {
+    const data = [];
+    const projects = arr.data;
+    return new Promise(function (resolve, reject) {
+        if (projects) {
+
+            for (var i = 0; i < projects.length; i++) {
+                const projecto = {
+                    "Codigo": projects[i].code,
+                    "Nombre": projects[i].name,
+                    "Descripcion": projects[i].description,
+                    "Objetivo General": projects[i].general_objective,
+                    "Objetivo Especifico 1": projects[i].specific_objective_1,
+                    "Objetivo Especifico 2": projects[i].specific_objective_2,
+                    "Objetivo Especifico 3": projects[i].specific_objective_3,
+                    "Objetivo Especifico 4": projects[i].specific_objective_4,
+                    "Paper": projects[i].paper == 1 ? "SI" : "NO",
+                    "Dispositivos": projects[i].devices == 1 ? "SI" : "NO",
+                    "Url del archivo": projects[i].url_file,
+                    "Url del sharepoint": projects[i].url_sharepoint,
+                    "Nombre de la carrera": projects[i].career.name,
+                    "Estado del projecto": projects[i].project_process_state.name,
+                    "Codigo del alumno 1": projects[i].student_1.code,
+                    "Nombre del alumno 1": projects[i].student_1.firstname,
+                    "Apellido del alumno 1": projects[i].student_1.lastname,
+                    "Codigo del alumno 2": projects[i].student_2.code,
+                    "Nombre del alumno 2": projects[i].student_2.firstname,
+                    "Apellido del alumno 2": projects[i].student_2.lastname,
+                    "Codigo del product owner": projects[i].product_owner.code,
+                    "Nombre del product owner": projects[i].product_owner.firstname,
+                    "Apellido del product owner": projects[i].product_owner.lastname,
+                    "Codigo del manager de portafolio": projects[i].portfolio_manager.code,
+                    "Nombre del manager de portafolio": projects[i].portfolio_manager.firstname,
+                    "Apellido del manager de portafolio": projects[i].portfolio_manager.lastname,
+                    "Codigo del coautor": projects[i].co_autor.code,
+                    "Nombre del coautor": projects[i].co_autor.firstname,
+                    "Apellido del coautor": projects[i].co_autor.lastname,
+                    "Nombre de la compañia": projects[i].company.name
+                }
+                data.push(projecto)
+            }
+
+
+            var xls = json2xls(data);
+            fs.writeFileSync(filename, xls, 'binary', (err) => {
+                if (err) {
+                    reject({
+                        codeMessage: 'MISSING_INFORMATION',
+                        message: 'Enviar informacion completa'
+                    })
+                }
+
+            });
+            resolve(true)
+
+
+        }
+        else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Enviar informacion completa'
+            })
+        }
+    })
+
+}
