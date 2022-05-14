@@ -42,6 +42,8 @@ router.get(PROJECT_URL.OPERATIONS.GET_STATUS, ProjectController.getProyectsbySta
 
 router.get(PROJECT_URL.OPERATIONS.HISTORY, ProjectController.getHistory);
 
+router.post(PROJECT_URL.OPERATIONS.DOWNLOAD_PROJECTS, ProjectController.downloadProjects);
+
 
 router.post(PROJECT_URL.OPERATIONS.MULTIPLE_UPDATE, ProjectController.mutipleUpdates);
 

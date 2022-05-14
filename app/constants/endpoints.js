@@ -60,6 +60,7 @@ const endpoints = {
             GET_EDITS: '/edits',
             GET_ONE: '/:idProject',
             SAVE_TEACHERS: '/save_teachers',
+            DOWNLOAD_PROJECTS: '/download'
         }
     },
     POSTULATION_URL: {
