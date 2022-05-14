@@ -59,7 +59,9 @@ exports.getgroup = function (code) {
                 if (result && result.length > 0) {
                     console.log(result[0].id);
                     mysqlConnection.query({
-                        sql: `select g.group_weighted_average,
+                        sql: `select 
+                        g.id as 'group_id',
+                        g.group_weighted_average,
                         u1.firstname as 'alumno1.nombre',
                         u1.lastname as 'alumno1.apellido',
                         u1.code as 'alumno1.codigo',

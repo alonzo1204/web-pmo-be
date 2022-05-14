@@ -29,7 +29,7 @@ exports.saveCompany = function (req, res)  {
         }
         //console.log(direccion)
         let path =
-        direccion + "/recursos/images/" + req.file.filename;
+        direccion + "/" + req.file.filename;
         
         CompanyService.saveCompany(req,path).then(function (result) {
             if (result) {

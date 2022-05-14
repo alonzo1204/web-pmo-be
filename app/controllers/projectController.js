@@ -26,7 +26,8 @@ exports.getFullList = function (req, res) {
 }
 
 exports.save = function (req, res) {
-    ProjectService.save(req.body).then(function (result) {
+    const settings = req.user.settings;
+    ProjectService.save(req.body, settings).then(function (result) {
 
         if (result) {
             return res.status(200).send({
@@ -75,6 +76,7 @@ exports.saveExcel = function (req, res, callback) {
                 }
             }, function (error) {
                 if (error) {
+                    console.log(error);
                     console.log(element.code);
                     //send no funciona por alguna razon
                     //return res.status(401).send({
@@ -437,6 +439,24 @@ exports.getHistory = function (req, res) {
     })
 }
 
+exports.saveTeachers = function (req, res) {
+    ProjectService.saveTeachers(req.body).then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result,
+                message: 'Se han asignado los docentes al proyecto ' + req.params.idProject + ' de manera correcta',
+                idStatus: req.params.idState
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }
+    })
+}
 exports.downloadProjects = function (req, res) {
     ProjectService.downloadProjects(req.body).then(function (result) {
         if (result) {

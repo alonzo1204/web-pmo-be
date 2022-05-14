@@ -209,4 +209,7 @@ router.get(PROJECT_URL.OPERATIONS.GET_ALL_REQUEST_EDITS, ProjectController.getEd
 //SAVE NEW PROJECT WITH ARCHIVE
 router.post(PROJECT_URL.OPERATIONS.SAVE_NEW_WITH_ARCHIVE, uploadArch.single("file"), ProjectController.saveWithArchive);
 
+//SAVE TEACHERS
+router.post(PROJECT_URL.OPERATIONS.SAVE_TEACHERS, ProjectController.saveTeachers);
+
 module.exports = router;

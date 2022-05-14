@@ -85,10 +85,9 @@ exports.getFullList = function () {
     })
 }
 
-exports.save = function (project) {
+exports.save = function (project, settings) {
     return new Promise(function (resolve, reject) {
         if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.project_process_state_id && project.company) {
-
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',
             }, [project.code], function (error, result, fields) {
@@ -99,7 +98,7 @@ exports.save = function (project) {
                     })
                 } else {
                     mysqlConnection.query({
-                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `group_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, portfolio_id, semester_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
                         project.code, project.name,
                         project.description, project.general_objective,
@@ -110,7 +109,8 @@ exports.save = function (project) {
                         project.career_id,
                         project.group_id,
                         project.portfolio_manager_id,
-                        project.co_autor_id, project.project_process_state_id, project.company
+                        project.co_autor_id, project.project_process_state_id, project.company,
+                        settings.portfolio_id, settings.semester_id
                     ], function (error, result, fields) {
                         if (result) {
                             resolve(result);
@@ -149,7 +149,7 @@ exports.saveExcel = function (project) {
                 if (result && result.length > 0) {
                     reject({
                         codeMessage: 'CODE_DUPLICATED',
-                        message: 'Send an unique code for project'
+                        message: 'Envie un código unico de proyecto'
                     })
                 } else {
                     mysqlConnection.query({
@@ -825,6 +825,35 @@ exports.getHistory = function (requirements) {
     })
 }
 
+exports.saveTeachers = function (body) {
+    return new Promise(function (resolve, reject) {
+        if (!body.code || !body.product_owner_id || !body.portfolio_manager_id || !body.co_autor_id) {
+            reject({
+                message: 'No se ha enviado la información completa'
+            })
+        } else {
+            var code = body.code;
+            var product_owner_id = body.product_owner_id;
+            var portfolio_manager_id = body.portfolio_manager_id;
+            var co_autor_id = body.co_autor_id;
+            mysqlConnection.query({
+                sql: 'UPDATE project p SET p.project_process_state_id = 6, p.product_owner_id = ?, p.portfolio_manager_id = ?, p.co_autor_id = ?, update_date = CURRENT_TIMESTAMP WHERE p.code = ?',
+            }, [product_owner_id, portfolio_manager_id, co_autor_id, code], function (error, result, fields) {
+                if (result) {
+                    resolve(result);
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        }
+
+    })
+
+}
 
 exports.downloadProjects = function (arr) {
     const data = [];
@@ -890,5 +919,4 @@ exports.downloadProjects = function (arr) {
             })
         }
     })
-
 }

@@ -44,11 +44,11 @@ exports.login = function (code) {
                     active: result[0].active
                 };
                 let roles = result.map((i) => { return { id: i.role_id, name: i.role_name, access: i.role_access.split(',') } });
-               
+
                 resolve({
                     information: user,
                     roles
- 
+
                 });
             } else {
                 resolve(null);
@@ -67,8 +67,9 @@ exports.login = function (code) {
 exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
         if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
+            var customsql = !user.isStudent ? `select * from application_settings` : `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 1`
             mysqlConnection.query({
-                sql: `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 1`,
+                sql: customsql,
             }, function (error, result, fields) {
                 if (result && result.length > 0) {
                     mysqlConnection.query({
@@ -116,16 +117,15 @@ exports.registerUser = function (user) {
                     })
                 } else {
                     reject({
-
-                        codeMessage: 'WRONG CODE',
-                        message: 'The code sended wasnt in the list'
+                        codeMessage: 'ERR_USER_NO_ALLOWED',
+                        message: 'El usuario con el código ' + user.code + ' no tiene permisos de para usar el aplicativo'
                     })
                 }
             })
         } else {
             reject({
                 codeMessage: 'ERR_USER_NO_ALLOWED',
-                message: 'El usuario con el código ' + user.code + ' No tiene permisos de para usar el aplicativo'
+                message: 'El usuario con el código ' + user.code + ' no tiene permisos de para usar el aplicativo'
             })
         }
     })

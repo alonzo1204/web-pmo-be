@@ -23,6 +23,8 @@ passport.use(
                     back_url: result[0].back_url,
                     name_portfolio: result[0]['portfolio.name'],
                     portfolio_state: result[0]['portfolio_state.state'],
+                    portfolio_id: result[0]['portfolio.id'],
+                    semester_id: result[0]['semester.id'],
                     semester: result[0]['semester.name'],
                     date_from: result[0]['semester.date_from'],
                     date_until: result[0]['semester.date_until']
