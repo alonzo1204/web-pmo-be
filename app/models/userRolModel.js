@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { roleModel } = require('./roleModel');
+const { userModel } = require('./userModel');
 
 class userRolModel extends Model{}
 
@@ -12,17 +14,32 @@ userRolModel.init({
     },
     user_id:{
         type:DataTypes.INTEGER,
-        defaultValue: null
+        defaultValue: null,
+        reference:{
+            model: userModel,
+            key: 'id'
+        }
     },
     role_id:{
         type:DataTypes.INTEGER,
-        defaultValue: null
+        defaultValue: null,
+        reference:{
+            model: roleModel,
+            key: 'id'
+        }
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"user_rol"
+    sequelize, modelName:'user_rol'
 });
 
+//Relaciones
+userRolModel.belongsTo(userModel,{
+    foreignKey: "user_id",
+})
+userRolModel.belongsTo(roleModel,{
+    foreignKey: "role_id",
+})
 
 module.exports = {
     userRolModel

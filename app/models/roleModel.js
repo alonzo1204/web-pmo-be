@@ -20,7 +20,7 @@ roleModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"role"
+    sequelize, modelName:'role'
 });
 
 

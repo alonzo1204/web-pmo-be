@@ -16,7 +16,7 @@ careerModel.init({
     }
 },{
     freezeTableName: true,
-    sequelize, modelName:"career"
+    sequelize, modelName:'career'
 });
 
 

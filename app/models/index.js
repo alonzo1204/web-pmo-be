@@ -1,41 +1,47 @@
-const AppSettingsModel = require('./appSettingsModel');
-const CareerModel = require('./careerModel');
-const CompanyModel = require('./companyModel');
-const EditRequestModel = require('./editRequestModel');
-const GroupModel = require('./groupModel');
-const HistPostulationModel = require('./histPostulationModel');
-const HistProjectsModel = require('./histProjectsModel');
-const hsAccessModel = require('./hsAccessModel');
-const hsSessionModel = require('./hsSessionModel');
-const PortfolioModel = require('./portfolioModel');
-const PortfolioStateModel = require('./portfolioStateModel');
-const PostulationModel = require('./postulationModel');
-const ProjectModel = require('./projectModel');
-const ProjectProcessStateModel = require('./projectProcessStateModel');
-const RegistrationPermissionsModel = require('./registrationPermissionsModel');
-const RoleModel = require('./roleModel');
-const SemesterModel = require('./semesterModel');
-const UserModel = require('./userModel');
-const UserRolModel = require('./userRolModel');
+const { appSettingsModel } = require('./appSettingsModel');
+const { careerModel } = require('./careerModel');
+const { companyModel } = require('./companyModel');
+const { editRequestModel } = require('./editRequestModel');
+const { groupModel } = require('./groupModel');
+const { histPostulationModel } = require('./histPostulationModel');
+const { histProjectsModel } = require('./histProjectsModel');
+const { hsAccessModel } = require('./hsAccessModel');
+const { hsSessionModel } = require('./hsSessionModel');
+const { portfolioModel } = require('./portfolioModel');
+const { portfolioStateModel } = require('./portfolioStateModel');
+const { postulationModel } = require('./postulationModel');
+const { projectModel } = require('./projectModel');
+const { projectProcessStateModel } = require('./projectProcessStateModel');
+const { registrationPermissionsModel } = require('./registrationPermissionsModel');
+const { roleModel } = require('./roleModel');
+const { semesterModel } = require('./semesterModel');
+const { userModel } = require('./userModel');
+const { userRolModel } = require('./userRolModel');
+
+appSettingsModel.associate()
+portfolioModel.associate()
+projectModel.associate()
+postulationModel.associate()
+groupModel.associate()
 
 module.exports = {
-    AppSettingsModel,
-    CareerModel,
-    CompanyModel,
-    EditRequestModel,
-    GroupModel,
-    HistPostulationModel,
-    HistProjectsModel,
+    projectModel,
+    appSettingsModel,
+    careerModel,
+    companyModel,
+    editRequestModel,
+    groupModel,
+    histPostulationModel,
+    histProjectsModel,
     hsAccessModel ,
     hsSessionModel,
-    PortfolioModel,
-    PortfolioStateModel,
-    PostulationModel,
-    ProjectModel,
-    ProjectProcessStateModel,
-    RegistrationPermissionsModel,
-    RoleModel,
-    SemesterModel,
-    UserModel,
-    UserRolModel
+    portfolioModel,
+    portfolioStateModel,
+    postulationModel,
+    projectProcessStateModel,
+    registrationPermissionsModel,
+    roleModel,
+    semesterModel,
+    userModel,
+    userRolModel
 }

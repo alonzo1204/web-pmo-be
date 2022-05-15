@@ -1,14 +1,21 @@
 const { mysqlConnection } = require('../connections/mysql');
+const { portfolioModel, semesterModel, portfolioStateModel } = require('../models');
 const { appSettingsModel } = require('../models/appSettingsModel');
 
 
-exports.getConfiguration =async function(){
-    await appSettingsModel.findAll().then(configuracion=>{
-        return configuracion;
-    }).catch(error=>{
-        return error;
+exports.getConfiguration =function(){
+    return new Promise(function(resolve,reject){
+        appSettingsModel.findAll({
+            include:[{
+                model:portfolioModel,
+                include:[semesterModel,portfolioStateModel]
+        }]
+        }).then(configuracion=>{
+            resolve(configuracion);
+        }).catch(error=>{
+            reject(error);
+        })
     })
-    
 };
 /*
 exports.getConfiguration = function(configID){

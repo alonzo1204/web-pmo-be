@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { roleModel } = require('./roleModel');
 
 class hsAccessModel extends Model{}
 
@@ -12,7 +13,11 @@ hsAccessModel.init({
     },
     role_id:{
         type:DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        reference:{
+            model: roleModel,
+            key: 'id'
+        }
     },
     token:{
         type:DataTypes.STRING(150),
@@ -20,9 +25,13 @@ hsAccessModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"hs_access"
+    sequelize, modelName:'hs_access'
 });
 
+//Relaciones
+hsAccessModel.belongsTo(roleModel,{
+    foreignKey: "role_id",
+})
 
 module.exports = {
     hsAccessModel

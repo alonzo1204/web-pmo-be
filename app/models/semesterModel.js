@@ -24,7 +24,7 @@ semesterModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"semester"
+    sequelize, modelName:'semester'
 });
 
 

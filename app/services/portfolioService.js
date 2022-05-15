@@ -1,6 +1,20 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { portfolioModel } = require('../models');
 
 
+exports.getAll =function(){
+    return new Promise(function(resolve,reject){
+        portfolioModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+
+
+
+/*
 exports.getAll = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -32,7 +46,7 @@ exports.getAll = function () {
             }
         })
     })
-}
+}*/
 
 exports.savePortfolio = function (portfolio) {
     return new Promise(function (resolve, reject) {

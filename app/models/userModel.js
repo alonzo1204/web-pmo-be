@@ -36,8 +36,9 @@ userModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"user"
+    sequelize, modelName:'user'
 });
+
 
 
 module.exports = {

@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { groupModel } = require('./groupModel');
+const { projectModel } = require('./projectModel');
 
 class histPostulationModel extends Model{}
 
@@ -17,18 +19,34 @@ histPostulationModel.init({
     project_1_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     project_2_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     project_3_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     project_4_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     iteration:{
         type:DataTypes.INTEGER,
@@ -44,11 +62,19 @@ histPostulationModel.init({
     },
     project_assigned:{
         type:DataTypes.INTEGER,
-        defaultValue: null
+        defaultValue: null,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     group_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: groupModel,
+            key: 'id'
+        }
     },
     update_date:{
         type:DataTypes.DATE,
@@ -60,8 +86,14 @@ histPostulationModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"history_postulations"
+    sequelize, modelName:'history_postulations'
 });
+
+//Relaciones
+histPostulationModel.belongsTo(groupModel,{
+    foreignKey: "group_id",
+})
+
 
 
 module.exports = {

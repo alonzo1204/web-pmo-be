@@ -1,5 +1,18 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { companyModel } = require('../models');
 
+
+exports.getFullList =function(){
+    return new Promise(function(resolve,reject){
+        companyModel.findAll().then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+
+/*
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -16,7 +29,7 @@ exports.getFullList = function () {
             }
         })
     })
-}
+}*/
 
 exports.saveCompany = function (company,path) {
     console.log(company.body.name)

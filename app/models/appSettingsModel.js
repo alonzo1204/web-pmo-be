@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { portfolioModel } = require('./portfolioModel');
 
 class appSettingsModel extends Model{}
 appSettingsModel.init({
@@ -11,7 +12,11 @@ appSettingsModel.init({
     },
     portfolio_id:{
         type:DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        reference:{
+            model: portfolioModel,
+            key: 'id'
+        }
     }, 
     front_url:{
         type:DataTypes.STRING(200),
@@ -23,8 +28,15 @@ appSettingsModel.init({
     }
 },{
     freezeTableName: true,
-    sequelize, modelName:"application_settings",
+    sequelize, modelName:'application_settings',
 });
+
+appSettingsModel.associate=function(){
+    //Relaciones Appsettings
+    appSettingsModel.belongsTo(portfolioModel, {
+        foreignKey: "portfolio_id",
+    });
+}
 
 module.exports = {
     appSettingsModel

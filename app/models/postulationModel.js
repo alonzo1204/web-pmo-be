@@ -1,5 +1,8 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { groupModel } = require('./groupModel');
+const models=require('./index')
+const { projectModel } = require('./projectModel');
 
 class postulationModel extends Model{}
 
@@ -17,18 +20,34 @@ postulationModel.init({
     project_1_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'project_1_id'
+        }
     },
     project_2_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     project_3_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     project_4_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     iteration:{
         type:DataTypes.INTEGER,
@@ -44,11 +63,19 @@ postulationModel.init({
     },
     project_assigned:{
         type:DataTypes.INTEGER,
-        defaultValue: null
+        defaultValue: null,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     group_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: groupModel,
+            key: 'id'
+        }
     },
     update_date:{
         type:DataTypes.DATE,
@@ -56,9 +83,20 @@ postulationModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"postulation"
+    sequelize, modelName:'postulation'
 });
 
+postulationModel.associate=function(){
+    //Relaciones Postulations
+    /*postulationModel.belongsTo(projectModel,{
+        as:"project_1",
+        foreignKey: "project_1_id",
+    })*/
+    
+    postulationModel.belongsTo(groupModel,{
+        foreignKey: "group_id",
+    })
+}
 
 module.exports = {
     postulationModel

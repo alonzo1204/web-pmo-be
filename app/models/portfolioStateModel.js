@@ -16,7 +16,7 @@ portfolioStateModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"portfolio_state"
+    sequelize, modelName:'portfolio_state'
 });
 
 

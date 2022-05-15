@@ -22,10 +22,10 @@ exports.save = function (req, res) {
 }
 
 exports.getgroup = function (req, res) {
-    groupService.getgroup(req.body).then(function (result) {
+    groupService.getgroup(req.user.token.information.id).then(function (result) {
 
         if (result) {
-            result.map(r => dot.object(r));
+            //result.map(r => dot.object(r));
             return res.status(200).send({
                 data: result
             })

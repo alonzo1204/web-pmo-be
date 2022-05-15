@@ -1,4 +1,22 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { Op } = require("sequelize");
+const { groupModel } = require('../models');
+
+
+exports.getgroup =function(code){
+    return new Promise(function(resolve,reject){
+        groupModel.findOne({
+            where:{
+                [Op.or] :[{student_1_id: code}, {student_2_id: code}]
+            },
+            include:{all: true, nested: true},
+        }).then(group=>{
+            resolve(group);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
 
 
 exports.save = function (group) {
@@ -43,7 +61,7 @@ exports.save = function (group) {
         }
     })
 }
-
+/*
 exports.getgroup = function (code) {
     return new Promise(function (resolve, reject) {
         if (code.code) {
@@ -83,4 +101,4 @@ exports.getgroup = function (code) {
             })
         }
     })
-}
+}*/

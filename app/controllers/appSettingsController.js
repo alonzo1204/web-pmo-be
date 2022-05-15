@@ -5,19 +5,22 @@ var dot = require('dot-object');
 const { appSettingsModel } = require('../models/appSettingsModel');
 
 exports.getConfig = function (req, res) {
-    appSettingsModel.findAll().then(configuracion=>{
-        configuracion.map(r => dot.object(r));
-        return res.status(200).send({
-            data: configuracion,
-        })
-    }).catch(error=>{
-        return res.status(401).send({
-            code: error.codeMessage,
-            message: error.message
-        })
+    AppSettingsService.getConfiguration().then(function (result){
+        if(result){
+            result.map(r => dot.object(r));
+            return res.status(200).send({
+                data: result,
+            })
+        }
+    },function(error){
+        if (error) {
+            return res.status(401).send({
+                code: error.codeMessage,
+                message: error.message
+            })
+        }                    
     })
-
-};
+}
 
 /*
 exports.getConfig = function (req, res) {

@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { semesterModel } = require('./semesterModel');
 
 class registrationPermissionsModel extends Model{}
 
@@ -22,12 +23,20 @@ registrationPermissionsModel.init({
     semester_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: semesterModel,
+            key: 'id'
+        }
     }
 },{
     freezeTableName: true,
-    sequelize, modelName:"registration_permissions"
+    sequelize, modelName:'registration_permissions'
 });
 
+//Relaciones
+registrationPermissionsModel.belongsTo(semesterModel,{
+    foreignKey: "semester_id",
+})
 
 module.exports = {
     registrationPermissionsModel

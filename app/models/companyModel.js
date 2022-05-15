@@ -22,7 +22,7 @@ companyModel.init({
     }
 },{
     freezeTableName: true,
-    sequelize, modelName:"company"
+    sequelize, modelName:'company'
 });
 
 

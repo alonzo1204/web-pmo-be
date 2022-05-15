@@ -1,5 +1,18 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { userModel } = require('../models');
 
+
+exports.getFullList =function(){
+    return new Promise(function(resolve,reject){
+        userModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+
+/*
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -30,7 +43,7 @@ exports.getFullList = function () {
         })
     })
 }
-
+*/
 exports.Baja = function (usuario) {
     var code = usuario.params.idUser;
     return new Promise(function (resolve, reject) {

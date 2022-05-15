@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { projectModel } = require('./projectModel');
+const { userModel } = require('./userModel');
 
 class editRequestModel extends Model{}
 
@@ -13,10 +15,18 @@ editRequestModel.init({
     user_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: userModel,
+            key: 'id'
+        }
     },
     project_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectModel,
+            key: 'id'
+        }
     },
     attribute_to_change:{
         type:DataTypes.STRING(100),
@@ -36,9 +46,15 @@ editRequestModel.init({
     }
 },{
     freezeTableName: true,
-    sequelize, modelName:"edit_request"
+    sequelize, modelName:'edit_request'
 });
-
+//Relaciones
+editRequestModel.belongsTo(userModel,{
+    foreignKey: "user_id",
+})
+/*editRequestModel.belongsTo(projectModel,{
+    foreignKey: "project_id",
+})*/
 
 module.exports = {
     editRequestModel

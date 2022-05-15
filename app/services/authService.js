@@ -2,6 +2,7 @@ const { mysqlConnection } = require('../connections/mysql');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { security, requestAccess } = require('../constants');
+const { hsAccessModel, hsSessionModel } = require('../models');
 
 exports.getUserByCode = function (code) {
     return new Promise(function (resolve, reject) {
@@ -274,6 +275,16 @@ exports.closeSession = function (body) {
 
 exports.checkValidToken = function (token) {
     return new Promise(function (resolve, reject) {
+        hsSessionModel.findOne({ where: { token: token }}).then(session=>{
+            resolve(session);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+}
+/*
+exports.checkValidToken = function (token) {
+    return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'SELECT * from hs_session where token = ?',
         }, [token], function (error, result, fields) {
@@ -291,7 +302,7 @@ exports.checkValidToken = function (token) {
         })
     })
 }
-
+*/
 var makepass = function () {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

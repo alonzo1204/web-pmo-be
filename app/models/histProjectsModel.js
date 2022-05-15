@@ -1,5 +1,12 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
+const { careerModel } = require('./careerModel');
+const { companyModel } = require('./companyModel');
+const { groupModel } = require('./groupModel');
+const { portfolioModel } = require('./portfolioModel');
+const { projectProcessStateModel } = require('./projectProcessStateModel');
+const { semesterModel } = require('./semesterModel');
+const { userModel } = require('./userModel');
 
 class histProjectsModel extends Model{}
 
@@ -65,38 +72,74 @@ histProjectsModel.init({
     career_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: careerModel,
+            key: 'id'
+        }
     },
     product_owner_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: userModel,
+            key: 'id'
+        }
     },
     portfolio_manager_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: userModel,
+            key: 'id'
+        }
     },
     co_autor_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: userModel,
+            key: 'id'
+        }
     },
     project_process_state_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: projectProcessStateModel,
+            key: 'id'
+        }
     },
     company_id:{
         type:DataTypes.INTEGER,
         allowNull: false,
+        reference:{
+            model: companyModel,
+            key: 'id'
+        }
     },
     group_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: groupModel,
+            key: 'id'
+        }
     },
     portfolio_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: portfolioModel,
+            key: 'id'
+        }
     },
     semester_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
+        reference:{
+            model: semesterModel,
+            key: 'id'
+        }
     },
     comments:{
         type:DataTypes.STRING(350),
@@ -112,8 +155,19 @@ histProjectsModel.init({
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"history_projects"
+    sequelize, modelName:'history_projects'
 });
+
+//Relaciones
+histProjectsModel.belongsTo(groupModel,{
+    foreignKey: "group_id",
+})
+histProjectsModel.belongsTo(careerModel,{
+    foreignKey: "career_id",
+})
+histProjectsModel.belongsTo(userModel,{
+    foreignKey: "product_owner_id",
+})
 
 
 module.exports = {

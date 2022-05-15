@@ -10,13 +10,13 @@ projectProcessStateModel.init({
         primaryKey: true,
         autoIncrement: true,
     },
-    state:{
+    name:{
         type:DataTypes.STRING(100),
         defaultValue: null,
     },
 },{
     freezeTableName: true,
-    sequelize, modelName:"project_process_state"
+    sequelize, modelName:'project_process_state'
 });
 
 

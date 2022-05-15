@@ -1,8 +1,22 @@
-const { mysqlConnection } = require('../connections/mysql');
+
 const { setQuery, security, setHandleQuery, validProject } = require('../constants');
 
 const jwt = require('jsonwebtoken');
 
+const { projectModel } = require('../models');
+
+
+exports.getFullList =function(){
+    return new Promise(function(resolve,reject){
+        projectModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+/*
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -80,7 +94,7 @@ exports.getFullList = function () {
             }
         })
     })
-}
+}*/
 
 exports.save = function (project) {
     return new Promise(function (resolve, reject) {

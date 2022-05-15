@@ -1,5 +1,19 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { postulationModel, projectModel, groupModel } = require('../models');
 
+
+
+exports.getFullList =function(){
+    return new Promise(function(resolve,reject){
+        postulationModel.findAll({include:{all: true, nested: true}}).then(configuracion=>{
+            resolve(configuracion);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+
+/*
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -107,7 +121,7 @@ exports.getFullList = function () {
             }
         })
     })
-}
+}*/
 
 exports.save = function (postulation) {
     return new Promise(function (resolve, reject) {

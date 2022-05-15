@@ -1,5 +1,17 @@
-const { mysqlConnection } = require('../connections/mysql');
+const { careerModel } = require('../models');
 
+
+exports.getFullList =function(){
+    return new Promise(function(resolve,reject){
+        careerModel.findAll().then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+/*
 exports.getFullList = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -16,4 +28,4 @@ exports.getFullList = function () {
             }
         })
     })
-}
+}*/
