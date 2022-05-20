@@ -111,24 +111,82 @@ exports.getFullList = function () {
 
 exports.save = function (postulation) {
     return new Promise(function (resolve, reject) {
-        if (!postulation.repostulation) {
-            if (postulation.group_id && postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
-                mysqlConnection.query({
-                    sql: 'SELECT id, group_id from postulation where group_id = ?',
-                }, [postulation.group_id], function (error, result, fields) {
-                    if (result && result.length > 0) {
-                        reject({
-                            codeMessage: 'STUDENT_IN_POSTULATION',
-                            message: `El grupo con id ${postulation.group_id} ya esta en una postulacion, o ya se postulo antes`
+        if (postulation.group_id) {
+            mysqlConnection.query({
+                sql: 'SELECT id, group_id,accepted from postulation where group_id = ?',
+            }, [postulation.group_id], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    if (postulation.project_1_id) {
+                        mysqlConnection.query({
+                            sql: `SELECT id, group_id, iteration,accepted,project_2_id,project_3_id,project_4_id from postulation where group_id = ${postulation.group_id}`,
+                        }, function (error, result, fields) {
+                            if (result[0].accepted == null) {
+                                reject({
+                                    codeMessage: 'STUDENT_IN_POSTULATION',
+                                    message: `El grupo con id ${postulation.group_id} se encuentra en una postulacion`
+                                })
+                            }
+                            else if (result[0].accepted == "1") {
+                                reject({
+                                    codeMessage: 'STUDENT_IN_POSTULATION',
+                                    message: `El grupo con id ${postulation.group_id} ya fue asignado a un proyecto`
+                                })
+                            }
+                            else {
+                                const idr = result[0].id
+                                const project_2_id = postulation.project_2_id ? postulation.project_2_id : result[0].project_2_id
+                                const project_3_id = postulation.project_3_id ? postulation.project_3_id : result[0].project_3_id
+                                const project_4_id = postulation.project_4_id ? postulation.project_4_id : result[0].project_4_id
+                                const iter = result[0].iteration + 1
+                                if (result && result.length > 0) {
+                                    mysqlConnection.query({
+                                        sql: `
+                                        update postulation set accepted = null, project_1_id= ${postulation.project_1_id},
+                                        project_2_id=${project_2_id},project_3_id=${project_3_id},project_4_id=${project_4_id},
+                                        iteration = ${iter}
+                                        where id = ${idr}
+                                        `,
+                                    }, function (error, result, fields) {
+                                        if (result) {
+                                            resolve(result);
+                                        }
+                                        if (error) {
+                                            reject({
+                                                codeMessage: error.code ? error.code : 'ER_',
+                                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                            })
+                                        }
+                                    })
+                                } else {
+
+                                    reject({
+                                        codeMessage: 'STUDENT_IN_POSTULATION',
+                                        message: `El grupo con id ${postulation.group_id} se encuentra en una postulacion`
+                                    })
+                                }
+                                if (error) {
+                                    reject({
+                                        codeMessage: error.code ? error.code : 'ER_',
+                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                    })
+                                }
+                            }
                         })
                     } else {
+                        reject({
+                            codeMessage: 'MISSING_INFORMATION',
+                            message: 'Send the complete body for postulation'
+                        })
+                    }
+                } else {
+                    if (postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
                         mysqlConnection.query({
                             sql: `
-                            INSERT INTO db_pmo_dev.postulation
-                            (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id)
-                            select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id
-                            from db_pmo_dev.group g where g.id = ${postulation.group_id};
-                            `,
+                                    INSERT INTO db_pmo_dev.postulation
+                                    (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id)
+                                    select ${postulation.project_1_id},${postulation.project_2_id},${postulation.project_3_id},${postulation.project_4_id}, g.group_weighted_average, id
+                                    from db_pmo_dev.group g where g.id = ${postulation.group_id};
+                                    `,
                         }, function (error, result, fields) {
                             if (result) {
                                 resolve(result);
@@ -140,77 +198,23 @@ exports.save = function (postulation) {
                                 })
                             }
                         })
-                    }
-                    if (error) {
+                    } else {
                         reject({
-                            codeMessage: error.code ? error.code : 'ER_',
-                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            codeMessage: 'MISSING_INFORMATION',
+                            message: 'Send the complete body for postulation'
                         })
                     }
-                })
-            } else {
-                reject({
-                    codeMessage: 'MISSING_INFORMATION',
-                    message: 'Send the complete body for postulation'
-                })
-            }
+                }
+                if (error) {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
         }
         else {
-            if (postulation.group_id && postulation.project_1_id) {
-                mysqlConnection.query({
-                    sql: `SELECT id, group_id, iteration,accepted from postulation where group_id = ${postulation.group_id} order by iteration desc limit 1 `,
-                }, function (error, result, fields) {
-                    if (result[0].accepted == null) {
-                        reject({
-                            codeMessage: 'STUDENT_IN_POSTULATION',
-                            message: `El grupo con id ${postulation.group_id} se encuentra en una postulacion`
-                        })
-                    }
-                    else {
-                        const project_2_id = postulation.project_2_id ? postulation.project_2_id : null
-                        const project_3_id = postulation.project_3_id ? postulation.project_3_id : null
-                        const project_4_id = postulation.project_4_id ? postulation.project_4_id : null
-                        const iter = result[0].iteration + 1
-                        if (result && result.length > 0) {
-                            mysqlConnection.query({
-                                sql: `
-                                INSERT INTO db_pmo_dev.postulation
-                                (project_1_id, project_2_id, project_3_id, project_4_id,group_weighted_average, group_id, iteration)
-                                select ${postulation.project_1_id},${project_2_id},${project_3_id},${project_4_id}, g.group_weighted_average, id,${iter}
-                                from db_pmo_dev.group g where g.id = ${postulation.group_id}
-                                `,
-                            }, function (error, result, fields) {
-                                if (result) {
-                                    resolve(result);
-                                }
-                                if (error) {
-                                    reject({
-                                        codeMessage: error.code ? error.code : 'ER_',
-                                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                                    })
-                                }
-                            })
-                        } else {
 
-                            reject({
-                                codeMessage: 'STUDENT_IN_POSTULATION',
-                                message: `El grupo con id ${postulation.group_id} se encuentra en una postulacion`
-                            })
-                        }
-                        if (error) {
-                            reject({
-                                codeMessage: error.code ? error.code : 'ER_',
-                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
-                            })
-                        }
-                    }
-                })
-            } else {
-                reject({
-                    codeMessage: 'MISSING_INFORMATION',
-                    message: 'Send the complete body for postulation'
-                })
-            }
         }
     })
 }

@@ -26,6 +26,7 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/',//done
             SAVE: '/save',
+            UPDATE: '/update',
             DOWN: '/down/?idUser=:idUser',//done
             GET_ONE: '/:idUser',
             MASIVEREGISTER: '/registroMasivo',//working

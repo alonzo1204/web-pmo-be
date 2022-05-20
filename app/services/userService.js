@@ -80,12 +80,12 @@ exports.Baja = function (usuario) {
 }
 
 // Para el register_permission
-exports.CargaMasivaPermisos = function(user){
+exports.CargaMasivaPermisos = function (user) {
     return new Promise(function (resolve, reject) {
-        if(user.code && user.semester_id){
+        if (user.code && user.semester_id) {
             mysqlConnection.query({
                 sql: 'SELECT id, code from registration_permissions where code = ?',
-            }, [user.code], function (error, result, fields){
+            }, [user.code], function (error, result, fields) {
                 if (result && result.length > 0) {
                     reject({
                         codeMessage: 'CODE_DUPLICATED',
@@ -94,12 +94,12 @@ exports.CargaMasivaPermisos = function(user){
                 } else {
                     mysqlConnection.query({
                         sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,1,?)',
-                    },[user.code,user.semester_id], function (error, result, fields){
+                    }, [user.code, user.semester_id], function (error, result, fields) {
                         if (result) {
                             resolve(result);
                         }
                         if (error) {
-                            
+
                             reject({
                                 codeMessage: error.code ? error.code : 'ER_',
                                 message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
@@ -108,14 +108,14 @@ exports.CargaMasivaPermisos = function(user){
                     })
                 }
                 if (error) {
-                    
+
                     reject({
                         codeMessage: error.code ? error.code : 'ER_',
                         message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
                     })
                 }
             })
-        }else{
+        } else {
             reject({
                 codeMessage: 'MISSING_INFORMATION',
                 message: 'Send the complete body for registration'
@@ -125,12 +125,12 @@ exports.CargaMasivaPermisos = function(user){
 }
 
 // Para el register_permission
-exports.CargaMasivaPermisosBloqueados = function(user){
+exports.CargaMasivaPermisosBloqueados = function (user) {
     return new Promise(function (resolve, reject) {
-        if(user.code && user.semester_id){
+        if (user.code && user.semester_id) {
             mysqlConnection.query({
                 sql: 'SELECT id, code from registration_permissions where code = ?',
-            }, [user.code], function (error, result, fields){
+            }, [user.code], function (error, result, fields) {
                 if (result && result.length > 0) {
                     reject({
                         codeMessage: 'CODE_DUPLICATED',
@@ -139,12 +139,12 @@ exports.CargaMasivaPermisosBloqueados = function(user){
                 } else {
                     mysqlConnection.query({
                         sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,0,?)',
-                    },[user.code,user.semester_id], function (error, result, fields){
+                    }, [user.code, user.semester_id], function (error, result, fields) {
                         if (result) {
                             resolve(result);
                         }
                         if (error) {
-                            
+
                             reject({
                                 codeMessage: error.code ? error.code : 'ER_',
                                 message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
@@ -153,17 +153,58 @@ exports.CargaMasivaPermisosBloqueados = function(user){
                     })
                 }
                 if (error) {
-                    
+
                     reject({
                         codeMessage: error.code ? error.code : 'ER_',
                         message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
                     })
                 }
             })
-        }else{
+        } else {
             reject({
                 codeMessage: 'MISSING_INFORMATION',
                 message: 'Send the complete body for registration'
+            })
+        }
+    })
+}
+
+exports.changeName = function (data) {
+    return new Promise(function (resolve, reject) {
+        if (data.id) {
+            mysqlConnection.query({
+                sql: `Select * from user where id = ${data.id} `
+            }, function (error, result, fields) {
+                if (result) {
+                    if (data.firstname && data.lastname) {
+                        mysqlConnection.query({
+                            sql: `Update user set firstname = '${data.firstname}' , lastname = '${data.lastname}' where id = ${data.id}`,
+                        }, function (error, result, fields) {
+                            if (result) {
+                                resolve(result);
+                            }
+                            if (error) {
+
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                        })
+                    }
+                    else {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: 'Error, mandar datos completos'
+                        })
+                    }
+                }
+                else {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: 'Id incorrecto'
+                    })
+                }
             })
         }
     })
