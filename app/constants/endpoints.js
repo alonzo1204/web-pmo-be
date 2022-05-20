@@ -56,7 +56,7 @@ const endpoints = {
             GET_MY_REQUEST_EDITS: '/my_request_edits',
             GET_ALL_REQUEST_EDITS: '/all_request_edits',
             SAVE_NEW_WITH_ARCHIVE: '/save_with_archive',
-            GET_VARIOUS_STATUS: '/status/:idState',
+            GET_VARIOUS_STATUS: '/status/:idState/:idCareer',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
             GET_ONE: '/:idProject',
