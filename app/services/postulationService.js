@@ -14,12 +14,16 @@ exports.getFullList = function () {
                 u1.code as 'student_1.code',
                 u1.firstname as 'student_1.firstname',
                 u1.lastname as 'student_1.lastname',
-                
+                c1.id as 'student_1.carrera.codigo',
+                c1.name as 'student_1.carrera.nombre',
+
                 u2.id as 'student_2.id',
                 u2.code as 'student_2.code',
                 u2.firstname as 'student_2.firstname',
                 u2.lastname as 'student_2.lastname',
-                
+                c2.id as 'student_2.carrera.codigo',
+                c2.name as 'student_2.carrera.nombre',
+
                 p1.id as 'p1.id', 
                 p1.code as 'p1.code', 
                 p1.name as 'p1.name', 
@@ -90,11 +94,18 @@ exports.getFullList = function () {
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
                 
-                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev.group g, user u1, user u2
-                where p.project_1_id = p1.id and p.project_2_id = p2.id and p.project_3_id = p3.id and
-                 p.project_4_id = p4.id and pa.id and g.id = p.group_id and g.student_1_id = u1.id and
-                 g.student_2_id = u2.id
-                 group by p.id`,
+                from postulation p
+                left join project p1 on p1.id = p.project_1_id
+                left join project p2 on p2.id = p.project_2_id
+                left join project p3 on p2.id = p.project_3_id
+                left join project p4 on p2.id = p.project_4_id
+				left join project pa on pa.id = p.project_assigned
+				left join db_pmo_dev.group g on g.id = p.group_id
+                left join user u1 on u1.id = g.student_1_id
+                left join user u2 on u2.id = g.student_2_id
+                left join career c1 on c1.id = u1.career_id
+                left join career c2 on c2.id = u2.career_id
+				group by p.id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -233,12 +244,16 @@ exports.myPostulation = function (user) {
                 u1.code as 'student_1.code',
                 u1.firstname as 'student_1.firstname',
                 u1.lastname as 'student_1.lastname',
-                
+                c1.id as 'student_1.carrera.codigo',
+                c1.name as 'student_1.carrera.nombre',
+
                 u2.id as 'student_2.id',
                 u2.code as 'student_2.code',
                 u2.firstname as 'student_2.firstname',
                 u2.lastname as 'student_2.lastname',
-                
+                c2.id as 'student_2.carrera.codigo',
+                c2.name as 'student_2.carrera.nombre',
+
                 p1.id as 'p1.id', 
                 p1.code as 'p1.code', 
                 p1.name as 'p1.name', 
@@ -308,12 +323,20 @@ exports.myPostulation = function (user) {
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
-                from postulation p, project p1, project p2, project p3, project p4, project pa, db_pmo_dev.group g, user u1, user u2
-                where p.project_1_id = p1.id and p.project_2_id = p2.id and p.project_3_id = p3.id and
-                 p.project_4_id = p4.id and pa.id and g.id = p.group_id and g.student_1_id = u1.id and
-                 g.student_2_id = u2.id
-                 and (g.student_1_id = ${user.id} or g.student_2_id= ${user.id})
-                 group by p.id`,
+                
+                from postulation p
+                left join project p1 on p1.id = p.project_1_id
+                left join project p2 on p2.id = p.project_2_id
+                left join project p3 on p2.id = p.project_3_id
+                left join project p4 on p2.id = p.project_4_id
+				left join project pa on pa.id = p.project_assigned
+				left join db_pmo_dev.group g on g.id = p.group_id
+                left join user u1 on u1.id = g.student_1_id
+                left join user u2 on u2.id = g.student_2_id
+                left join career c1 on c1.id = u1.career_id
+                left join career c2 on c2.id = u2.career_id
+                where (g.student_1_id = ${user.id} or g.student_2_id= ${user.id})
+                group by p.id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);

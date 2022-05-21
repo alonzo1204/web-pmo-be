@@ -36,11 +36,15 @@ exports.getFullList = function () {
                     u1.code as 'student_1.code',
                     u1.firstname as 'student_1.firstname',
                     u1.lastname as 'student_1.lastname',
+                    c1.id as 'student_1.carrera.codigo',
+                    c1.name as 'student_1.carrera.nombre',
 
                     u2.id as 'student_2.id',
                     u2.code as 'student_2.code',
                     u2.firstname as 'student_2.firstname',
                     u2.lastname as 'student_2.lastname',
+                    c2.id as 'student_2.carrera.codigo',
+                    c2.name as 'student_2.carrera.nombre',
 
                     powner.id as 'product_owner.id',
                     powner.code as 'product_owner.code',
@@ -66,6 +70,8 @@ exports.getFullList = function () {
                     left join db_pmo_dev.group g on g.id = p.group_id
                     left join user u1 on u1.id = g.student_1_id
                     left join user u2 on u2.id = g.student_2_id
+                    left join career c1 on c1.id = u1.career_id
+                    left join career c2 on c2.id = u2.career_id
                     left join user pmanager on pmanager.id = p.portfolio_manager_id
                     left join user coautor on coautor.id = p.co_autor_id
                     left join user powner on powner.id = p.product_owner_id
@@ -599,12 +605,16 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
                 u1.code as 'student_1.code',
                 u1.firstname as 'student_1.firstname',
                 u1.lastname as 'student_1.lastname',
-                
+                c1.id as 'student_1.carrera.codigo',
+                c1.name as 'student_1.carrera.nombre',
+
                 u2.id as 'student_2.id',
                 u2.code as 'student_2.code',
                 u2.firstname as 'student_2.firstname',
                 u2.lastname as 'student_2.lastname',
-                
+                c2.id as 'student_2.carrera.codigo',
+                c2.name as 'student_2.carrera.nombre',
+
                 powner.id as 'product_owner.id',
                 powner.code as 'product_owner.code',
                 powner.firstname as 'product_owner.firstname',
@@ -629,6 +639,8 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
                 left join db_pmo_dev.group g on g.id = p.group_id
                 left join user u1 on u1.id = g.student_1_id
                 left join user u2 on u2.id = g.student_2_id
+                left join career c1 on c1.id = u1.career_id
+                left join career c2 on c2.id = u2.career_id
                 left join user pmanager on pmanager.id = p.portfolio_manager_id
                 left join user coautor on coautor.id = p.co_autor_id
                 left join user powner on powner.id = p.product_owner_id

@@ -12,9 +12,14 @@ exports.getFullList = function () {
                 u.active, 
                 u.weighted_average, 
                 r.id as 'role.id', 
-                r.name as 'role.name'
-                from user u, user_rol ur, role r 
-                where u.id = ur.user_id and r.id = ur.role_id`,
+                r.name as 'role.name',
+                c.id as 'carrera.codigo de la carrera',
+                c.name as 'carrera.nombre de la carrera'
+                from user u
+                left join user_rol ur on ur.user_id = u.id
+                left join role r on r.id = ur.role_id
+                left join career c on c.id = u.career_id
+                group by u.id`,
         }, function (error, result, fields) {
             if (result) {
                 resolve(result);
@@ -40,10 +45,13 @@ exports.getFullListTeachers = function () {
                 u.lastname,
                 CONCAT(u.code,' - ',u.firstname,' ',u.lastname) as fullInformation,
                 u.active, 
-                u.weighted_average
+                u.weighted_average,
+                c.id as 'carrera.codigo de la carrera',
+                c.name as 'carrera.nombre de la carrera'
                 from user u
                 left join user_rol ur on ur.user_id = u.id
                 left join role r on r.id = ur.role_id
+                left join career c on c.id = u.career_id
                 where ur.role_id in (4,5)
                 group by u.id`,
         }, function (error, result, fields) {
