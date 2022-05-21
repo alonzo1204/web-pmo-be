@@ -39,10 +39,11 @@ const endpoints = {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
+            LIST_BY_SEMESTER: '/bysemester',
             REQUEST_UPDATE: '/request_update',
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
-            SAVE: '/save', //done,
+            SAVE: '/save', //done,w
             HISTORY: '/history',
             SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
