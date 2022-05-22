@@ -9,6 +9,13 @@ var morgan = require('morgan')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, { 
+    cors: { 
+        origins: ['http://localhost:4200'] 
+    } 
+});
+
 //Auth middlewares
 require('./app/middlewares/passport/local-strategy');
 require('./app/middlewares/passport/jwt-strategy');
@@ -56,6 +63,19 @@ mysqlConnection.connect(function (err) {
         console.log('Server Running on port ' + server.PORT);
     })
 });
+
+//WEBSOCKET
+io.on('connection', (socket) => {
+    console.log('A connexion has been created with ' + socket.id);
+
+    socket.on('get configuration', (msg) => io.emit('my project', `${msg}`));
+
+    socket.on('disconnect', () => console.log('disconnected')); 
+});
+
+http.listen(31, function() {
+    console.log('Server Running on port 31');
+})
 
 const options = {
     definition: {
