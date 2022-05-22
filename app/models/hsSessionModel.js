@@ -32,10 +32,7 @@ hsSessionModel.init({
     sequelize, modelName:'hs_session'
 });
 
-//Relaciones
-hsSessionModel.belongsTo(userModel,{
-    foreignKey: "user_id",
-})
+
 
 module.exports = {
     hsSessionModel

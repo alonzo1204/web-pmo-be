@@ -12,8 +12,6 @@ exports.getAll =function(){
 };
 
 
-
-
 /*
 exports.getAll = function () {
     return new Promise(function (resolve, reject) {
@@ -49,6 +47,28 @@ exports.getAll = function () {
 }*/
 
 exports.savePortfolio = function (portfolio) {
+    return new Promise(function(resolve,reject){
+        if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
+            portfolioModel.create({
+                name: portfolio.name,
+                semester_id:portfolio.semester_id,
+                portfolio_state_id:portfolio.portfolio_state_id
+            }).then(portfolio=>{
+                resolve({data:portfolio, id:portfolio.id});
+            }).catch(error=>{
+                reject(error);
+            })
+        }else{
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
+
+/*
+exports.savePortfolio = function (portfolio) {
     return new Promise(function (resolve, reject) {
         if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
             mysqlConnection.query({
@@ -71,4 +91,4 @@ exports.savePortfolio = function (portfolio) {
             })
         }
     })
-}
+}*/

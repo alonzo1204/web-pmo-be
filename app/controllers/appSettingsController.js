@@ -45,7 +45,7 @@ exports.getConfig = function (req, res) {
 }
 */
 exports.editConfig = function (req, res) {
-    AppSettingsService.editConfiguration(req).then(function (result) {
+    AppSettingsService.editConfiguration(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
                 data: result,

@@ -33,13 +33,7 @@ userRolModel.init({
     sequelize, modelName:'user_rol'
 });
 
-//Relaciones
-userRolModel.belongsTo(userModel,{
-    foreignKey: "user_id",
-})
-userRolModel.belongsTo(roleModel,{
-    foreignKey: "role_id",
-})
+
 
 module.exports = {
     userRolModel

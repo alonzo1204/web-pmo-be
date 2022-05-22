@@ -33,10 +33,7 @@ registrationPermissionsModel.init({
     sequelize, modelName:'registration_permissions'
 });
 
-//Relaciones
-registrationPermissionsModel.belongsTo(semesterModel,{
-    foreignKey: "semester_id",
-})
+
 
 module.exports = {
     registrationPermissionsModel

@@ -89,11 +89,6 @@ histPostulationModel.init({
     sequelize, modelName:'history_postulations'
 });
 
-//Relaciones
-histPostulationModel.belongsTo(groupModel,{
-    foreignKey: "group_id",
-})
-
 
 
 module.exports = {

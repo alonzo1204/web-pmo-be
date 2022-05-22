@@ -1,4 +1,4 @@
-const { userModel } = require('../models');
+const { userModel, registrationPermissionsModel } = require('../models');
 
 
 exports.getFullList =function(){
@@ -44,6 +44,21 @@ exports.getFullList = function () {
     })
 }
 */
+
+exports.Baja = function (usuario) {
+    var code = usuario.params.idUser;
+    return new Promise(function (resolve, reject) {
+        userModel.update({active:0},{where:{code:code}}).then(function(){
+            userModel.findOne({where:{code:code}}).then(user=>{
+                resolve(user)
+            })
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+
+/*
 exports.Baja = function (usuario) {
     var code = usuario.params.idUser;
     return new Promise(function (resolve, reject) {
@@ -61,8 +76,37 @@ exports.Baja = function (usuario) {
             }
         })
     })
-}
+}*/
 
+exports.CargaMasivaPermisos = function(user){
+    return new Promise(function (resolve, reject) {
+        registrationPermissionsModel.findOne({where:{code:user.code}}).then(function(){
+            if (result!=null||result!=undefined) {
+                reject({
+                    codeMessage: 'USER_EXIST',
+                    message: `The user with id ${user.id} are already in a postulation`
+                })
+            }else{
+                registrationPermissionsModel.create({values:{
+                    code:user.code,
+                    enabled:1,
+                    semester_id:user.semester_id
+                }
+                }).then(NewUser=>{
+                    resolve({data:NewUser,id:NewUser.id})
+                }).catch(error=>{
+                    reject(error)
+                })
+            }
+        })
+        userModel.create(user).then(newUser=>{
+            resolve(newUser)
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+/*
 // Para el register_permission
 exports.CargaMasivaPermisos = function(user){
     return new Promise(function (resolve, reject) {
@@ -106,8 +150,37 @@ exports.CargaMasivaPermisos = function(user){
             })
         }
     })
-}
+}*/
 
+exports.CargaMasivaPermisosBloqueados = function(user){
+    return new Promise(function (resolve, reject) {
+        registrationPermissionsModel.findOne({where:{code:user.code}}).then(function(){
+            if (result!=null||result!=undefined) {
+                reject({
+                    codeMessage: 'USER_EXIST',
+                    message: `The user with id ${user.id} are already in a postulation`
+                })
+            }else{
+                registrationPermissionsModel.create({values:{
+                    code:user.code,
+                    enabled:0,
+                    semester_id:user.semester_id
+                }
+                }).then(NewUser=>{
+                    resolve({data:NewUser,id:NewUser.id})
+                }).catch(error=>{
+                    reject(error)
+                })
+            }
+        })
+        userModel.create(user).then(newUser=>{
+            resolve(newUser)
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+/*
 // Para el register_permission
 exports.CargaMasivaPermisosBloqueados = function(user){
     return new Promise(function (resolve, reject) {
@@ -151,4 +224,4 @@ exports.CargaMasivaPermisosBloqueados = function(user){
             })
         }
     })
-}
+}*/

@@ -31,13 +31,25 @@ passport.use(
                 //console.log(result)
                 return settings
             })*/
-            var settings=await AppSettingsService.getConfiguration();
+            var setts=await AppSettingsService.getConfiguration();
+            let settings = {
+                front_url: setts[0].dataValues.front_url,
+                back_url: setts[0].dataValues.back_url,
+                portfolio_id: setts[0].dataValues.portfolio.id,
+                portfolio_name: setts[0].dataValues.portfolio.name,
+                portfolio_state_id: setts[0].dataValues.portfolio.portfolio_state_id,
+                portfolio_state: setts[0].dataValues.portfolio.portfolio_state.state,
+                semester_id: setts[0].dataValues.portfolio.semester.id,
+                semester_name: setts[0].dataValues.portfolio.semester.name,
+                date_from: setts[0].dataValues.portfolio.semester.date_from,
+                date_until: setts[0].dataValues.portfolio.semester.date_until,
+            };
             try {
                 AuthService.checkValidToken(jwt).then((response) => {
                     if (response) {
                         
                         //ENVIAR INFORMACION DE CONFIGURACION DEL SISTEMA
-                        //console.log(settings);
+                        //console.log("settings");
                         return done(null, { token, settings });
                     } else {
                         return done({ message: 'El token enviado no es válido' }, false);

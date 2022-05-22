@@ -23,9 +23,9 @@ exports.save = function (req, res) {
     PostulationService.save(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result,
-                message: 'Postulation with id ' + result.insertId + ' created successfully',
-                idPosition: result.insertId
+                data: result.data,
+                message: 'Postulation with id ' + result.id + ' created successfully',
+                idPosition: result.id
             })
         }
     }, function (error) {

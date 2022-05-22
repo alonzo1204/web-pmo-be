@@ -3,8 +3,8 @@ const { companyModel } = require('../models');
 
 exports.getFullList =function(){
     return new Promise(function(resolve,reject){
-        companyModel.findAll().then(careers=>{
-            resolve(careers);
+        companyModel.findAll().then(company=>{
+            resolve(company);
         }).catch(error=>{
             reject(error);
         })
@@ -31,6 +31,26 @@ exports.getFullList = function () {
     })
 }*/
 
+exports.saveCompany = function(company,path){
+    return new Promise(function(resolve,reject){
+        if (company.body.name && path) {
+            companyModel.create({
+                name:company.body.name,
+                image:path
+            }).then(newCompany=>{
+                resolve(newCompany)
+            }).catch(error=>{
+                reject(error);
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+};
+/*
 exports.saveCompany = function (company,path) {
     console.log(company.body.name)
     return new Promise(function (resolve, reject) {
@@ -55,4 +75,4 @@ exports.saveCompany = function (company,path) {
             })
         }
     })
-}
+}*/

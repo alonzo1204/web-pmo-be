@@ -158,16 +158,7 @@ histProjectsModel.init({
     sequelize, modelName:'history_projects'
 });
 
-//Relaciones
-histProjectsModel.belongsTo(groupModel,{
-    foreignKey: "group_id",
-})
-histProjectsModel.belongsTo(careerModel,{
-    foreignKey: "career_id",
-})
-histProjectsModel.belongsTo(userModel,{
-    foreignKey: "product_owner_id",
-})
+
 
 
 module.exports = {

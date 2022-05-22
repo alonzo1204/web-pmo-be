@@ -119,7 +119,7 @@ const endpoints = {
         MAIN: '/config',
         OPERATIONS: {
             GET_ONE: '/',
-            EDIT: '/edit/:idConfig'
+            EDIT: '/edit'
         }
     }
 }

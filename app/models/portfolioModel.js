@@ -37,16 +37,6 @@ portfolioModel.init({
     sequelize, modelName:'portfolio'
 });
 
-portfolioModel.associate=function(){
-    //Relaciones
-    portfolioModel.belongsTo(semesterModel,{
-        foreignKey: "semester_id",
-    })
-    portfolioModel.belongsTo(portfolioStateModel,{
-        foreignKey: "portfolio_state_id",
-    })
-}
-
 module.exports = {
     portfolioModel
 }

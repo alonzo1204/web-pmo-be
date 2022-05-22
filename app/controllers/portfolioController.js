@@ -20,12 +20,13 @@ exports.getFullList = function (req, res) {
 }
 
 exports.savePortfolio = function (req, res) {
+    
     portfolioService.savePortfolio(req.body).then(function (result) {
         if (result) {
             return res.status(200).send({
-                data: result,
-                message: 'Portfolio with id ' + result.insertId + ' created successfully',
-                idPosition: result.insertId
+                data: result.data,
+                message: 'Portfolio with id ' + result.id + ' created successfully',
+                idPosition: result.id
             })
         }
     }, function (error) {

@@ -51,6 +51,20 @@ exports.getConfiguration = function(configID){
     })
 }
 */
+
+
+exports.editConfiguration =function(config){
+    return new Promise(function(resolve,reject){
+        appSettingsModel.update(config,{where:{id:1}}).then(function(){
+            appSettingsModel.findAll({include:{all: true, nested: true}}).then(configuracion=>{
+                resolve(configuracion)
+            })
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+/*
 exports.editConfiguration = function(config){
     console.log(config.params.idConfig)
     return new Promise(function (resolve, reject) {
@@ -86,4 +100,4 @@ exports.editConfiguration = function(config){
             }
         })
     })
-}
+}*/

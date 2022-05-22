@@ -4,8 +4,8 @@ const { postulationModel, projectModel, groupModel } = require('../models');
 
 exports.getFullList =function(){
     return new Promise(function(resolve,reject){
-        postulationModel.findAll({include:{all: true, nested: true}}).then(configuracion=>{
-            resolve(configuracion);
+        postulationModel.findAll({include:{all: true, nested: true}, order:[['id','ASC']]}).then(postulation=>{
+            resolve(postulation);
         }).catch(error=>{
             reject(error);
         })
@@ -123,6 +123,39 @@ exports.getFullList = function () {
     })
 }*/
 
+exports.save =  function (postulation) {
+    return new Promise(function (resolve, reject) {
+        if (postulation.group_id && postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
+            postulationModel.findOne({where:{group_id:postulation.group_id}}).then(function(result){
+                if (result!=null||result!=undefined) {
+                    reject({
+                        codeMessage: 'STUDENT_IN_POSTULATION',
+                        message: `The group with id ${postulation.group_id} are already in a postulation`
+                    })
+                }else{
+                    postulationModel.create({
+                        group_id:postulation.group_id,
+                        project_1_id:postulation.project_1_id,
+                        project_2_id:postulation.project_2_id,
+                        project_3_id:postulation.project_3_id, 
+                        project_4_id:postulation.project_4_id
+                    }).then(NewPostulation=>{
+                        resolve({data:NewPostulation,id:NewPostulation.id})
+                    }).catch(error=>{
+                        reject(error)
+                    })
+                }
+            });
+        }else{
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for postulation'
+            })
+        }
+    })
+}
+
+/*
 exports.save = function (postulation) {
     return new Promise(function (resolve, reject) {
         if (postulation.group_id && postulation.project_1_id && postulation.project_2_id && postulation.project_3_id && postulation.project_4_id) {
@@ -166,4 +199,4 @@ exports.save = function (postulation) {
             })
         }
     })
-}
+}*/

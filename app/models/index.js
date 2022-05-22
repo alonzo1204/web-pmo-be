@@ -17,12 +17,10 @@ const { roleModel } = require('./roleModel');
 const { semesterModel } = require('./semesterModel');
 const { userModel } = require('./userModel');
 const { userRolModel } = require('./userRolModel');
+const { relations } =require('./assosiationss')
 
-appSettingsModel.associate()
-portfolioModel.associate()
-projectModel.associate()
-postulationModel.associate()
-groupModel.associate()
+relations();
+
 
 module.exports = {
     projectModel,

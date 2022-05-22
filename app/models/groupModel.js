@@ -45,13 +45,7 @@ groupModel.init({
     sequelize, modelName:'group'
 });
 
-groupModel.associate=function(){
-    //Group
-    /*groupModel.belongsTo(projectModel,{
-        foreignKey: "project_assigned",
-    });*/
-    groupModel.belongsTo(userModel,{foreignKey: "student_1_id",})
-}
+
 
 
 module.exports = {

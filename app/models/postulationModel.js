@@ -86,17 +86,7 @@ postulationModel.init({
     sequelize, modelName:'postulation'
 });
 
-postulationModel.associate=function(){
-    //Relaciones Postulations
-    /*postulationModel.belongsTo(projectModel,{
-        as:"project_1",
-        foreignKey: "project_1_id",
-    })*/
-    
-    postulationModel.belongsTo(groupModel,{
-        foreignKey: "group_id",
-    })
-}
+
 
 module.exports = {
     postulationModel

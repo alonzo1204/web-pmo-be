@@ -2,12 +2,12 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 const {sequelize}=require('../connections');
 const { careerModel } = require('./careerModel');
 const { companyModel } = require('./companyModel');
-const { groupModel } = require('./groupModel');
-const { portfolioModel } = require('./portfolioModel');
-const { postulationModel } = require('./postulationModel');
-const { projectProcessStateModel } = require('./projectProcessStateModel');
 const { semesterModel } = require('./semesterModel');
+const { portfolioModel } = require('./portfolioModel');
+const { projectProcessStateModel } = require('./projectProcessStateModel');
 const { userModel } = require('./userModel');
+//const { groupModel } = require('./groupModel');
+//const { postulationModel } = require('./postulationModel');
 
 class projectModel extends Model{}
 
@@ -114,7 +114,7 @@ projectModel.init({
             model: companyModel,
             key: 'id'
         }
-    },
+    },/*
     group_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
@@ -122,7 +122,7 @@ projectModel.init({
             model: groupModel,
             key: 'id'
         }
-    },
+    },*/
     portfolio_id:{
         type:DataTypes.INTEGER,
         defaultValue: null,
@@ -152,43 +152,7 @@ projectModel.init({
     sequelize, modelName:'project'
 });
 
-projectModel.associate=function () {
-    //Relaciones project
-    projectModel.belongsTo(careerModel,{
-        foreignKey: "career_id",
-    })
-    projectModel.belongsTo(projectProcessStateModel,{
-        foreignKey: "project_process_state_id",
-    })
-    projectModel.belongsTo(companyModel,{
-        foreignKey: "company_id",
-    })
-    projectModel.belongsTo(portfolioModel,{
-        foreignKey: "portfolio_id",
-    })
-    projectModel.belongsTo(semesterModel,{
-        foreignKey: "semester_id",
-    })
-    projectModel.belongsTo(userModel,{
-        as:"portfolio_manager",
-        foreignKey: "portfolio_manager_id",
-    })
-    projectModel.belongsTo(userModel,{
-        as:"product_owner",
-        foreignKey: "product_owner_id",
-    })
-    projectModel.belongsTo(userModel,{
-        as:"co_autor",
-        foreignKey: "co_autor_id",
-    })
-    
-    projectModel.belongsTo(groupModel,{
-        foreignKey: "group_id",
-    })
-    
-    //projectModel.hasOne(groupModel,{foreignKey: "group_id",})
-    
-};
+
 
 module.exports = {
     projectModel

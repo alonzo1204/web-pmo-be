@@ -21,6 +21,7 @@ exports.getFullList = function (req, res) {
 }
 
 exports.saveCompany = function (req, res)  {
+    //console.log(req.user.settings)
     var direccion = req.user.settings.back_url
     //console.log(req.user.settings.then((resolve)=>{resolve.back_url}).catch(err=>{console.log(err)}))
     try{

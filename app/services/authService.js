@@ -276,7 +276,7 @@ exports.closeSession = function (body) {
 exports.checkValidToken = function (token) {
     return new Promise(function (resolve, reject) {
         hsSessionModel.findOne({ where: { token: token }}).then(session=>{
-            resolve(session);
+            resolve(JSON.stringify(session));
         }).catch(error=>{
             reject(error);
         })

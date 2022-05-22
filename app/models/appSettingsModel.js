@@ -31,12 +31,7 @@ appSettingsModel.init({
     sequelize, modelName:'application_settings',
 });
 
-appSettingsModel.associate=function(){
-    //Relaciones Appsettings
-    appSettingsModel.belongsTo(portfolioModel, {
-        foreignKey: "portfolio_id",
-    });
-}
+
 
 module.exports = {
     appSettingsModel

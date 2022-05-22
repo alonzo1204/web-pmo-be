@@ -48,13 +48,7 @@ editRequestModel.init({
     freezeTableName: true,
     sequelize, modelName:'edit_request'
 });
-//Relaciones
-editRequestModel.belongsTo(userModel,{
-    foreignKey: "user_id",
-})
-/*editRequestModel.belongsTo(projectModel,{
-    foreignKey: "project_id",
-})*/
+
 
 module.exports = {
     editRequestModel

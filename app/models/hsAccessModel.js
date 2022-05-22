@@ -28,10 +28,7 @@ hsAccessModel.init({
     sequelize, modelName:'hs_access'
 });
 
-//Relaciones
-hsAccessModel.belongsTo(roleModel,{
-    foreignKey: "role_id",
-})
+
 
 module.exports = {
     hsAccessModel
