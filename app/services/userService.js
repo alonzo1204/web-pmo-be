@@ -90,7 +90,7 @@ exports.Baja = function (usuario) {
 // Para el register_permission
 exports.CargaMasivaPermisos = function (user) {
     return new Promise(function (resolve, reject) {
-        if (user.code && user.semester_id) {
+        if (user.code && user.semester) {
             mysqlConnection.query({
                 sql: 'SELECT id, code from registration_permissions where code = ?',
             }, [user.code], function (error, result, fields) {
@@ -102,7 +102,7 @@ exports.CargaMasivaPermisos = function (user) {
                 } else {
                     mysqlConnection.query({
                         sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,1,?)',
-                    }, [user.code, user.semester_id], function (error, result, fields) {
+                    }, [user.code, user.semester], function (error, result, fields) {
                         if (result) {
                             resolve(result);
                         }
@@ -135,7 +135,7 @@ exports.CargaMasivaPermisos = function (user) {
 // Para el register_permission
 exports.CargaMasivaPermisosBloqueados = function (user) {
     return new Promise(function (resolve, reject) {
-        if (user.code && user.semester_id) {
+        if (user.code && user.semester) {
             mysqlConnection.query({
                 sql: 'SELECT id, code from registration_permissions where code = ?',
             }, [user.code], function (error, result, fields) {
@@ -147,7 +147,7 @@ exports.CargaMasivaPermisosBloqueados = function (user) {
                 } else {
                     mysqlConnection.query({
                         sql: 'INSERT INTO registration_permissions (`code`, `enabled`, `semester_id`) VALUES (?,0,?)',
-                    }, [user.code, user.semester_id], function (error, result, fields) {
+                    }, [user.code, user.semester], function (error, result, fields) {
                         if (result) {
                             resolve(result);
                         }
@@ -215,5 +215,26 @@ exports.changeName = function (data) {
                 }
             })
         }
+    })
+}
+
+
+exports.getSemesters = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `select id, name from semester`
+        }, function (error, result) {
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+
+            }
+            else {
+                const semestres = result
+                resolve({ semestres })
+            }
+        })
     })
 }

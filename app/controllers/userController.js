@@ -73,31 +73,43 @@ exports.RegistroMasivo = function (req, res, callback) {
         //Solo funcionara cuando haya una hoja llamada Hoja1
         var worksheet = workbook.Sheets["Hoja1"];
         var datos = xlsx.utils.sheet_to_json(worksheet);
-        for (let index = 0; index < datos.length; index++) {
-            const element = datos[index];
-            if (element.project_process_state_id == null) element.project_process_state_id = 6;
-            UserService.CargaMasivaPermisos(element).then(function (result) {
-                if (result) {
-                    nCorrectos += 1;
-                }
-            }, function (error) {
-                if (error) {
-                    console.log(element.code);
-                }
-            })
+        let semestres;
+        UserService.getSemesters().then(function (result) {
+            semestres = result;
+        }).then(function () {
+            for (let index = 0; index < datos.length; index++) {
+                const element = datos[index];
 
-        }
-        //borra el excel
-        fs.unlink(path, (err) => {
-            if (err) {
-                throw err;
+                for (let sindex = 0; sindex < semestres.length; sindex++) {
+                    if (element.semester == semestres[sindex].name) {
+                        element.semester = semestres[sindex].id
+                    }
+                }
+                if (element.project_process_state_id == null) element.project_process_state_id = 6;
+                UserService.CargaMasivaPermisos(element).then(function (result) {
+                    if (result) {
+                        nCorrectos += 1;
+                    }
+                }, function (error) {
+                    if (error) {
+                        console.log(element.code);
+                    }
+                })
+
             }
-            console.log("File is deleted.");
-        });
-        console.log(Incorrectos)
-        return res.status(200).send({
-            confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            //borra el excel
+            fs.unlink(path, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("File is deleted.");
+            });
+            console.log(Incorrectos)
+            return res.status(200).send({
+                confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            })
         })
+
     } catch (error) {
 
         console.log(error);
@@ -121,30 +133,41 @@ exports.RegistroMasivoBloqueados = function (req, res, callback) {
         //Solo funcionara cuando haya una hoja llamada Hoja1
         var worksheet = workbook.Sheets["Hoja1"];
         var datos = xlsx.utils.sheet_to_json(worksheet);
-        for (let index = 0; index < datos.length; index++) {
-            const element = datos[index];
-            if (element.project_process_state_id == null) element.project_process_state_id = 6;
-            UserService.CargaMasivaPermisosBloqueados(element).then(function (result) {
-                if (result) {
-                    nCorrectos += 1;
-                }
-            }, function (error) {
-                if (error) {
-                    console.log(element.code);
-                }
-            })
+        let semestres;
+        UserService.getSemesters().then(function (result) {
+            semestres = result
+        }).then(function () {
+            for (let index = 0; index < datos.length; index++) {
+                const element = datos[index];
 
-        }
-        //borra el excel
-        fs.unlink(path, (err) => {
-            if (err) {
-                throw err;
+                for (let sindex = 0; sindex < semestres.length; sindex++) {
+                    if (element.semester == semestres[sindex].name) {
+                        element.semester = semestres[sindex].id
+                    }
+                }
+                if (element.project_process_state_id == null) element.project_process_state_id = 6;
+                UserService.CargaMasivaPermisosBloqueados(element).then(function (result) {
+                    if (result) {
+                        nCorrectos += 1;
+                    }
+                }, function (error) {
+                    if (error) {
+                        console.log(element.code);
+                    }
+                })
+
             }
-            console.log("File is deleted.");
-        });
-        console.log(Incorrectos)
-        return res.status(200).send({
-            confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            //borra el excel
+            fs.unlink(path, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("File is deleted.");
+            });
+            console.log(Incorrectos)
+            return res.status(200).send({
+                confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            })
         })
     } catch (error) {
 
