@@ -102,6 +102,14 @@ const endpoints = {
             GET_ONE: '/:idRole'
         }
     },
+    RegistrationPermission_URL: {
+        MAIN: '/rp',
+        OPERATIONS: {
+            LIST: '/', //done
+            SAVE: '/save',
+            GET_ONE: '/:idRole'
+        }
+    },
     SEMESTER_URL: {
         MAIN: '/semester',
         OPERATIONS: {

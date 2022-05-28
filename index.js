@@ -43,7 +43,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 //ROUTES
-var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes, portfolioRoutes, appSettingsRoutes } = require('./app/routes');
+var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes, portfolioRoutes, appSettingsRoutes, registration_permissionsRoutes } = require('./app/routes');
 const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION;
 
 //MySQL Database Connection
@@ -105,6 +105,7 @@ const specs2 = swaggerJSDoc(options);
 
 
 app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, passport.authenticate('jwt', { session: false }), ClientsRoute);
+app.use(APP_ROUTE + endpoints.RegistrationPermission_URL.MAIN, passport.authenticate('jwt', { session: false }), registration_permissionsRoutes);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
 app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
 app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, passport.authenticate('jwt', { session: false }), SemesterRoutes);

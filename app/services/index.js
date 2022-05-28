@@ -10,6 +10,7 @@ const CompanyService = require('./companyService');
 const groupService = require('./groupService')
 const portfolioService = require('./portfolioService')
 const AppSettingsService = require('./appSettingsService')
+const Registration_permissionsService = require('./registration_permissionsService')
 
 module.exports = {
     ClientsService,
@@ -23,5 +24,6 @@ module.exports = {
     CompanyService,
     groupService,
     portfolioService,
-    AppSettingsService
+    AppSettingsService,
+    Registration_permissionsService
 }
