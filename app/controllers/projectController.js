@@ -96,6 +96,7 @@ exports.saveExcel = function (req, res, callback) {
                     }
                 }
                 if (element.project_process_state_id == null) element.project_process_state_id = 6;
+                console.log(element)
                 ProjectService.saveExcel(element).then(function (result) {
                     if (result) {
                         nCorrectos += 1;
@@ -118,6 +119,7 @@ exports.saveExcel = function (req, res, callback) {
                         //});
                     }
                 })
+
 
             }
             //borra el excel
