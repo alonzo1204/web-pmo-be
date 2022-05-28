@@ -163,8 +163,9 @@ exports.saveExcel = function (project) {
                         message: 'Envie un código unico de proyecto'
                     })
                 } else {
+
                     mysqlConnection.query({
-                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, `comments`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                        sql: 'INSERT INTO project (`code`, `name`, `description`, `general_objective`, `specific_objetive_1`, `specific_objetive_2`, `specific_objetive_3`, `specific_objetive_4`, `paper`, `devices`, `url_file`, `url_sharepoint`, `career_id`, `semester_id`, `group_id`, `portfolio_id`, `product_owner_id`, `portfolio_manager_id`, `co_autor_id`, `project_process_state_id`, `company_id`, `comments`, `career_id_2`, `devices_description`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     }, [
                         project.code, project.name,
                         project.description, project.general_objective,
@@ -172,10 +173,11 @@ exports.saveExcel = function (project) {
                         project.specific_objetive_3, project.specific_objetive_4,
                         project.paper, project.devices,
                         project.url_file, project.url_sharepoint,
-                        project.career_id, project.semester_id,
+                        project.career, project.semester,
                         project.group_id, project.portfolio_id,
                         project.product_owner_id, project.portfolio_manager_id,
-                        project.co_autor_id, project.project_process_state_id, project.company_id, project.comments], function (error, result, fields) {
+                        project.co_autor_id, project.project_process_state_id, project.company, project.comments,
+                        project.career_2, project.devices_description], function (error, result, fields) {
 
                             if (result) {
                                 resolve(result);
@@ -1045,5 +1047,50 @@ exports.listBySemester = function (data) {
                 message: 'Enviar informacion completa'
             })
         }
+    })
+}
+
+exports.getData = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `select id, name from career`
+        }, function (error, result, fields) {
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+            else {
+                const carreras = result;
+                mysqlConnection.query({
+                    sql: `select id, name from semester`
+                }, function (error, result, fields) {
+                    if (error) {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    }
+                    else {
+                        const semester = result
+                        mysqlConnection.query({
+                            sql: `select id, name from company`
+                        }, function (error, result, fields) {
+                            if (error) {
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                            else {
+                                const company = result
+                                resolve({ company, semester, carreras })
+                            }
+                        })
+                    }
+                })
+            }
+        })
     })
 }

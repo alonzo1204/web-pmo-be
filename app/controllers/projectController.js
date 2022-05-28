@@ -56,48 +56,83 @@ exports.saveExcel = function (req, res, callback) {
         let path =
             __basedir + "/recursos/uploads/" + req.file.filename;
         var workbook = xlsx.readFile(path);
-
+        let semesters, carreras, company;
         //Solo funcionara cuando haya una hoja llamada CargaMasiva
         var worksheet = workbook.Sheets["CargaMasiva"];
         var datos = xlsx.utils.sheet_to_json(worksheet);
-        for (let index = 0; index < datos.length; index++) {
-            const element = datos[index];
-            if (element.project_process_state_id == null) element.project_process_state_id = 6;
-            ProjectService.saveExcel(element).then(function (result) {
-                if (result) {
-                    nCorrectos += 1;
-                    //send no funciona por alguna razon
-                    //res.status(200).status({
-                    //    data: result,
-                    //    message: 'Project with id ' + result.insertId + ' created successfully',
-                    //    idPosition: result.insertId
-                    //})
-                    //return;
+        ProjectService.getData().then(function (result) {
+            semesters = result.semester
+            carreras = result.carreras
+            company = result.company
+        }).then(function () {
+            for (let index = 0; index < datos.length; index++) {
+                const element = datos[index];
+                element.paper = element.paper == "SI" ? 1 : 0;
+                element.devices = element.devices == "SI" ? 1 : 0;
+                element.devices_description = element.devices_description == undefined ? null : element.devices_description;
+                if (element.career_2) {
+                    for (let cindex = 0; cindex < carreras.length; cindex++) {
+                        if (element.career_2 == carreras[cindex].name) {
+                            element.career_2 = carreras[cindex].id
+                        }
+                    }
                 }
-            }, function (error) {
-                if (error) {
-                    console.log(error);
-                    console.log(element.code);
-                    //send no funciona por alguna razon
-                    //return res.status(401).send({
-                    //    code: error.codeMessage,
-                    //    message: error.message,
-                    //});
+                else {
+                    element.career_2 = null
                 }
-            })
+                for (let sindex = 0; sindex < semesters.length; sindex++) {
+                    if (element.semester == semesters[sindex].name) {
+                        element.semester = semesters[sindex].id
+                    }
+                }
+                for (let cindex = 0; cindex < carreras.length; cindex++) {
+                    if (element.career == carreras[cindex].name) {
+                        element.career = carreras[cindex].id
+                    }
+                }
+                for (let coindex = 0; coindex < company.length; coindex++) {
+                    if (element.company == company[coindex].name) {
+                        element.company = company[coindex].id
+                    }
+                }
+                if (element.project_process_state_id == null) element.project_process_state_id = 6;
+                ProjectService.saveExcel(element).then(function (result) {
+                    if (result) {
+                        nCorrectos += 1;
+                        //send no funciona por alguna razon
+                        //res.status(200).status({
+                        //    data: result,
+                        //    message: 'Project with id ' + result.insertId + ' created successfully',
+                        //    idPosition: result.insertId
+                        //})
+                        //return;
+                    }
+                }, function (error) {
+                    if (error) {
+                        console.log(error);
+                        console.log(element.code);
+                        //send no funciona por alguna razon
+                        //return res.status(401).send({
+                        //    code: error.codeMessage,
+                        //    message: error.message,
+                        //});
+                    }
+                })
 
-        }
-        //borra el excel
-        fs.unlink(path, (err) => {
-            if (err) {
-                throw err;
             }
-            console.log("File is deleted.");
-        });
-        console.log(Incorrectos)
-        return res.status(200).send({
-            confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            //borra el excel
+            fs.unlink(path, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("File is deleted.");
+            });
+            console.log(Incorrectos)
+            return res.status(200).send({
+                confirmacion: "Se subio correctamente el archivo: " + req.file.originalname,
+            })
         })
+
     } catch (error) {
 
         console.log(error);
