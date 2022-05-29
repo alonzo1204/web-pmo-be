@@ -2,8 +2,23 @@ const { mysqlConnection } = require('../connections/mysql');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { security, requestAccess } = require('../constants');
-const { hsAccessModel, hsSessionModel } = require('../models');
+const { Op } = require("sequelize");
 
+const { hsAccessModel, hsSessionModel, userModel, registrationPermissionsModel, userRolModel } = require('../models');
+
+exports.getUserByCode = function (code) {
+    return new Promise(function (resolve, reject) {
+        userModel.findOne({where:{code:code}}).then(usuario=>{
+            resolve(usuario)
+        }).catch(error=>{
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
+}
+/*
 exports.getUserByCode = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -22,8 +37,35 @@ exports.getUserByCode = function (code) {
             }
         })
     })
+}*/
+
+exports.login = function (code) {
+    return new Promise(function (resolve, reject) {
+        userModel.findOne({include:{all: true, nested: true},where:{code:code}}).then(usuario=>{
+            let user = {
+                id: usuario[0].user_id,
+                code: usuario[0].code,
+                lastname: usuario[0].lastname,
+                firstname: usuario[0].firstname,
+                weighted_average: usuario[0].weighted_average,
+                password: usuario[0].password,
+                active: usuario[0].active
+            };
+            let roles = usuario.map((i) => { return { id: i.role_id, name: i.role_name, access: i.role_access.split(',') } });
+            resolve({
+                information: user,
+                roles
+            });
+        }).catch(error=>{
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
 }
 
+/*
 exports.login = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -63,9 +105,69 @@ exports.login = function (code) {
         })
     })
 }
+*/
+
+
+exports.registerUser = function (user) {
+    return new Promise(async function (resolve, reject) {
+        if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
+            registrationPermissionsModel.findOne({
+                where:{
+                    code:user.code,
+                    semester_id:user.semester_id,
+                    enabled:1
+                }
+            }).then(UserRegistration=>{
+                const User=await userModel.findOne({where:{code:user.code}})
+                if(User===null||User===undefined){
+                    userModel.create({
+                        code:user.code,
+                        password:createHash(user.password),
+                        firstname:user.firstname,
+                        lastname:user.lastname
+                    }).then(NewUser=>{
+                        const uid=NewUser.id
+                        userRolModel.create({
+                            user_id:uid,
+                            role_id:user.role_id
+                        }).then(result=>{
+                            resolve(uid)
+                        }).catch(error=>{
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        })
+                    }).catch(error=>{
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    })
+                }else{
+                    reject({
+                        codeMessage: 'ERR_USER_ALREADY_EXISTS',
+                        message: 'El usuario con el código ' + user.code + ' ya existe en el sistema.'
+                    })
+                }
+            }).catch(error=>{
+                reject({
+                    codeMessage: 'WRONG CODE',
+                    message: 'The code sended wasnt in the list'
+                })
+            })
+        } else {
+            reject({
+                codeMessage: 'ERR_USER_NO_ALLOWED',
+                message: 'El usuario con el código ' + user.code + ' No tiene permisos de para usar el aplicativo'
+            })
+        }
+    })
+
+}
 
 //cambios a role y sacar career y cambios al query
-exports.registerUser = function (user) {
+/*exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
         if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
             mysqlConnection.query({
@@ -131,8 +233,57 @@ exports.registerUser = function (user) {
         }
     })
 
-}
+}*/
 
+exports.changePassword = function (user) {
+    return new Promise(function (resolve, reject) {
+        if (user.code && user.password && user.newPassword) {
+            userModel.findOne({where:{code:user.code}}).then(usuario=>{
+                var newPassword = user.newPassword;
+                var oldPassword = user.password;
+                if (newPassword == oldPassword) {
+                    reject({
+                        codeMessage: 'ER_SAME_PASSWORD',
+                        message: "Las contraseñas son iguales"
+                    })
+                }
+                console.log(usuario[0].password);
+                const isValid = bcrypt.compareSync(oldPassword, usuario[0].password);
+                console.log(isValid);
+                if (!isValid) {
+                    reject({
+                        codeMessage: 'ER_PASSWORD_INCORRECT',
+                        message: "Contraseña no coincide"
+                    })
+                } else {
+                    userModel.update({
+                        password:createHash(newPassword)
+                    },{
+                        where:{code:user.code}
+                    }).then(UsuarioCambiado=>{
+                        resolve(UsuarioCambiado)
+                    }).catch(error=>{
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    })
+                }
+            }).catch(error=>{
+                reject({
+                    codeMessage: 'ERR_USER_NOT_FOUND',
+                    message: 'El usuario con el código ' + user.code + ' no existe en el sistema.'
+                })
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for register'
+            })
+        }
+    })
+}
+/*
 exports.changePassword = function (user) {
     return new Promise(function (resolve, reject) {
         if (user.code && user.password && user.newPassword) {
@@ -186,11 +337,39 @@ exports.changePassword = function (user) {
         }
     })
 }
+*/
 
 var createHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 }
 
+exports.recPass = function (code) {
+    return new Promise(function (resolve, reject) {
+        userModel.findOne({where:{code:code.code}}).then(Usuario=>{
+            const code = Usuario[0].code
+            const pass = makepass();
+            const cryptedpass = createHash(pass);
+            userModel.update({
+                password:cryptedpass,
+            },{
+                where:{code:code}
+            }).then(Result=>{
+                resolve(pass)
+            }).catch(error=>{
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            })
+        }).catch(error=>{
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
+}
+/*
 exports.recPass = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -224,8 +403,31 @@ exports.recPass = function (code) {
             }
         })
     })
+}*/
+
+exports.createSession = function (payload) {
+    return new Promise(function (resolve, reject) {
+        const user_id = payload.information.id
+        const token = jwt.sign(payload, security.JWT_SECRET);
+        hsSessionModel.create({
+            token:token,
+            user_id:user_id
+        }).then(NewSession=>{
+            resolve({
+                token,
+                user: payload
+            });
+        }).catch(error=>{
+            console.log(error);
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
 }
 
+/*
 exports.createSession = function (payload) {
     return new Promise(function (resolve, reject) {
         const user_id = payload.information.id
@@ -250,8 +452,28 @@ exports.createSession = function (payload) {
             }
         })
     })
-}
+}*/
 
+exports.closeSession = function (body) {
+    return new Promise(function (resolve, reject) {
+        hsSessionModel.destroy({
+            where:{
+                token:body.token,
+                user_id:body.user_id
+            }
+        }).then(result=>{
+            resolve(result)
+        }).catch(error=>{
+            console.log(error);
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+        
+    })
+}
+/*
 exports.closeSession = function (body) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -271,7 +493,7 @@ exports.closeSession = function (body) {
             }
         })
     })
-}
+}*/
 
 exports.checkValidToken = function (token) {
     return new Promise(function (resolve, reject) {
@@ -315,6 +537,42 @@ var makepass = function () {
 }
 
 exports.requestAccess = function (code) {
+    return new Promise(async function (resolve, reject) {
+        const Usuario=await userModel.findOne({attributes:code,where:{code:code.code}});
+        if (Usuario == []||Usuario!=null||Usuario!=undefined) {
+            console.log(Usuario)
+            reject(`El usuario ya existe, prueba recuperando tu contraseña`)
+        } else {
+            console.log("en else")
+            userModel.findAll({
+                where:{
+                    '$user_rol.role_id$':{[Op.eq]:5},
+                    id:'$user_rol.user_id$'
+                },
+                include:[{
+                    model:userRolModel,
+                    as:'user_rol'
+                }],    
+            }).then(resultado=>{
+                const pmos = resultado
+                pmos.map(pmo => {
+                    const data = pmo
+                    const mail = requestAccess(code.code, data.code, data.firstname, data.lastname);
+                })
+                resolve("Correo enviado correctamente")                
+            }).catch(error=>{
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            })
+
+        }
+
+    })
+}
+/*
+exports.requestAccess = function (code) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT code from user where code = ?`,
@@ -352,4 +610,4 @@ exports.requestAccess = function (code) {
             }
         })
     })
-}
+}*/

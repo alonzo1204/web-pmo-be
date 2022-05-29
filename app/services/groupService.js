@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { groupModel } = require('../models');
+const { groupModel, userModel } = require('../models');
 
 
 exports.getgroup =function(code){
@@ -17,8 +17,48 @@ exports.getgroup =function(code){
     })
 };
 
+exports.save = function (group) {
+    return new Promise(function (resolve, reject) {
+        if (group.student_1_id && group.student_2_id) {
+            groupModel.findOne({
+                where:{
+                    [Op.or] :[{student_1_id: group.student_1_id},
+                         {student_2_id: group.student_2_id}]
+                },
+            }).then(function(result){
+                if (result && result.length > 0) {
+                    reject({
+                        codeMessage: 'STUDENT DUPLICCATED',
+                        message: 'One of your students is duplicated'
+                    })
+                } else {
+                    groupModel.query(`INSERT INTO db_pmo_dev.group (student_1_id,student_2_id, group_weighted_average) select u1.id , u2.id, ((u1.weighted_average)+(u2.weighted_average))/2 as group_weighted_average 
+                    from user u1, user u2 
+                    where u1.id = ${group.student_1_id} and u2.id = ${group.student_2_id}`).then(NewGroup=>{
+                        resolve(NewGroup)
+                    }).catch(error=>{
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                        })
+                    })
+                }
+            }).catch(error=>{
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
 
-
+/*
 exports.save = function (group) {
     return new Promise(function (resolve, reject) {
         if (group.student_1_id && group.student_2_id) {
@@ -60,7 +100,7 @@ exports.save = function (group) {
             })
         }
     })
-}
+}*/
 /*
 exports.getgroup = function (code) {
     return new Promise(function (resolve, reject) {

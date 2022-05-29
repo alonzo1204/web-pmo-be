@@ -2,8 +2,10 @@
 const { setQuery, security, setHandleQuery, validProject } = require('../constants');
 
 const jwt = require('jsonwebtoken');
-const { projectModel, careerModel, portfolioModel, companyModel } = require('../models');
+const { projectModel, careerModel, portfolioModel, companyModel, editRequestModel } = require('../models');
 const { sequelize } = require('../connections');
+const { Op } = require("sequelize");
+const { where } = require('sequelize/types');
 
 
 exports.getFullList =function(){
@@ -178,20 +180,23 @@ exports.save = function (project) {
 }*/
 
 exports.saveExcel = async function (project){
-    return new Promise(function (resolve, reject) {
-        var carrera= careerModel.findOne({where:{name:project.career_id}}).then(function(result){
+    return new Promise(async function (resolve, reject) {
+        var carrera= await careerModel.findOne({where:{name:project.career_id}}).then(function(result){
             return result
         }).catch(error=>{
             reject(error)
         })
         project.career_id=carrera.id
-        var portfolio= portfolioModel.findOne({where:{name:project.portfolio_id}}).then(function(result){
-            return result
-        }).catch(error=>{
-            reject(error)
-        })
-        project.portfolio_id=portfolio.id
-        var compania= companyModel.findOne({where:{name:project.company_id}}).then(function(result){
+        if(typeof(project.portfolio_id) != 'number'){
+            var portfolio= await portfolioModel.findOne({where:{name:project.portfolio_id}}).then(function(result){
+                return result
+            }).catch(error=>{
+                reject(error)
+            })
+            console.log(portfolio)
+            project.portfolio_id=portfolio.id
+        }       
+        var compania= await companyModel.findOne({where:{name:project.company_id}}).then(function(result){
             return result
         }).catch(error=>{
             reject(error)
@@ -448,6 +453,19 @@ exports.AprobarComentarios = function (project, comentarios) {
 
 exports.saveArchivo = function (project, path) {
     return new Promise(function (resolve, reject) {
+        projectModel.update({url_file:path},{where:{code:project.params.idProject}}).then(function(){
+            projectModel.findOne({where:{code:project.params.idProject}}).then(project=>{
+                resolve(project)
+            })
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+
+/*
+exports.saveArchivo = function (project, path) {
+    return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'UPDATE project p SET p.url_file = ?, p.url_sharepoint=? WHERE p.code = ?',
         }, [project.file.filename, path, project.params.idProject], function (error, result, fields) {
@@ -462,8 +480,22 @@ exports.saveArchivo = function (project, path) {
             }
         })
     })
+}*/
+
+exports.updateState = function (ids) {
+    var code = ids.params.idProject;
+    return new Promise(function (resolve, reject) {
+        projectModel.update({project_process_state_id:ids.params.idState},{where:{code:code}}).then(function(){
+            projectModel.findOne({where:{code:code}}).then(project=>{
+                resolve(project)
+            })
+        }).catch(error=>{
+            reject(error)
+        })
+    })
 }
 
+/*
 exports.updateState = function (ids) {
     var code = ids.params.idProject;
     var project_process_state_id = ids.params.idState;
@@ -482,8 +514,22 @@ exports.updateState = function (ids) {
             }
         })
     })
+}*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+exports.updateProject = function (project) {
+    return new Promise(function (resolve, reject) {
+        projectModel.update(project,{where:{code:code}}).then(function(){
+            projectModel.findOne({where:{code:code}}).then(project=>{
+                resolve(project)
+            })
+        }).catch(error=>{
+            reject(error)
+        })
+    })
 }
 
+/*
 exports.updateProject = function (project) {
     return new Promise(function (resolve, reject) {
         if (project.codes && project.column && project.value) {
@@ -531,8 +577,52 @@ exports.updateProject = function (project) {
             })
         }
     })
+}*/
+
+exports.sendUpdateRequest = function (project, token_inf) {
+    return new Promise(function (resolve, reject) {
+        if (project.project_id && project.value && project.column) {
+            const uid = token_inf.token.information.id
+            projectModel.findOne({where:{code:code}}).then(Project=>{
+                const code = Project[0].code
+                const verificar = setQuery(project.column, code, project.value)
+                    if (verificar == '') {
+                        resolve({
+                            error: `El valor ${project.value} no coincide con la columna ${project.column}`
+                        })
+                    }
+                    else {
+                        editRequestModel.create({user_id:uid,project_id:project.project_id,
+                            attribute_to_change:project.column, value:project.value, 
+                            accepted:0}).then(editrequest=>{
+                                resolve({
+                                    message: `Se solicito el cambio del proyecto ${code} la columna ${project.column} con el valor: ${project.value}`,
+                                    data:editrequest
+                                })
+                            }).catch(error=>{
+                                if (error.sqlMessage == "Query was empty")
+                                    reject({
+                                        error: `El valor ${project.value} no coincide con la columna ${project.column}`
+                                    })
+                                else (reject(error))
+                            })
+                        }
+                }).then(error=>{
+                    reject({
+                        er:error,
+                        error: `El projecto no concuerda con el codigo de usuario`
+                    })
+                })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
 }
 
+/*
 exports.sendUpdateRequest = function (project, token_inf) {
     return new Promise(function (resolve, reject) {
         if (project.project_id && project.value && project.column) {
@@ -583,9 +673,60 @@ exports.sendUpdateRequest = function (project, token_inf) {
             })
         }
     })
+}*/
+
+exports.handleUpdate = function (req) {
+    return new Promise(function (resolve, reject) {
+        if (req.id) {
+            editRequestModel.findOne({where:{id:req.id,accepted:0}}).then(edit=>{
+                const column = edit[0].attribute_to_change
+                const code = edit[0].project_id
+                const value = edit[0].value
+                if (req.state == "Aprobado") {
+                    let query = setHandleQuery(column, code, value)
+                    if (query == '') {
+                        query = setHandleQuery(column, code, parseInt(value))
+                    }
+                    sequelize.query(query).then(result=>{
+                        editRequestModel.update({accepted:1},{where:{id:req.id}}).then(updated=>{
+                            resolve({
+                                result,
+                                updated,
+                                message: `El projecto con el codigo ${req.id} se altero en la columna ${column} con el valor ${value}`
+                            })
+                        }).catch(error=>{
+                            reject({error})
+                        })
+                    }).catch(error=>{
+                        reject({
+                            er:error,
+                            error: `El valor ${value} no coincide con la columna ${column}`
+                        })
+                    })
+                }
+                else if (req.state == "Desaprobado") {
+                    editRequestModel.update({accepted:2},{where:{id:req.id}}).then(updated=>{
+                        resolve({
+                            message: `Se rechazo la solicitud de cambio del proyecto con codigo ${req.id} de manera correcta`
+                        })
+                    }).catch(error=>{
+                        reject({error})
+                    })
+                }
+            }).catch(error=>{
+                reject({
+                    error: `El projecto con id ${req.id} ya fue atendido`
+                })
+            })
+        } else {
+            reject({
+                error: 'Send the complete body for project'
+            })
+        }
+    })
 }
 
-
+/*
 exports.handleUpdate = function (req) {
     return new Promise(function (resolve, reject) {
         if (req.id) {
@@ -660,8 +801,79 @@ exports.handleUpdate = function (req) {
             })
         }
     })
+}*/
+
+exports.mutipleUpdates = (arr) => {
+    const data = arr.projects
+    return new Promise(function (resolve, reject) {
+        const projects = data.map((project) => {
+            if (project.code) {
+                const prom = new Promise(function (resolve, reject) {
+                    projectModel.findOne({
+                        attributes: ['id', 'code'],
+                        where:{code:project.code}
+                    }).then(result=>{
+                        if (project.name && project.description && project.general_objective &&
+                            project.specific_objetive_1 && project.specific_objetive_2 &&
+                            project.specific_objetive_3 && project.specific_objetive_4 &&
+                            project.url_file && project.url_sharepoint && project.comments &&
+                            project.paper && project.devices && project.career_id &&
+                            project.product_owner_id && project.portfolio_manager_id &&
+                            project.co_autor_id && project.project_process_state_id &&
+                            project.company_id && project.portfolio_id &&
+                            project.semester_id && project.group_id) {
+                            const validacion = validProject(project);
+                            if (validacion) {
+
+                                projectModel.update(project,{where:{code:project.code}}).then(updated=>{
+                                    resolve({
+                                        codigo: project.code,
+                                        message: `El projecto con el codigo ${project.code} se cambio correctamente`
+                                    })
+                                }).catch(error=>{
+                                    reject({
+                                        codigo: project.code,
+                                        error: error
+                                    })
+                                })
+                            }
+                            else {
+                                reject({
+                                    codigo: project.code,
+                                    error: `El projecto con el codigo ${project.code} tiene un valor incorrecto.`
+                                })
+                            }
+
+                        }
+                        else {
+                            return reject({
+                                codigo: project.code,
+                                error: `El proyecto con codigo ${project.code} no se envio con los datos completos`
+                            })
+                        }
+                    }).catch(error=>{
+                        reject({
+                            err:error,
+                            codigo: project.code,
+                            error: `El codigo ${project.code} no existe en la base de datos`
+                        })
+                    })
+                })
+                return prom
+            }
+            else {
+                return resolve({
+                    codigo: 'ERR_CODE',
+                    error: `El proyecto se envio sin codigo`
+                })
+            }
+        })
+        const resps = Promise.all(projects);
+        resolve(resps)
+    })
 }
 
+/*
 exports.mutipleUpdates = (arr) => {
     const data = arr.projects
     return new Promise(function (resolve, reject) {
@@ -739,8 +951,30 @@ exports.mutipleUpdates = (arr) => {
         const resps = Promise.all(projects);
         resolve(resps)
     })
+}*/
+
+exports.getProyectByStatusVarious = function (idProjectProcess) {
+    var state_ids = idProjectProcess.params.idState;
+    return new Promise(function (resolve, reject) {
+        projectModel.findAll({
+            include:{all: true, nested: true},
+            where:{
+                project_process_state_id:{
+                    [Op.or]:state_ids
+            }
+        }
+        }).then(projects=>{
+            resolve(projects)
+        }).catch(error=>{
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
 }
 
+/*
 exports.getProyectByStatusVarious = function (idProjectProcess) {
     var state_ids = idProjectProcess.params.idState;
     return new Promise(function (resolve, reject) {
@@ -820,9 +1054,22 @@ exports.getProyectByStatusVarious = function (idProjectProcess) {
             }
         })
     })
-}
+}*/
 
 //Solicitud de mi Cambio
+exports.getMyEditRequest = function (idUser) {
+    return new Promise(function (resolve, reject) {
+        editRequestModel.findAll({
+            include:{all: true, nested: true},
+            where:{user_id:idUser}
+        }).then(requests=>{
+            resolve(requests)
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+/*
 exports.getMyEditRequest = function (idUser) {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -857,9 +1104,19 @@ exports.getMyEditRequest = function (idUser) {
             }
         })
     })
-}
+}*/
 
 //Solicitudes de cambios
+exports.getEditRequest = function () {
+    return new Promise(function (resolve, reject) {
+        editRequestModel.findAll().then(requests=>{
+            resolve(requests)
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+/*
 exports.getEditRequest = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -891,8 +1148,37 @@ exports.getEditRequest = function () {
             }
         })
     })
+}*/
+
+exports.saveWithArchive = function (project,path) {
+    return new Promise(async function (resolve, reject) {
+        if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.project_process_state_id && project.company_id) {
+            const proyecto =await projectModel.findOne({
+                attributes: ['id', 'code'],
+                where:{code:project.code}
+            })
+            if(proyecto===null || proyecto===undefined){
+                projectModel.create({project,url_file:path}).then(Newproject=>{
+                    resolve(Newproject)
+                }).catch(error=>{
+                    reject(error)
+                })
+            }else{
+                reject({
+                    codeMessage: 'CODE_DUPLICATED',
+                    message: 'Send an unique code for project'
+                })
+            }
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
 }
 
+/*
 exports.saveWithArchive = function (project,path) {
     return new Promise(function (resolve, reject) {
         if (project.code && project.name && project.description && project.general_objective && project.paper && project.devices && project.career_id && project.project_process_state_id && project.company_id) {
@@ -946,3 +1232,4 @@ exports.saveWithArchive = function (project,path) {
         }
     })
 }
+*/
