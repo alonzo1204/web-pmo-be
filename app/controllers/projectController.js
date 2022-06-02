@@ -3,6 +3,8 @@ var dot = require('dot-object');
 const fs = require('fs');
 var xlsx = require("xlsx");
 const { EOL } = require('os');
+const path = require('path');
+
 
 exports.getFullList = function (req, res) {
 
@@ -497,8 +499,14 @@ exports.saveTeachers = function (req, res) {
 exports.downloadProjects = function (req, res) {
     ProjectService.downloadProjects(req.body).then(function (result) {
         if (result) {
+            const filename = path.join(__dirname, '../reports/report.xlsx');
+            res.download(filename, 'report.xlsx', function (err) {
+                if (err) {
+                }
+                fs.unlink(filename, function () {
+                })
+            })
 
-            return res.status(200).sendFile('report.xlsx', { root: 'C:\\Users\\User\\Desktop\\TDP\\web-pmo-be\\app\\reports' })
 
         }
     }, function (error) {
