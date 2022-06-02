@@ -103,7 +103,7 @@ const endpoints = {
         }
     },
     RegistrationPermission_URL: {
-        MAIN: '/rp',
+        MAIN: '/registrationpermissions',
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save',

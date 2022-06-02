@@ -10,7 +10,7 @@ var CompanyRoutes = require('./CompanyRoutes');
 var GroupRoutes = require('./groupRoutes')
 var portfolioRoutes = require('./portfolioRoutes')
 var appSettingsRoutes = require('./appSettingsRoutes')
-var registration_permissionsRoutes = require('./registration_permissionsRoutes')
+var registration_permissionsRoutes = require('./registrationpermissionsRoutes')
 
 module.exports = {
     ClientsRoute,

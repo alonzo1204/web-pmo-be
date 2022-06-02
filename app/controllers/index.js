@@ -10,7 +10,7 @@ const CompanyController = require('./CompanyController');
 const groupController = require('./groupController')
 const portfolioController = require('./portfolioController')
 const appSettingsController = require('./appSettingsController')
-const registration_permissionsController = require('./registration_permissionsController')
+const registration_permissionsController = require('./registrationpermissionsController')
 
 module.exports = {
     ClientsController,

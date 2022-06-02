@@ -10,7 +10,7 @@ const CompanyService = require('./companyService');
 const groupService = require('./groupService')
 const portfolioService = require('./portfolioService')
 const AppSettingsService = require('./appSettingsService')
-const Registration_permissionsService = require('./registration_permissionsService')
+const Registration_permissionsService = require('./registrationpermissionsService')
 
 module.exports = {
     ClientsService,

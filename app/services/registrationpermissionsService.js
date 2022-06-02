@@ -7,7 +7,7 @@ exports.getFullList = function () {
             Select 
             rp.id as 'registration_permissions.id',
             rp.code as 'registration_permissions.code',
-            (select if(rp.enabled =1,'Si', 'No' )) as 'registration_permissions.enabled', 
+            (select if(rp.enabled =1,'Habilitado', 'No Habilitado' )) as 'registration_permissions.enabled', 
             s.id as 'registration_permissions.semester.id', 
             s.name as 'registration_permissions.semester.name',
             s.date_from as 'registration_permissions.semester.date_from',
