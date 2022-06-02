@@ -75,16 +75,14 @@ exports.RegistroMasivo = function (req, res, callback) {
         var datos = xlsx.utils.sheet_to_json(worksheet);
         let semestres;
         UserService.getSemesters().then(function (result) {
-            semestres = result;
+            semestres = result.semestres;
         }).then(function () {
             for (let index = 0; index < datos.length; index++) {
                 const element = datos[index];
 
-                for (let sindex = 0; sindex < semestres.length; sindex++) {
-                    if (element.semester == semestres[sindex].name) {
-                        element.semester = semestres[sindex].id
-                    }
-                }
+                const sem = semestres.find(semestre => semestre.name == element.semester)
+                element.semester = sem.id
+
                 if (element.project_process_state_id == null) element.project_process_state_id = 6;
                 UserService.CargaMasivaPermisos(element).then(function (result) {
                     if (result) {
@@ -135,16 +133,14 @@ exports.RegistroMasivoBloqueados = function (req, res, callback) {
         var datos = xlsx.utils.sheet_to_json(worksheet);
         let semestres;
         UserService.getSemesters().then(function (result) {
-            semestres = result
+            semestres = result.semestres
         }).then(function () {
             for (let index = 0; index < datos.length; index++) {
                 const element = datos[index];
 
-                for (let sindex = 0; sindex < semestres.length; sindex++) {
-                    if (element.semester == semestres[sindex].name) {
-                        element.semester = semestres[sindex].id
-                    }
-                }
+                const sem = semestres.find(semestre => semestre.name == element.semester)
+                element.semester = sem.id
+
                 if (element.project_process_state_id == null) element.project_process_state_id = 6;
                 UserService.CargaMasivaPermisosBloqueados(element).then(function (result) {
                     if (result) {

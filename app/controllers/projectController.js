@@ -73,30 +73,21 @@ exports.saveExcel = function (req, res, callback) {
                 element.devices = element.devices == "SI" ? 1 : 0;
                 element.devices_description = element.devices_description == undefined ? null : element.devices_description;
                 if (element.career_2) {
-                    for (let cindex = 0; cindex < carreras.length; cindex++) {
-                        if (element.career_2 == carreras[cindex].name) {
-                            element.career_2 = carreras[cindex].id
-                        }
-                    }
+                    const c = carreras.find(carrera => carrera.name == element.career_2)
+                    element.career_2 = c.id
                 }
                 else {
                     element.career_2 = null
                 }
-                for (let sindex = 0; sindex < semesters.length; sindex++) {
-                    if (element.semester == semesters[sindex].name) {
-                        element.semester = semesters[sindex].id
-                    }
-                }
-                for (let cindex = 0; cindex < carreras.length; cindex++) {
-                    if (element.career == carreras[cindex].name) {
-                        element.career = carreras[cindex].id
-                    }
-                }
-                for (let coindex = 0; coindex < company.length; coindex++) {
-                    if (element.company == company[coindex].name) {
-                        element.company = company[coindex].id
-                    }
-                }
+                const s = semesters.find(semester => semester.name == element.semester)
+                element.semester = s.id
+
+                const c1 = carreras.find(carrera => carrera.name == element.career)
+                element.career = c1.id
+
+                const compania = company.find(comp => comp.name == element.company)
+                element.company = compania.id
+
                 if (element.project_process_state_id == null) element.project_process_state_id = 6;
                 console.log(element)
                 ProjectService.saveExcel(element).then(function (result) {
@@ -121,8 +112,6 @@ exports.saveExcel = function (req, res, callback) {
                         //});
                     }
                 })
-
-
             }
             //borra el excel
             fs.unlink(path, (err) => {
