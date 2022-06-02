@@ -88,7 +88,7 @@ router.get(POSTULATION_URL.OPERATIONS.GET_POSTULATIONS, PostulationController.ge
  */
 router.post(POSTULATION_URL.OPERATIONS.SAVE, PostulationController.save);
 
-router.get(POSTULATION_URL.OPERATIONS.HISTORY, PostulationController.getHistory);
+router.post(POSTULATION_URL.OPERATIONS.HISTORY, PostulationController.getHistory);
 
 router.get(POSTULATION_URL.OPERATIONS.GET_MY, PostulationController.myPostulation);
 
