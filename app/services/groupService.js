@@ -1,5 +1,43 @@
 const { mysqlConnection } = require('../connections/mysql');
 
+exports.listAll = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `
+                select 
+                g.group_weighted_average as 'group.group_weighted_average',
+                u1.firstname as 'student_1.Nombre',
+                u1.lastname as 'student_1.Apellido',
+                u1.code as 'student_1.Codigo',
+                c1.name as 'student_1.Carrera',
+                u2.firstname as 'student_2.Nombre',
+                u2.lastname as 'student_2.Apellido',
+                u2.code as 'student_2.Codigo',
+                c2.name as 'student_2.Carrera',
+                (case 
+                when g.project_assigned is null then 'No tiene proyecto'
+                else p.name end) as 'project.nombre'
+                from db_pmo_dev.group g
+                left join user as u1 on g.student_1_id = u1.id
+                left join career as c1 on c1.id = u1.career_id
+                left join user as u2 on g.student_2_id = u2.id
+                left join career as c2 on c2.id = u2.career_id
+                left join project as p on p.id = g.project_assigned
+                `
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
+        })
+    })
+}
+
 
 exports.save = function (group) {
     return new Promise(function (resolve, reject) {

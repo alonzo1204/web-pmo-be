@@ -100,4 +100,6 @@ router.post(GROUP_URL.OPERATIONS.SAVE, groupController.save);
  */
 router.get(GROUP_URL.OPERATIONS.GET_GROUP, groupController.getgroup);
 
+router.get(GROUP_URL.OPERATIONS.LIST, groupController.listAll);
+
 module.exports = router;
