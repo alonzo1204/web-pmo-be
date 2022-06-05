@@ -93,7 +93,8 @@ exports.getFullList = function () {
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
-                
+                po.name as 'portfolio.name'
+
                 from postulation p
                 left join project p1 on p1.id = p.project_1_id
                 left join project p2 on p2.id = p.project_2_id
@@ -105,6 +106,7 @@ exports.getFullList = function () {
                 left join user u2 on u2.id = g.student_2_id
                 left join career c1 on c1.id = u1.career_id
                 left join career c2 on c2.id = u2.career_id
+                left join portfolio po on po.id = p.portfolio_id
 				group by p.id`,
         }, function (error, result, fields) {
             if (result) {
@@ -323,7 +325,8 @@ exports.myPostulation = function (user) {
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
                 pa.url_sharepoint as 'pa.url_sharepoint'
-                
+                po.name as 'portfolio.name'
+
                 from postulation p
                 left join project p1 on p1.id = p.project_1_id
                 left join project p2 on p2.id = p.project_2_id
@@ -335,6 +338,7 @@ exports.myPostulation = function (user) {
                 left join user u2 on u2.id = g.student_2_id
                 left join career c1 on c1.id = u1.career_id
                 left join career c2 on c2.id = u2.career_id
+                left join portfolio po on po.id = p.portfolio_id
                 where (g.student_1_id = ${user.id} or g.student_2_id= ${user.id})
                 group by p.id`,
         }, function (error, result, fields) {
@@ -618,11 +622,13 @@ exports.getpostulations = function (code) {
                 p.project_2_id,
                 p.project_3_id,
                 p.project_4_id
-                        
+                po.name as 'portfolio.name'
+                
                 from postulation p
                 left join db_pmo_dev.group g on g.id = p.group_id
                 left join user u1 on u1.id = g.student_1_id 
-                left join user u2 on u2.id = g.student_2_id 
+                left join user u2 on u2.id = g.student_2_id
+                left join portfolio po on po.id = p.portfolio_id 
                 where u1.code = "${codigo}" or u2.code = "${codigo}";`,
             }, function (error, result, fields) {
                 if (result && result.length > 0) {
