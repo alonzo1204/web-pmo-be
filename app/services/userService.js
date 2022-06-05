@@ -184,9 +184,9 @@ exports.changeName = function (data) {
                 sql: `Select * from user where id = ${data.id} `
             }, function (error, result, fields) {
                 if (result) {
-                    if (data.firstname && data.lastname) {
+                    if (data.firstname && data.lastname, data.career_id) {
                         mysqlConnection.query({
-                            sql: `Update user set firstname = '${data.firstname}' , lastname = '${data.lastname}' where id = ${data.id}`,
+                            sql: `Update user set firstname = '${data.firstname}' , lastname = '${data.lastname}', career_id = ${data.career_id} where id = ${data.id}`,
                         }, function (error, result, fields) {
                             if (result) {
                                 resolve(result);

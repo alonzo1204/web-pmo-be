@@ -66,7 +66,7 @@ exports.login = function (code) {
 //cambios a role y sacar career y cambios al query
 exports.registerUser = function (user) {
     return new Promise(function (resolve, reject) {
-        if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
+        if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id && user.career_id) {
             var customsql = !user.isStudent ? `select * from application_settings` : `SELECT * from registration_permissions where code = "${user.code}" and semester_id = ${user.semester_id} and enabled = 1`
             mysqlConnection.query({
                 sql: customsql,
@@ -82,8 +82,8 @@ exports.registerUser = function (user) {
                             })
                         } else {
                             mysqlConnection.query({
-                                sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`, `weighted_average`) VALUES (?,?,?,?,?)',
-                            }, [user.code, createHash(user.password), user.firstname, user.lastname, 15.00], function (error, r, fields) {
+                                sql: 'INSERT INTO user (`code`, `password`, `firstname`, `lastname`, `weighted_average`,`career_id`) VALUES (?,?,?,?,?,?)',
+                            }, [user.code, createHash(user.password), user.firstname, user.lastname, 15.00, user.career_id], function (error, r, fields) {
                                 if (r) {
                                     const uid = r.insertId
                                     mysqlConnection.query({
