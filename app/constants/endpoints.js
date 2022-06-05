@@ -74,7 +74,8 @@ const endpoints = {
             GET_MY: '/mypostulations',
             SET_PROYECT: '/runPostulationProcess',
             GET_ONE: '/:idPostulation',
-            GET_POSTULATIONS: '/mypostulations/:code'
+            GET_POSTULATIONS: '/mypostulations/:code',
+            ASIGN_PROYECTS: '/asign'
         }
     },
     CAREER_URL: {

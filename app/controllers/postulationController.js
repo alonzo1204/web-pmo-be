@@ -107,3 +107,17 @@ exports.getpostulations = function (req, res) {
         }
     })
 }
+
+exports.asignarProyectos = function (req, res) {
+    PostulationService.asignarProyectos().then(function (result) {
+        if (result) {
+            return res.status(200).send({
+                data: result
+            })
+        }
+    }, function (error) {
+        if (error) {
+            return res.status(401).send(error)
+        }
+    })
+}

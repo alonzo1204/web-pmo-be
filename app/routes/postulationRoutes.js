@@ -94,4 +94,6 @@ router.get(POSTULATION_URL.OPERATIONS.GET_MY, PostulationController.myPostulatio
 
 router.post(POSTULATION_URL.OPERATIONS.SET_PROYECT, PostulationController.setProyects);
 
+router.get(POSTULATION_URL.OPERATIONS.ASIGN_PROYECTS, PostulationController.asignarProyectos);
+
 module.exports = router;

@@ -642,3 +642,18 @@ exports.getpostulations = function (code) {
         }
     })
 }
+
+exports.asignarProyectos = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql: `call SetProyects();`
+        }, function (error, result, fields) {
+            if (error) {
+                reject(error)
+            }
+            resolve(
+                { msg: `Stored Procedure ejecutado correctamente` }
+            )
+        })
+    })
+}
