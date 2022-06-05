@@ -10,8 +10,8 @@ const sequelize = new Sequelize(database.DATABASE, database.USER, database.PASSW
     }
   });
   
-/*
-var connection = mysql.createConnection({
+
+var mysqlConnection = mysql.createConnection({
     host: database.HOST,
     user: database.USER,
     password: database.PASSWORD,
@@ -19,7 +19,8 @@ var connection = mysql.createConnection({
     supportBigNumbers: true,
     bigNumberStrings: true
 });
-*/
+
 module.exports = {
-    sequelize
+    sequelize,
+    mysqlConnection
 };

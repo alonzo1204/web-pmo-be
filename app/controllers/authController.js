@@ -1,5 +1,6 @@
 const { AuthService } = require('../services');
 const { sendMail } = require('../constants')
+const { endpoints } = require('../constants');
 
 const passport = require('passport');
 

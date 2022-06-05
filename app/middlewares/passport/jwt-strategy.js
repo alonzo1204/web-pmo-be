@@ -31,7 +31,7 @@ passport.use(
                 //console.log(result)
                 return settings
             })*/
-            var setts=await AppSettingsService.getConfiguration();
+            var setts=await AppSettingsService.getConfigurationV2();
             let settings = {
                 front_url: setts[0].dataValues.front_url,
                 back_url: setts[0].dataValues.back_url,

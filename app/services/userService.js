@@ -1,19 +1,9 @@
-const { userModel, registrationPermissionsModel } = require('../models');
+const { mysqlConnection, sequelize } = require('../connections');
+const { userModel, registrationPermissionsModel, userRolModel } = require('../models');
 
 
-exports.getFullList =function(){
-    return new Promise(function(resolve,reject){
-        userModel.findAll({include:{all: true, nested: true}}).then(careers=>{
-            resolve(careers);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
-
-
-/*
-exports.getFullList = function () {
+//get list users
+exports.getFullListV1 = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql:
@@ -43,23 +33,85 @@ exports.getFullList = function () {
         })
     })
 }
-*/
 
-exports.Baja = function (usuario) {
-    var code = usuario.params.idUser;
-    return new Promise(function (resolve, reject) {
-        userModel.update({active:0},{where:{code:code}}).then(function(){
-            userModel.findOne({where:{code:code}}).then(user=>{
-                resolve(user)
-            })
+exports.getFullListV2 =function(){
+    return new Promise(function(resolve,reject){
+        userModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
         }).catch(error=>{
-            reject(error)
+            reject(error);
+        })
+    })
+};
+
+//lista de profesores
+exports.getFullListTeachersV1 = function () {
+    return new Promise(function (resolve, reject) {
+        mysqlConnection.query({
+            sql:
+                `select 
+                u.id,
+                u.code, 
+                u.firstname, 
+                u.lastname,
+                CONCAT(u.code,' - ',u.firstname,' ',u.lastname) as fullInformation,
+                u.active, 
+                u.weighted_average,
+                c.id as 'carrera.codigo de la carrera',
+                c.name as 'carrera.nombre de la carrera'
+                from user u
+                left join user_rol ur on ur.user_id = u.id
+                left join role r on r.id = ur.role_id
+                left join career c on c.id = u.career_id
+                where ur.role_id in (4,5)
+                group by u.id`,
+        }, function (error, result, fields) {
+            if (result) {
+                resolve(result);
+            }
+            if (error) {
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                })
+            }
         })
     })
 }
 
-/*
-exports.Baja = function (usuario) {
+exports.getFullListTeachersV2 = function () {
+    return new Promise( function (resolve, reject) {
+        sequelize.query(
+            `select 
+                u.id,
+                u.code, 
+                u.firstname, 
+                u.lastname,
+                CONCAT(u.code,' - ',u.firstname,' ',u.lastname) as fullInformation,
+                u.active, 
+                u.weighted_average,
+                c.id as 'carrera.codigo de la carrera',
+                c.name as 'carrera.nombre de la carrera'
+                from user u
+                left join user_rol ur on ur.user_id = u.id
+                left join role r on r.id = ur.role_id
+                left join career c on c.id = u.career_id
+                where ur.role_id in (4,5)
+                group by u.id`
+        ).then(result=>{
+            resolve(result)
+        }).catch(error=>{
+            reject({
+                codeMessage: error.code ? error.code : 'ER_',
+                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+            })
+        })
+    })
+}
+
+
+//dar de baja a usuario
+exports.BajaV1 = function (usuario) {
     var code = usuario.params.idUser;
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -76,39 +128,24 @@ exports.Baja = function (usuario) {
             }
         })
     })
-}*/
+}
 
-exports.CargaMasivaPermisos = function(user){
+exports.BajaV2 = function (usuario) {
+    var code = usuario.params.idUser;
     return new Promise(function (resolve, reject) {
-        registrationPermissionsModel.findOne({where:{code:user.code}}).then(function(){
-            if (result!=null||result!=undefined) {
-                reject({
-                    codeMessage: 'USER_EXIST',
-                    message: `The user with id ${user.id} are already in a postulation`
-                })
-            }else{
-                registrationPermissionsModel.create({values:{
-                    code:user.code,
-                    enabled:1,
-                    semester_id:user.semester_id
-                }
-                }).then(NewUser=>{
-                    resolve({data:NewUser,id:NewUser.id})
-                }).catch(error=>{
-                    reject(error)
-                })
-            }
-        })
-        userModel.create(user).then(newUser=>{
-            resolve(newUser)
+        userModel.update({active:0},{where:{code:code}}).then(function(){
+            userModel.findOne({where:{code:code}}).then(user=>{
+                resolve(user)
+            })
         }).catch(error=>{
             reject(error)
         })
     })
 }
-/*
+
+
 // Para el register_permission
-exports.CargaMasivaPermisos = function(user){
+exports.CargaMasivaPermisosV1 = function(user){
     return new Promise(function (resolve, reject) {
         if(user.code && user.semester_id){
             mysqlConnection.query({
@@ -150,9 +187,9 @@ exports.CargaMasivaPermisos = function(user){
             })
         }
     })
-}*/
+}
 
-exports.CargaMasivaPermisosBloqueados = function(user){
+exports.CargaMasivaPermisosV2 = function(user){
     return new Promise(function (resolve, reject) {
         registrationPermissionsModel.findOne({where:{code:user.code}}).then(function(){
             if (result!=null||result!=undefined) {
@@ -163,7 +200,7 @@ exports.CargaMasivaPermisosBloqueados = function(user){
             }else{
                 registrationPermissionsModel.create({values:{
                     code:user.code,
-                    enabled:0,
+                    enabled:1,
                     semester_id:user.semester_id
                 }
                 }).then(NewUser=>{
@@ -180,9 +217,9 @@ exports.CargaMasivaPermisosBloqueados = function(user){
         })
     })
 }
-/*
+
 // Para el register_permission
-exports.CargaMasivaPermisosBloqueados = function(user){
+exports.CargaMasivaPermisosBloqueadosV1 = function(user){
     return new Promise(function (resolve, reject) {
         if(user.code && user.semester_id){
             mysqlConnection.query({
@@ -224,4 +261,117 @@ exports.CargaMasivaPermisosBloqueados = function(user){
             })
         }
     })
-}*/
+}
+
+exports.CargaMasivaPermisosBloqueadosV2 = function(user){
+    return new Promise(function (resolve, reject) {
+        registrationPermissionsModel.findOne({where:{code:user.code}}).then(function(){
+            if (result!=null||result!=undefined) {
+                reject({
+                    codeMessage: 'USER_EXIST',
+                    message: `The user with id ${user.id} are already in a postulation`
+                })
+            }else{
+                registrationPermissionsModel.create({values:{
+                    code:user.code,
+                    enabled:0,
+                    semester_id:user.semester_id
+                }
+                }).then(NewUser=>{
+                    resolve({data:NewUser,id:NewUser.id})
+                }).catch(error=>{
+                    reject(error)
+                })
+            }
+        })
+        userModel.create(user).then(newUser=>{
+            resolve(newUser)
+        }).catch(error=>{
+            reject(error)
+        })
+    })
+}
+
+
+//Change name
+exports.changeNameV1 = function (data) {
+    return new Promise(function (resolve, reject) {
+        if (data.id) {
+            mysqlConnection.query({
+                sql: `Select * from user where id = ${data.id} `
+            }, function (error, result, fields) {
+                if (result) {
+                    if (data.firstname && data.lastname, data.career_id) {
+                        mysqlConnection.query({
+                            sql: `Update user set firstname = '${data.firstname}' , lastname = '${data.lastname}', career_id = ${data.career_id} where id = ${data.id}`,
+                        }, function (error, result, fields) {
+                            if (result) {
+                                resolve(result);
+                            }
+                            if (error) {
+
+                                reject({
+                                    codeMessage: error.code ? error.code : 'ER_',
+                                    message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                                })
+                            }
+                        })
+                    }
+                    else {
+                        reject({
+                            codeMessage: error.code ? error.code : 'ER_',
+                            message: 'Error, mandar datos completos'
+                        })
+                    }
+                }
+                else {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: 'Id incorrecto'
+                    })
+                }
+            })
+        }
+    })
+}
+
+exports.changeNameV2 = function (data) {
+    return new Promise(function (resolve, reject) {
+        if (data.id) {
+            userModel.findByPk({id:data.id}).then(function(){
+                if (data.firstname && data.lastname, data.career_id) {
+                    userModel.update({
+                        firstname:data.firstname,
+                        lastname:data.lastname,
+                        career_id:data.career_id
+                    },{where:{
+                        id:data.id
+                    }
+                }).then(function(){
+                    userModel.findByPk({id:data.id}).then(usuario=>{
+                        resolve({
+                            usuario
+                        })
+                    })
+                }).catch(error=>{
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                })
+                }
+                else {
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: 'Error, mandar datos completos'
+                    })
+                }
+            }).catch(error=>{
+                reject({
+                    codeMessage: error.code ? error.code : 'ER_',
+                    message: 'Id incorrecto'
+                })
+            })
+        }
+    })
+}

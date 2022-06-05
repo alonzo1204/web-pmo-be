@@ -17,7 +17,7 @@ require('./app/middlewares/passport/jwt-strategy');
 const {sequelize}=require('./app/connections');
 
 //MySql Database Connection
-//var { mysqlConnection } = require('./app/connections');
+var { mysqlConnection } = require('./app/connections');
 
 //MORGAN
 app.use(morgan())
@@ -46,11 +46,14 @@ app.use(cors(corsOptions));
 
 //ROUTES
 var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes, portfolioRoutes, appSettingsRoutes } = require('./app/routes');
-const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION;
+//const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION.MYSQLCONN;
+
+const APP_ROUTE_MYSQLCONN = endpoints.API_NAME + endpoints.API_VERSION.MYSQLCONN;
+const APP_ROUTE_SEQUELIZECONN = endpoints.API_NAME + endpoints.API_VERSION.SEQUELIZECONN;
 
 //sequelize Database Connection
-app.listen(server.PORT, function(){
-    console.log('Server Running on port ' + server.PORT);
+app.listen(server.PORT+1, function(){
+    console.log('Server Running on port ' + server.PORT+1);
     sequelize.authenticate().then(() => {
         console.log('Connection has been established successfully.');
       })
@@ -60,7 +63,7 @@ app.listen(server.PORT, function(){
       
 })
 
-/*
+
 //MySQL Database Connection
 mysqlConnection.connect(function (err) {
     if (err) {
@@ -72,7 +75,7 @@ mysqlConnection.connect(function (err) {
         console.log('Server Running on port ' + server.PORT);
     })
 });
-*/
+
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -118,17 +121,31 @@ const options = {
 
 const specs2 = swaggerJSDoc(options);
 
+//
+app.use(APP_ROUTE_MYSQLCONN + endpoints.CLIENTS_URL.MAIN , passport.authenticate('jwt', { session: false }), ClientsRoute);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.AUTH_URL.MAIN , AuthRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.CAREER_URL.MAIN , passport.authenticate('jwt', { session: false }), CareerRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.SEMESTER_URL.MAIN , passport.authenticate('jwt', { session: false }), SemesterRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.POSTULATION_URL.MAIN , passport.authenticate('jwt', { session: false }), PostulationRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.PROJECT_URL.MAIN , passport.authenticate('jwt', { session: false }), ProjectRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.ROLE_URL.MAIN , passport.authenticate('jwt', { session: false }), RoleRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.USER_URL.MAIN , passport.authenticate('jwt', { session: false }), UserRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.COMPANY_URL.MAIN , passport.authenticate('jwt', { session: false }), CompanyRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.GROUP_URL.MAIN , passport.authenticate('jwt', { session: false }), GroupRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.PORTFOLIO_URL.MAIN , passport.authenticate('jwt', { session: false }), portfolioRoutes);
+app.use(APP_ROUTE_MYSQLCONN + endpoints.APP_SETTINGS_URL.MAIN /*, passport.authenticate('jwt', { session: false })*/, appSettingsRoutes);
+app.use(APP_ROUTE_MYSQLCONN + "/api-docs", swaggerUI.serve, swaggerUI.setup(specs2))
 
-app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, passport.authenticate('jwt', { session: false }), ClientsRoute);
-app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
-app.use(APP_ROUTE + endpoints.CAREER_URL.MAIN, passport.authenticate('jwt', { session: false }), CareerRoutes);
-app.use(APP_ROUTE + endpoints.SEMESTER_URL.MAIN, passport.authenticate('jwt', { session: false }), SemesterRoutes);
-app.use(APP_ROUTE + endpoints.POSTULATION_URL.MAIN, passport.authenticate('jwt', { session: false }), PostulationRoutes);
-app.use(APP_ROUTE + endpoints.PROJECT_URL.MAIN, passport.authenticate('jwt', { session: false }), ProjectRoutes);
-app.use(APP_ROUTE + endpoints.ROLE_URL.MAIN, passport.authenticate('jwt', { session: false }), RoleRoutes);
-app.use(APP_ROUTE + endpoints.USER_URL.MAIN, passport.authenticate('jwt', { session: false }), UserRoutes);
-app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, passport.authenticate('jwt', { session: false }), CompanyRoutes);
-app.use(APP_ROUTE + endpoints.GROUP_URL.MAIN, passport.authenticate('jwt', { session: false }), GroupRoutes);
-app.use(APP_ROUTE + endpoints.PORTFOLIO_URL.MAIN, passport.authenticate('jwt', { session: false }), portfolioRoutes);
-app.use(APP_ROUTE + endpoints.APP_SETTINGS_URL.MAIN/*, passport.authenticate('jwt', { session: false })*/, appSettingsRoutes);
-app.use(APP_ROUTE + "/api-docs", swaggerUI.serve, swaggerUI.setup(specs2))
+
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.CLIENTS_URL.MAIN , passport.authenticate('jwt', { session: false }), ClientsRoute);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.AUTH_URL.MAIN , AuthRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.CAREER_URL.MAIN , passport.authenticate('jwt', { session: false }), CareerRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.SEMESTER_URL.MAIN , passport.authenticate('jwt', { session: false }), SemesterRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.POSTULATION_URL.MAIN , passport.authenticate('jwt', { session: false }), PostulationRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.PROJECT_URL.MAIN , passport.authenticate('jwt', { session: false }), ProjectRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.ROLE_URL.MAIN , passport.authenticate('jwt', { session: false }), RoleRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.USER_URL.MAIN , passport.authenticate('jwt', { session: false }), UserRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.COMPANY_URL.MAIN , passport.authenticate('jwt', { session: false }), CompanyRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.GROUP_URL.MAIN , passport.authenticate('jwt', { session: false }), GroupRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.PORTFOLIO_URL.MAIN , passport.authenticate('jwt', { session: false }), portfolioRoutes);
+app.use(APP_ROUTE_SEQUELIZECONN + endpoints.APP_SETTINGS_URL.MAIN /*, passport.authenticate('jwt', { session: false })*/, appSettingsRoutes);

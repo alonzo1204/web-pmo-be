@@ -2,23 +2,8 @@ const { mysqlConnection } = require('../connections/mysql');
 const { portfolioModel, semesterModel, portfolioStateModel } = require('../models');
 const { appSettingsModel } = require('../models/appSettingsModel');
 
-
-exports.getConfiguration =function(){
-    return new Promise(function(resolve,reject){
-        appSettingsModel.findAll({
-            include:[{
-                model:portfolioModel,
-                include:[semesterModel,portfolioStateModel]
-        }]
-        }).then(configuracion=>{
-            resolve(configuracion);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
-/*
-exports.getConfiguration = function(configID){
+//get Configuracion
+exports.getConfigurationV1 = function(configID){
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT 
@@ -50,22 +35,24 @@ exports.getConfiguration = function(configID){
         })
     })
 }
-*/
 
-
-exports.editConfiguration =function(config){
+exports.getConfigurationV2 =function(){
     return new Promise(function(resolve,reject){
-        appSettingsModel.update(config,{where:{id:1}}).then(function(){
-            appSettingsModel.findAll({include:{all: true, nested: true}}).then(configuracion=>{
-                resolve(configuracion)
-            })
+        appSettingsModel.findAll({
+            include:[{
+                model:portfolioModel,
+                include:[semesterModel,portfolioStateModel]
+        }]
+        }).then(configuracion=>{
+            resolve(configuracion);
         }).catch(error=>{
             reject(error);
         })
     })
 };
-/*
-exports.editConfiguration = function(config){
+
+//editar configuracion
+exports.editConfigurationV1 = function(config){
     console.log(config.params.idConfig)
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
@@ -100,4 +87,17 @@ exports.editConfiguration = function(config){
             }
         })
     })
-}*/
+}
+
+exports.editConfigurationV2 =function(config){
+    return new Promise(function(resolve,reject){
+        appSettingsModel.update(config,{where:{id:1}}).then(function(){
+            appSettingsModel.findAll({include:{all: true, nested: true}}).then(configuracion=>{
+                resolve(configuracion)
+            })
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+

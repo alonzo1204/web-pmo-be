@@ -1,6 +1,9 @@
 const endpoints = {
     API_NAME: '/api',
-    API_VERSION: '/v1.0',
+    API_VERSION:{
+        MYSQLCONN:'/v1.0',
+        SEQUELIZECONN:'/v2.0'
+    }, 
     CLIENTS_URL: {
         MAIN: '/clients',
         OPERATIONS: {

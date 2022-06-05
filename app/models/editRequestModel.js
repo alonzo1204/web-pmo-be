@@ -42,7 +42,7 @@ editRequestModel.init({
     },
     request_date:{
         type:DataTypes.DATE,
-        defaultValue: moment().format('YYYY-MM-DDTHH:mm:s:ss') + '.000Z',
+        defaultValue: DataTypes.NOW
     }
 },{
     freezeTableName: true,

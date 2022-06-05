@@ -1,21 +1,8 @@
+const { mysqlConnection } = require('../connections');
 const { roleModel } = require('../models');
 
 
-exports.getFullList =function(){
-    return new Promise(function(resolve,reject){
-        roleModel.findAll({include:{all: true, nested: true}}).then(careers=>{
-            resolve(careers);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
-
-
-
-
-/*
-exports.getFullList = function () {
+exports.getFullListV1 = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'SELECT id, name from role',
@@ -31,4 +18,16 @@ exports.getFullList = function () {
             }
         })
     })
-}*/
+}
+
+exports.getFullListV2 =function(){
+    return new Promise(function(resolve,reject){
+        roleModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+

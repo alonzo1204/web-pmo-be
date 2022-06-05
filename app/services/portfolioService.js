@@ -1,19 +1,8 @@
+const { mysqlConnection } = require('../connections');
 const { portfolioModel } = require('../models');
 
-
-exports.getAll =function(){
-    return new Promise(function(resolve,reject){
-        portfolioModel.findAll({include:{all: true, nested: true}}).then(careers=>{
-            resolve(careers);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
-
-
-/*
-exports.getAll = function () {
+//Listado de todos los portafolios
+exports.getAllV1 = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: `SELECT 
@@ -44,31 +33,20 @@ exports.getAll = function () {
             }
         })
     })
-}*/
-
-exports.savePortfolio = function (portfolio) {
-    return new Promise(function(resolve,reject){
-        if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
-            portfolioModel.create({
-                name: portfolio.name,
-                semester_id:portfolio.semester_id,
-                portfolio_state_id:portfolio.portfolio_state_id
-            }).then(portfolio=>{
-                resolve({data:portfolio, id:portfolio.id});
-            }).catch(error=>{
-                reject(error);
-            })
-        }else{
-            reject({
-                codeMessage: 'MISSING_INFORMATION',
-                message: 'Send the complete body for project'
-            })
-        }
-    })
 }
 
-/*
-exports.savePortfolio = function (portfolio) {
+exports.getAllV2 =function(){
+    return new Promise(function(resolve,reject){
+        portfolioModel.findAll({include:{all: true, nested: true}}).then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+
+//Guardar portafolio
+exports.savePortfolioV1 = function (portfolio) {
     return new Promise(function (resolve, reject) {
         if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
             mysqlConnection.query({
@@ -91,4 +69,26 @@ exports.savePortfolio = function (portfolio) {
             })
         }
     })
-}*/
+}
+
+exports.savePortfolioV2 = function (portfolio) {
+    return new Promise(function(resolve,reject){
+        if (portfolio.name && portfolio.semester_id && portfolio.portfolio_state_id) {
+            portfolioModel.create({
+                name: portfolio.name,
+                semester_id:portfolio.semester_id,
+                portfolio_state_id:portfolio.portfolio_state_id
+            }).then(portfolio=>{
+                resolve({data:portfolio, id:portfolio.id});
+            }).catch(error=>{
+                reject(error);
+            })
+        }else{
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+}
+

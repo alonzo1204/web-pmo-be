@@ -1,18 +1,9 @@
+const { mysqlConnection } = require('../connections');
 const { careerModel } = require('../models');
 
 
-exports.getFullList =function(){
-    return new Promise(function(resolve,reject){
-        careerModel.findAll().then(careers=>{
-            resolve(careers);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
 
-/*
-exports.getFullList = function () {
+exports.getFullListV1 = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'SELECT id, name from career',
@@ -28,4 +19,15 @@ exports.getFullList = function () {
             }
         })
     })
-}*/
+}
+
+exports.getFullListV2 =function(){
+    return new Promise(function(resolve,reject){
+        careerModel.findAll().then(careers=>{
+            resolve(careers);
+        }).catch(error=>{
+            reject(error);
+        })
+    })
+};
+

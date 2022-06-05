@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { security, requestAccess } = require('../constants');
 const { Op } = require("sequelize");
 
-const { hsAccessModel, hsSessionModel, userModel, registrationPermissionsModel, userRolModel } = require('../models');
+const { hsAccessModel, hsSessionModel, userModel, registrationPermissionsModel, userRolModel, roleModel } = require('../models');
 
 exports.getUserByCode = function (code) {
     return new Promise(function (resolve, reject) {
@@ -41,17 +41,25 @@ exports.getUserByCode = function (code) {
 
 exports.login = function (code) {
     return new Promise(function (resolve, reject) {
-        userModel.findOne({include:{all: true, nested: true},where:{code:code}}).then(usuario=>{
+        userModel.findOne({include:{all: true, nested: true},where:{code:code}}).then(async function(usuario){
             let user = {
-                id: usuario[0].user_id,
-                code: usuario[0].code,
-                lastname: usuario[0].lastname,
-                firstname: usuario[0].firstname,
-                weighted_average: usuario[0].weighted_average,
-                password: usuario[0].password,
-                active: usuario[0].active
+                id: usuario.getDataValue('id'),
+                code: usuario.getDataValue('code'),
+                lastname: usuario.getDataValue('lastname'),
+                firstname: usuario.getDataValue('firstname'),
+                weighted_average: usuario.getDataValue('weighted_average'),
+                password: usuario.getDataValue('password'),
+                active: usuario.getDataValue('active')
             };
-            let roles = usuario.map((i) => { return { id: i.role_id, name: i.role_name, access: i.role_access.split(',') } });
+            
+            var rol=await userRolModel.findOne({where:{user_id:usuario.getDataValue('id')}})
+            let i=await roleModel.findByPk(rol.getDataValue('role_id'))
+            let roles={
+                id: i.getDataValue('id'),
+                name: i.getDataValue('name'), 
+                access: i.getDataValue('access').split(',')
+            }
+            //let roles = usuario.map((i) => { return { id: i.role_id, name: i.role_name, access: i.role_access.split(',') } });
             resolve({
                 information: user,
                 roles
@@ -108,7 +116,7 @@ exports.login = function (code) {
 */
 
 
-exports.registerUser = function (user) {
+exports.registerUser = async function (user) {
     return new Promise(async function (resolve, reject) {
         if (user.code && user.password && user.firstname && user.lastname && user.role_id && user.semester_id) {
             registrationPermissionsModel.findOne({
@@ -117,7 +125,7 @@ exports.registerUser = function (user) {
                     semester_id:user.semester_id,
                     enabled:1
                 }
-            }).then(UserRegistration=>{
+            }).then(async function(){
                 const User=await userModel.findOne({where:{code:user.code}})
                 if(User===null||User===undefined){
                     userModel.create({
@@ -247,8 +255,8 @@ exports.changePassword = function (user) {
                         message: "Las contraseñas son iguales"
                     })
                 }
-                console.log(usuario[0].password);
-                const isValid = bcrypt.compareSync(oldPassword, usuario[0].password);
+                console.log(usuario.getDataValue('password'));
+                const isValid = bcrypt.compareSync(oldPassword, usuario.getDataValue('password'));
                 console.log(isValid);
                 if (!isValid) {
                     reject({

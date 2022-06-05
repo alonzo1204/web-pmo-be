@@ -1,19 +1,8 @@
+const { mysqlConnection } = require('../connections');
 const { companyModel } = require('../models');
 
 
-exports.getFullList =function(){
-    return new Promise(function(resolve,reject){
-        companyModel.findAll().then(company=>{
-            resolve(company);
-        }).catch(error=>{
-            reject(error);
-        })
-    })
-};
-
-
-/*
-exports.getFullList = function () {
+exports.getFullListV1 = function () {
     return new Promise(function (resolve, reject) {
         mysqlConnection.query({
             sql: 'SELECT id, name, image from company',
@@ -29,29 +18,21 @@ exports.getFullList = function () {
             }
         })
     })
-}*/
+}
 
-exports.saveCompany = function(company,path){
+exports.getFullListV2 =function(){
     return new Promise(function(resolve,reject){
-        if (company.body.name && path) {
-            companyModel.create({
-                name:company.body.name,
-                image:path
-            }).then(newCompany=>{
-                resolve(newCompany)
-            }).catch(error=>{
-                reject(error);
-            })
-        } else {
-            reject({
-                codeMessage: 'MISSING_INFORMATION',
-                message: 'Send the complete body for project'
-            })
-        }
+        companyModel.findAll().then(company=>{
+            resolve(company);
+        }).catch(error=>{
+            reject(error);
+        })
     })
 };
-/*
-exports.saveCompany = function (company,path) {
+
+
+//Save Company
+exports.saveCompanyV1 = function (company,path) {
     console.log(company.body.name)
     return new Promise(function (resolve, reject) {
         if (company.body.name && path) {
@@ -75,4 +56,25 @@ exports.saveCompany = function (company,path) {
             })
         }
     })
-}*/
+}
+
+exports.saveCompanyV2 = function(company,path){
+    return new Promise(function(resolve,reject){
+        if (company.body.name && path) {
+            companyModel.create({
+                name:company.body.name,
+                image:path
+            }).then(newCompany=>{
+                resolve(newCompany)
+            }).catch(error=>{
+                reject(error);
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for project'
+            })
+        }
+    })
+};
+
