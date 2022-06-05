@@ -64,7 +64,7 @@ const GROUP_URL = endpoints.GROUP_URL
  */
 router.post(GROUP_URL.OPERATIONS.SAVE, groupController.save);
 
-
+router.get(GROUP_URL.OPERATIONS.LIST, groupController.getFullList);
 
 /**
  * @swagger
