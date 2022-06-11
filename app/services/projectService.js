@@ -157,7 +157,7 @@ exports.save = function (project, settings) {
 
 exports.saveExcel = function (project) {
     return new Promise(function (resolve, reject) {
-        if ((project.code && project.name && project.paper && project.devices && devices_description && project.career && career_2 && project.semester && project.company) >= 0) {
+        if ((project.code && project.name && project.paper && project.devices && project.devices_description && project.career && project.career_2 && project.semester && project.company) >= 0) {
 
             mysqlConnection.query({
                 sql: 'SELECT id, code from project where code = ?',

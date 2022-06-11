@@ -95,7 +95,6 @@ exports.getgroup = function (code) {
                 left join user u2 on u2.id = g.student_2_id
                 where u1.code = "${codigo}" or u2.code = "${codigo}"`,
             }, function (error, result, fields) {
-                console.log(error);
                 if (result && result.length > 0) {
                     mysqlConnection.query({
                         sql: `select 
