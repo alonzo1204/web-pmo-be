@@ -1,6 +1,7 @@
 var express = require('express');
 const path = require('path');
-var cors = require('cors')
+var cors = require('cors');
+const _ = require('lodash');
 var app = express();
 var bodyParser = require('body-parser');
 var passport = require('passport');
@@ -103,7 +104,6 @@ const options = {
 
 const specs2 = swaggerJSDoc(options);
 
-
 app.use(APP_ROUTE + endpoints.CLIENTS_URL.MAIN, passport.authenticate('jwt', { session: false }), ClientsRoute);
 app.use(APP_ROUTE + endpoints.RegistrationPermission_URL.MAIN, passport.authenticate('jwt', { session: false }), registration_permissionsRoutes);
 app.use(APP_ROUTE + endpoints.AUTH_URL.MAIN, AuthRoutes);
@@ -117,4 +117,27 @@ app.use(APP_ROUTE + endpoints.COMPANY_URL.MAIN, passport.authenticate('jwt', { s
 app.use(APP_ROUTE + endpoints.GROUP_URL.MAIN, passport.authenticate('jwt', { session: false }), GroupRoutes);
 app.use(APP_ROUTE + endpoints.PORTFOLIO_URL.MAIN, passport.authenticate('jwt', { session: false }), portfolioRoutes);
 app.use(APP_ROUTE + endpoints.APP_SETTINGS_URL.MAIN/*, passport.authenticate('jwt', { session: false })*/, appSettingsRoutes);
-app.use(APP_ROUTE + "/api-docs", swaggerUI.serve, swaggerUI.setup(specs2))
+app.use(APP_ROUTE + "/api-docs", swaggerUI.serve, swaggerUI.setup(specs2));
+
+// ERROR-HANDLING MIDDLEWARE FOR SENDING ERROR RESPONSES TO MAINTAIN A CONSISTENT FORMAT
+app.use((err, req, res, next) => {
+    console.log('here');
+    let responseStatusCode = 401;
+    let responseObj = {
+        success: false,
+        data: [],
+        error: err,
+        message: 'Usted no se encuentra autorizado para acceder al recurso solicitado.',
+    };
+
+    if (!_.isNil(err)) {
+        if (err.name === 'JsonWebTokenError') {
+            responseStatusCode = 401;
+            responseObj.message = 'You cannot get the details. You are not authorized to access this protected resource';
+        }
+    }
+
+    if (!res.headersSent) {
+        res.status(responseStatusCode).json(responseObj);
+    }
+});

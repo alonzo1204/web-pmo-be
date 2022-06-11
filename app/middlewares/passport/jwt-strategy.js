@@ -15,9 +15,9 @@ passport.use(
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
             passReqToCallback: true
         },
-        async (req, token, done) => { //TOKEN ES LA INFORMACION DENTRO DEL JWT
+        async (req, token, next) => { //TOKEN ES LA INFORMACION DENTRO DEL JWT
             const jwt = req.headers.authorization.split(' ')[1];
-            var settings = await AppSettingsService.getConfiguration('1').then(function(result) {
+            var settings = await AppSettingsService.getConfiguration('1').then(function (result) {
                 let settings = {
                     front_url: result[0].front_url,
                     back_url: result[0].back_url,
@@ -32,22 +32,20 @@ passport.use(
                 //console.log(result)
                 return settings
             })
-            
+
             try {
                 AuthService.checkValidToken(jwt).then((response) => {
                     if (response) {
-                        
                         //ENVIAR INFORMACION DE CONFIGURACION DEL SISTEMA
-                        //console.log(settings);
-                        return done(null, { token, settings });
+                        return next(null, { token, settings });
                     } else {
-                        return done({ message: 'El token enviado no es válido' }, false);
+                        return next('El token enviado no es válido');
                     }
                 }).catch((e) => {
-                    done(e, null);
+                    next(e);
                 })
             } catch (error) {
-                done(error);
+                next(error);
             }
         }
     )
