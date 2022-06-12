@@ -46,6 +46,7 @@ app.use(cors(corsOptions));
 
 //ROUTES
 var { ClientsRoute, AuthRoutes, CareerRoutes, SemesterRoutes, PostulationRoutes, ProjectRoutes, RoleRoutes, UserRoutes, CompanyRoutes, GroupRoutes, portfolioRoutes, appSettingsRoutes } = require('./app/routes');
+const db = require('./app/models');
 //const APP_ROUTE = endpoints.API_NAME + endpoints.API_VERSION.MYSQLCONN;
 
 const APP_ROUTE_MYSQLCONN = endpoints.API_NAME + endpoints.API_VERSION.MYSQLCONN;
@@ -54,7 +55,7 @@ const APP_ROUTE_SEQUELIZECONN = endpoints.API_NAME + endpoints.API_VERSION.SEQUE
 //sequelize Database Connection
 app.listen(server.PORT+1, function(){
     console.log('Server Running on port ' + server.PORT+1);
-    sequelize.authenticate().then(() => {
+    db.sequelize.authenticate().then(() => {
         console.log('Connection has been established successfully.');
       })
       .catch(err => {

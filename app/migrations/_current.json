@@ -1,0 +1,81 @@
+{
+    "tables": {
+        "application_settings": {
+            "tableName": "application_settings",
+            "indexes": []
+        },
+        "career": {
+            "tableName": "career",
+            "indexes": []
+        },
+        "company": {
+            "tableName": "company",
+            "indexes": []
+        },
+        "edit_request": {
+            "tableName": "edit_request",
+            "indexes": []
+        },
+        "group": {
+            "tableName": "group",
+            "indexes": []
+        },
+        "history_postulations": {
+            "tableName": "history_postulations",
+            "indexes": []
+        },
+        "history_projects": {
+            "tableName": "history_projects",
+            "indexes": []
+        },
+        "hs_access": {
+            "tableName": "hs_access",
+            "indexes": []
+        },
+        "hs_session": {
+            "tableName": "hs_session",
+            "indexes": []
+        },
+        "portfolio": {
+            "tableName": "portfolio",
+            "indexes": []
+        },
+        "portfolio_state": {
+            "tableName": "portfolio_state",
+            "indexes": []
+        },
+        "postulation": {
+            "tableName": "postulation",
+            "indexes": []
+        },
+        "project": {
+            "tableName": "project",
+            "indexes": []
+        },
+        "project_process_state": {
+            "tableName": "project_process_state",
+            "indexes": []
+        },
+        "registration_permissions": {
+            "tableName": "registration_permissions",
+            "indexes": []
+        },
+        "role": {
+            "tableName": "role",
+            "indexes": []
+        },
+        "semester": {
+            "tableName": "semester",
+            "indexes": []
+        },
+        "user": {
+            "tableName": "user",
+            "indexes": []
+        },
+        "user_rol": {
+            "tableName": "user_rol",
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
