@@ -92,7 +92,7 @@ exports.getFullList = function () {
                 pa.paper as 'pa.paper',
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
-                pa.url_sharepoint as 'pa.url_sharepoint'
+                pa.url_sharepoint as 'pa.url_sharepoint',
                 po.name as 'portfolio.name'
 
                 from postulation p
@@ -324,7 +324,7 @@ exports.myPostulation = function (user) {
                 pa.paper as 'pa.paper',
                 pa.devices as 'pa.devices',
                 pa.url_file as 'pa.url_file',
-                pa.url_sharepoint as 'pa.url_sharepoint'
+                pa.url_sharepoint as 'pa.url_sharepoint',
                 po.name as 'portfolio.name'
 
                 from postulation p
@@ -621,7 +621,7 @@ exports.getpostulations = function (code) {
                 p.project_1_id,
                 p.project_2_id,
                 p.project_3_id,
-                p.project_4_id
+                p.project_4_id,
                 po.name as 'portfolio.name'
                 
                 from postulation p
