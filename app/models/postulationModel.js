@@ -1,18 +1,29 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { groupModel } = require('./groupModel');
-const models=require('./index')
-const { projectModel } = require('./projectModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class postulationModel extends Model{
         static associate(models) {
             postulationModel.belongsTo(models.project,{
                 as:"project_1",
                 foreignKey: "project_1_id",
+            })
+            postulationModel.belongsTo(models.project,{
+                as:"project_2",
+                foreignKey: "project_2_id",
+            })
+            postulationModel.belongsTo(models.project,{
+                as:"project_3",
+                foreignKey: "project_3_id",
+            })
+            postulationModel.belongsTo(models.project,{
+                as:"project_4",
+                foreignKey: "project_4_id",
+            })
+            postulationModel.belongsTo(models.project,{
+                as:"project_assigned",
+                foreignKey: "project_assigned",
             })
             postulationModel.belongsTo(models.group,{
                 foreignKey: "group_id",
@@ -34,15 +45,15 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectModel,
-                key: 'project_1_id'
+                model: "project",
+                key: 'id'
             }
         },
         project_2_id:{
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectModel,
+                model: "project",
                 key: 'id'
             }
         },
@@ -50,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectModel,
+                model: "project",
                 key: 'id'
             }
         },
@@ -58,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectModel,
+                model: "project",
                 key: 'id'
             }
         },
@@ -78,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: projectModel,
+                model: "project",
                 key: 'id'
             }
         },
@@ -86,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: groupModel,
+                model: "group",
                 key: 'id'
             }
         },

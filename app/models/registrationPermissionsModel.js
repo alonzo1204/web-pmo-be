@@ -1,10 +1,7 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { semesterModel } = require('./semesterModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class registrationPermissionsModel extends Model{
         static associate(models) {
@@ -34,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: semesterModel,
+                model: "semester",
                 key: 'id'
             }
         }

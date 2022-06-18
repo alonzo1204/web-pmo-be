@@ -1,16 +1,7 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { careerModel } = require('./careerModel');
-const { companyModel } = require('./companyModel');
-const { groupModel } = require('./groupModel');
-const { portfolioModel } = require('./portfolioModel');
-const { projectProcessStateModel } = require('./projectProcessStateModel');
-const { semesterModel } = require('./semesterModel');
-const { userModel } = require('./userModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class histProjectsModel extends Model{
         static associate(models) {
@@ -22,6 +13,24 @@ module.exports = (sequelize, DataTypes) => {
             })
             histProjectsModel.belongsTo(models.user,{
                 foreignKey: "product_owner_id",
+            })
+            histProjectsModel.belongsTo(models.user,{
+                foreignKey: "portfolio_manager_id",
+            })
+            histProjectsModel.belongsTo(models.user,{
+                foreignKey: "co_autor_id",
+            })
+            histProjectsModel.belongsTo(models.project_process_state,{
+                foreignKey: "project_process_state_id",
+            })
+            histProjectsModel.belongsTo(models.company,{
+                foreignKey: "company_id",
+            })
+            histProjectsModel.belongsTo(models.portfolio,{
+                foreignKey: "portfolio_id",
+            })
+            histProjectsModel.belongsTo(models.semester,{
+                foreignKey: "semester_id",
             })
         }
     }
@@ -88,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: careerModel,
+                model: "career",
                 key: 'id'
             }
         },
@@ -96,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -104,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -112,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -120,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectProcessStateModel,
+                model: "project_process_state",
                 key: 'id'
             }
         },
@@ -128,7 +137,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: companyModel,
+                model: "company",
                 key: 'id'
             }
         },
@@ -136,7 +145,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: groupModel,
+                model: "group",
                 key: 'id'
             }
         },
@@ -144,7 +153,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: portfolioModel,
+                model: "portfolio",
                 key: 'id'
             }
         },
@@ -152,7 +161,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: semesterModel,
+                model: "semester",
                 key: 'id'
             }
         },

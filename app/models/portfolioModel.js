@@ -1,11 +1,7 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { portfolioStateModel } = require('./portfolioStateModel');
-const { semesterModel } = require('./semesterModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class portfolioModel extends Model{
         static associate(models) {
@@ -32,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: semesterModel,
+                model: "semester",
                 key: 'id'
             }
         },
@@ -40,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: portfolioStateModel,
+                model: "portfolio_state",
                 key: 'id'
             }
         },

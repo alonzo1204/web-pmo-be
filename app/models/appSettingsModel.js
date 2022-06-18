@@ -1,8 +1,7 @@
 'use strict';
-const { Model } = require('sequelize');
-const { portfolioModel } = require('./portfolioModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class appSettingsModel extends Model{
         static associate(models) {
@@ -22,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: portfolioModel,
+                model: "portfolio",
                 key: 'id'
             }
         }, 
@@ -38,6 +37,5 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         sequelize, modelName:'application_settings',
     });
-    return appSettingsModel;
-}
-
+  return appSettingsModel;
+};

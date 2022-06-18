@@ -1,10 +1,7 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { userModel } = require('./userModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class hsSessionModel extends Model{
         static associate(models) {
@@ -28,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },

@@ -1,17 +1,7 @@
 'use strict';
-
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const {sequelize}=require('../connections');
-const { careerModel } = require('./careerModel');
-const { companyModel } = require('./companyModel');
-const { semesterModel } = require('./semesterModel');
-const { portfolioModel } = require('./portfolioModel');
-const { projectProcessStateModel } = require('./projectProcessStateModel');
-const { userModel } = require('./userModel');
-//const { groupModel } = require('./groupModel');
-//const { postulationModel } = require('./postulationModel');
-
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class projectModel extends Model{
         static associate(models) {
@@ -107,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: careerModel,
+                model: "career",
                 key: 'id'
             }
         },
@@ -115,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -123,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -131,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: userModel,
+                model: "user",
                 key: 'id'
             }
         },
@@ -139,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: projectProcessStateModel,
+                model: "project_process_state",
                 key: 'id'
             }
         },
@@ -147,23 +137,23 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             allowNull: false,
             reference:{
-                model: companyModel,
+                model: "company",
                 key: 'id'
             }
-        },/*
+        },
         group_id:{
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: groupModel,
+                model: "group",
                 key: 'id'
             }
-        },*/
+        },
         portfolio_id:{
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: portfolioModel,
+                model: "portfolio",
                 key: 'id'
             }
         },
@@ -171,7 +161,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.INTEGER,
             defaultValue: null,
             reference:{
-                model: semesterModel,
+                model: "semester",
                 key: 'id'
             }
         },

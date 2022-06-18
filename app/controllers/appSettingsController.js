@@ -1,7 +1,7 @@
 const { AppSettingsService } = require('../services');
 const { endpoints } = require('../constants');
 var dot = require('dot-object');
-const { appSettingsModel } = require('../models/appSettingsModel');
+const { appSettingsModel } = require('../models/appsettingsModel');
 
 const URLBASE_MYSQLCONN=endpoints.API_NAME+endpoints.API_VERSION.MYSQLCONN+endpoints.GROUP_URL.MAIN
 const URLBASE_SEQUELIZECONN=endpoints.API_NAME+endpoints.API_VERSION.SEQUELIZECONN+endpoints.GROUP_URL.MAIN
