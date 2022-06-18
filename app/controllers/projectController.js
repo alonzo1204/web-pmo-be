@@ -472,7 +472,7 @@ exports.saveTeachers = function (req, res) {
         if (result) {
             return res.status(200).send({
                 data: result,
-                message: 'Se han asignado los docentes al proyecto ' + req.params.idProject + ' de manera correcta',
+                message: 'Se han asignado los docentes al proyecto ' + req.body.code + ' de manera correcta',
                 idStatus: req.params.idState
             })
         }

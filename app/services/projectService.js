@@ -380,10 +380,12 @@ exports.updateProject = function (project) {
 exports.sendUpdateRequest = function (project, token_inf) {
     return new Promise(function (resolve, reject) {
         if (project.project_id && project.value && project.column) {
+
             const uid = token_inf.token.information.id
             mysqlConnection.query({
                 sql: `select p.code from db_pmo_dev.group g, project p where p.group_id = g.id and p.id = ${project.project_id} and (g.student_1_id = ${uid} or g.student_2_id = ${uid}) group by p.id`,
             }, function (error, result, fields) {
+
                 if (result && result.length == 0 || error) {
                     resolve({
                         error: `El projecto no concuerda con el codigo de usuario`
