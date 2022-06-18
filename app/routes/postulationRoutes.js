@@ -35,6 +35,8 @@ const POSTULATION_URL = endpoints.POSTULATION_URL
  */
 router.get(POSTULATION_URL.OPERATIONS.LIST, PostulationController.getFullList);
 
+router.get(POSTULATION_URL.OPERATIONS.GET_POSTULATIONS, PostulationController.getpostulations);
+
 /**
  * @swagger
  * path:
@@ -85,5 +87,13 @@ router.get(POSTULATION_URL.OPERATIONS.LIST, PostulationController.getFullList);
  *         description: Muestra los posibles errores
  */
 router.post(POSTULATION_URL.OPERATIONS.SAVE, PostulationController.save);
+
+router.post(POSTULATION_URL.OPERATIONS.HISTORY, PostulationController.getHistory);
+
+router.get(POSTULATION_URL.OPERATIONS.GET_MY, PostulationController.myPostulation);
+
+router.post(POSTULATION_URL.OPERATIONS.SET_PROYECT, PostulationController.setProyects);
+
+router.get(POSTULATION_URL.OPERATIONS.ASIGN_PROYECTS, PostulationController.asignarProyectos);
 
 module.exports = router;
