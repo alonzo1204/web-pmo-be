@@ -426,7 +426,7 @@ async function loopV1(r, current, next, callback) {
                 }
                 if (current < r.length) {
 
-                    retr = loop(r, current + 1, log, callback);
+                    retr = loopV1(r, current + 1, log, callback);
                 }
             }
             if (result.length > 0) {
@@ -450,7 +450,7 @@ async function loopV1(r, current, next, callback) {
                                         }
                                         if (current < r.length) {
 
-                                            retr = loop(r, current + 1, log, callback);
+                                            retr = loopV1(r, current + 1, log, callback);
                                         }
                                     }
                                     if (result) {
@@ -460,7 +460,7 @@ async function loopV1(r, current, next, callback) {
                                         }
                                         if (current < r.length) {
 
-                                            retr = loop(r, current + 1, log, callback);
+                                            retr = loopV1(r, current + 1, log, callback);
                                         }
                                     }
                                 })
@@ -472,7 +472,7 @@ async function loopV1(r, current, next, callback) {
                                 }
                                 if (current < r.length) {
 
-                                    retr = loop(r, current + 1, log, callback);
+                                    retr = loopV1(r, current + 1, log, callback);
                                 }
                             }
                         })
@@ -485,7 +485,7 @@ async function loopV1(r, current, next, callback) {
                         }
                         if (current < r.length) {
 
-                            retr = loop(r, current + 1, log, callback);
+                            retr = loopV1(r, current + 1, log, callback);
                         }
 
                     }
@@ -507,7 +507,7 @@ async function loopV1(r, current, next, callback) {
                                 }
                                 if (current < r.length) {
 
-                                    retr = loop(r, current + 1, log, callback);
+                                    retr = loopV1(r, current + 1, log, callback);
                                 }
                             }
                             if (result) {
@@ -517,7 +517,7 @@ async function loopV1(r, current, next, callback) {
                                 }
                                 if (current < r.length) {
 
-                                    retr = loop(r, current + 1, log, callback);
+                                    retr = loopV1(r, current + 1, log, callback);
                                 }
                             }
                         })
@@ -531,7 +531,7 @@ async function loopV1(r, current, next, callback) {
                         }
                         if (current < r.length) {
 
-                            retr = loop(r, current + 1, log, callback);
+                            retr = loopV1(r, current + 1, log, callback);
                         }
 
                     }
@@ -573,7 +573,7 @@ async function loopV2(r, current, next, callback) {
                             }
                             if (current < r.length) {
     
-                                retr = loop(r, current + 1, log, callback);
+                                retr = loopV2(r, current + 1, log, callback);
                             }
                         }).catch(error=>{
                             console.log(error)
@@ -583,7 +583,7 @@ async function loopV2(r, current, next, callback) {
                             }
                             if (current < r.length) {
     
-                                retr = loop(r, current + 1, log, callback);
+                                retr = loopV2(r, current + 1, log, callback);
                             }
                         }) 
                     }).catch(error=>{
@@ -593,7 +593,7 @@ async function loopV2(r, current, next, callback) {
                         }
                         if (current < r.length) {
     
-                            retr = loop(r, current + 1, log, callback);
+                            retr = loopV2(r, current + 1, log, callback);
                         }
                     })
                 }).catch(error=>{
@@ -603,7 +603,7 @@ async function loopV2(r, current, next, callback) {
                     }
                     if (current < r.length) {
     
-                        retr = loop(r, current + 1, log, callback);
+                        retr = loopV2(r, current + 1, log, callback);
                     }
                 })    
             }else{
@@ -619,7 +619,7 @@ async function loopV2(r, current, next, callback) {
                         }
                         if (current < r.length) {
 
-                            retr = loop(r, current + 1, log, callback);
+                            retr = loopV2(r, current + 1, log, callback);
                         }
                     }).catch(error=>{
                         console.log(error)
@@ -629,7 +629,7 @@ async function loopV2(r, current, next, callback) {
                         }
                         if (current < r.length) {
 
-                            retr = loop(r, current + 1, log, callback);
+                            retr = loopV2(r, current + 1, log, callback);
                         }
                     })
                 }).catch(error=>{
@@ -639,7 +639,7 @@ async function loopV2(r, current, next, callback) {
                     }
                     if (current < r.length) {
 
-                        retr = loop(r, current + 1, log, callback);
+                        retr = loopV2(r, current + 1, log, callback);
                     }
                 })
             }
@@ -650,7 +650,7 @@ async function loopV2(r, current, next, callback) {
             }
             if (current < r.length) {
 
-                retr = loop(r, current + 1, log, callback);
+                retr = loopV2(r, current + 1, log, callback);
             }
         })
     }, 2000);
