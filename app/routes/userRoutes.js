@@ -34,6 +34,10 @@ router.post(USER_URL.OPERATIONS.MASIVEREGISTER, upload.single("file"), UserContr
 //POST CARGA MASIVA DE REGISTRO DE LOS BLOQUEADOS
 router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
 
+//Registro de ingles masivo
+router.post(USER_URL.OPERATIONS.ENGLISHREGISTER, upload.single("file"), UserController.ActualizarInglesMasivo);
+
+
 router.post(USER_URL.OPERATIONS.UPDATE, UserController.changeName);
 
 //GET LISTA DE PROFESORES Y MIEMBROS DE COMITE

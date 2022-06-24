@@ -132,6 +132,51 @@ exports.CargaMasivaPermisos = function (user) {
     })
 }
 
+exports.CargaMasivaIngles = function (user) {
+    console.log(user)
+    return new Promise(function (resolve, reject) {
+        if (user.code) {
+            mysqlConnection.query({
+                sql: 'SELECT id, code from user where code = ?',
+            }, [user.code], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    mysqlConnection.query({
+                        sql: `update user set english = ${user.english} where code = '${user.code}'`,
+                    }, function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
+
+                } else {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for user'
+                    })
+                }
+                if (error) {
+
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for registration'
+            })
+        }
+    })
+}
+
 // Para el register_permission
 exports.CargaMasivaPermisosBloqueados = function (user) {
     return new Promise(function (resolve, reject) {
