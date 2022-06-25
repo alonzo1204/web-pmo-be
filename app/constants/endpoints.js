@@ -33,6 +33,7 @@ const endpoints = {
             MREGISTERBLOCK: '/registroMasivoB',//working
             GET_ONE: '/:idUser',
             ENGLISHREGISTER: '/registroIngles',
+            AVERAGEWEIGHT_UPDATE: '/actualizarpromedio',
             GET_TEACHERS: '/teachers',
         }
     },

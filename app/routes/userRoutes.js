@@ -37,6 +37,8 @@ router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserContr
 //Registro de ingles masivo
 router.post(USER_URL.OPERATIONS.ENGLISHREGISTER, upload.single("file"), UserController.ActualizarInglesMasivo);
 
+//Actualizacion de promedio ponderado
+router.post(USER_URL.OPERATIONS.AVERAGEWEIGHT_UPDATE, upload.single("file"), UserController.ActualizarPromedioMasivo);
 
 router.post(USER_URL.OPERATIONS.UPDATE, UserController.changeName);
 
