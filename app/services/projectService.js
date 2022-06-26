@@ -2,7 +2,7 @@
 const { setQuery, security, setHandleQuery, validProject } = require('../constants');
 
 const jwt = require('jsonwebtoken');
-const { projectModel, careerModel, portfolioModel, companyModel, editRequestModel, histProjectsModel, semesterModel } = require('../models');
+const { projectModel, careerModel, portfolioModel, companyModel, editRequestModel, histProjectsModel, semesterModel } = require('../models/index');
 const { sequelize, mysqlConnection } = require('../connections');
 const { Op } = require("sequelize");
 

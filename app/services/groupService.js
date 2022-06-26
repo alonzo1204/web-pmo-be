@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { groupModel, userModel } = require('../models');
+const { groupModel, userModel } = require('../models/index');
 const { mysqlConnection } = require('../connections/mysql');
 
 //Get Group

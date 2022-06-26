@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { security, requestAccess } = require('../constants');
 const { Op } = require("sequelize");
 
-const { hsAccessModel, hsSessionModel, userModel, registrationPermissionsModel, userRolModel, roleModel } = require('../models');
+const { hsAccessModel, hsSessionModel, userModel, registrationPermissionsModel, userRolModel, roleModel } = require('../models/index');
 
 exports.getUserByCode = function (code) {
     return new Promise(function (resolve, reject) {

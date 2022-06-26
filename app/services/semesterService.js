@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections');
-const { semesterModel } = require('../models');
+const { semesterModel } = require('../models/index');
 
 
 exports.getFullListV1 = function () {

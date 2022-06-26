@@ -29,21 +29,27 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/',//done
             SAVE: '/save',
+            UPDATE: '/update',
             DOWN: '/down/?idUser=:idUser',//done
             GET_ONE: '/:idUser',
             MASIVEREGISTER: '/registroMasivo',//working
             MREGISTERBLOCK: '/registroMasivoB',//working
-            GET_ONE: '/:idUser'
+            GET_ONE: '/:idUser',
+            ENGLISHREGISTER: '/registroIngles',
+            AVERAGEWEIGHT_UPDATE: '/actualizarpromedio',
+            GET_TEACHERS: '/teachers',
         }
     },
     PROJECT_URL: {
         MAIN: '/projects',
         OPERATIONS: {
             LIST: '/', //done
+            LIST_BY_SEMESTER: '/bysemester',
             REQUEST_UPDATE: '/request_update',
             HANDLE_UPDATE: '/handle_update',
             LIST_APPROVED: '/approved',
-            SAVE: '/save', //done
+            SAVE: '/save', //done,w
+            HISTORY: '/history',
             SAVE_EXCEL: '/saveExcel',//done
             UPDATE: '/update',
             MULTIPLE_UPDATE: '/mupdate',
@@ -56,10 +62,12 @@ const endpoints = {
             GET_MY_REQUEST_EDITS: '/my_request_edits',
             GET_ALL_REQUEST_EDITS: '/all_request_edits',
             SAVE_NEW_WITH_ARCHIVE: '/save_with_archive',
-            GET_VARIOUS_STATUS: '/status/:idState',
+            GET_VARIOUS_STATUS: '/status/:idState/:idCareer',
             GET_MY_EDIT: '/edit/:idUser',
             GET_EDITS: '/edits',
-            GET_ONE: '/:idProject'
+            GET_ONE: '/:idProject',
+            SAVE_TEACHERS: '/save_teachers',
+            DOWNLOAD_PROJECTS: '/download'
         }
     },
     POSTULATION_URL: {
@@ -67,7 +75,12 @@ const endpoints = {
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save', //done
-            GET_ONE: '/:idPostulation'
+            HISTORY: '/history', //done
+            GET_MY: '/mypostulations',
+            SET_PROYECT: '/runPostulationProcess',
+            GET_ONE: '/:idPostulation',
+            GET_POSTULATIONS: '/mypostulations/:code',
+            ASIGN_PROYECTS: '/asign'
         }
     },
     CAREER_URL: {
@@ -84,11 +97,19 @@ const endpoints = {
             LIST: '/', //done
             SAVE: '/save',
             GET_ONE: '/:idgroup',
-            GET_GROUP: '/mygroup'
+            GET_GROUP: '/mygroup/:code'
         }
     },
     ROLE_URL: {
         MAIN: '/roles',
+        OPERATIONS: {
+            LIST: '/', //done
+            SAVE: '/save',
+            GET_ONE: '/:idRole'
+        }
+    },
+    RegistrationPermission_URL: {
+        MAIN: '/registrationpermissions',
         OPERATIONS: {
             LIST: '/', //done
             SAVE: '/save',

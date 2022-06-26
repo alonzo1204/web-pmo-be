@@ -1,5 +1,5 @@
 const { mysqlConnection, sequelize } = require('../connections');
-const { userModel, registrationPermissionsModel, userRolModel } = require('../models');
+const { userModel, registrationPermissionsModel, userRolModel } = require('../models/index');
 
 
 //get list users
@@ -140,6 +140,178 @@ exports.BajaV2 = function (usuario) {
         }).catch(error=>{
             reject(error)
         })
+    })
+}
+
+//Carga masica ingles
+exports.CargaMasivaInglesV1 = function (user) {
+    console.log(user)
+    return new Promise(function (resolve, reject) {
+        if (user.code) {
+            mysqlConnection.query({
+                sql: 'SELECT id, code from user where code = ?',
+            }, [user.code], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    mysqlConnection.query({
+                        sql: `update user set english = ${user.english} where code = '${user.code}'`,
+                    }, function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
+
+                } else {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for user'
+                    })
+                }
+                if (error) {
+
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for registration'
+            })
+        }
+    })
+}
+
+exports.CargaMasivaInglesV2 = function (user) {
+    console.log(user)
+    return new Promise(function (resolve, reject) {
+        if (user.code) {
+            userModel.findOne({where:{code:user.code}}).then(function(result){
+                if (result!=null||result!=undefined) {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for user'
+                    })
+                }else{
+                    userModel.update({
+                        english:user.english
+                    },{
+                        where:{
+                            code:user.code
+                        }
+                    }).then(function(){
+                        userModel.findOne({where:{code:user.code}}).then(usuario=>{
+                            resolve({usuario})
+                        }).catch(error=>{
+                            reject(error)
+                        })
+                        
+                    }).catch(error=>{
+                        reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for registration'
+            })
+        }
+    })
+}
+
+//CArga de promedios masivo
+exports.CargaMasivaPromedioV1 = function (user) {
+    return new Promise(function (resolve, reject) {
+        if (user.code) {
+            mysqlConnection.query({
+                sql: 'SELECT id, code from user where code = ?',
+            }, [user.code], function (error, result, fields) {
+                if (result && result.length > 0) {
+                    mysqlConnection.query({
+                        sql: `update user set weighted_average = ${user.weighted_average} where code = '${user.code}'`,
+                    }, function (error, result, fields) {
+                        if (result) {
+                            resolve(result);
+                        }
+                        if (error) {
+                            reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                        }
+                    })
+
+                } else {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for user'
+                    })
+                }
+                if (error) {
+
+                    reject({
+                        codeMessage: error.code ? error.code : 'ER_',
+                        message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for registration'
+            })
+        }
+    })
+}
+
+exports.CargaMasivaPromedioV2 = function (user) {
+    return new Promise(function (resolve, reject) {
+        if (user.code) {
+            userModel.findOne({where:{code:user.code}}).then(function(result){
+                if (result!=null||result!=undefined) {
+                    reject({
+                        codeMessage: 'CODE_DUPLICATED',
+                        message: 'Send an unique code for user'
+                    })
+                }else{
+                    userModel.update({
+                        weighted_average:user.weighted_average
+                    },{
+                        where:{
+                            code:user.code
+                        }
+                    }).then(function(){
+                        userModel.findOne({where:{code:user.code}}).then(usuario=>{
+                            resolve({usuario})
+                        }).catch(error=>{
+                            reject(error)
+                        })
+                        
+                    }).catch(error=>{
+                        reject({
+                                codeMessage: error.code ? error.code : 'ER_',
+                                message: error.sqlMessage ? error.sqlMessage : 'Connection Failed'
+                            })
+                    })
+                }
+            })
+        } else {
+            reject({
+                codeMessage: 'MISSING_INFORMATION',
+                message: 'Send the complete body for registration'
+            })
+        }
     })
 }
 

@@ -1,6 +1,6 @@
 const { mysqlConnection } = require('../connections/mysql');
-const { portfolioModel, semesterModel, portfolioStateModel } = require('../models');
-const { appSettingsModel } = require('../models/appsettingsModel');
+const { portfolioModel, semesterModel, portfolioStateModel } = require('../models/index');
+const { appSettingsModel } = require('../models/index');
 
 //get Configuracion
 exports.getConfigurationV1 = function(configID){

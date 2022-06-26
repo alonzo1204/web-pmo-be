@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections');
-const { careerModel } = require('../models');
+const { careerModel } = require('../models/index');
 
 
 

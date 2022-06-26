@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections');
-const { portfolioModel } = require('../models');
+const { portfolioModel } = require('../models/index');
 
 //Listado de todos los portafolios
 exports.getAllV1 = function () {

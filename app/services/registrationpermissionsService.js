@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections/mysql');
-const { registrationPermissionsModel } = require('../models');
+const { registrationPermissionsModel } = require('../models/index');
 
 exports.getFullListV1 = function () {
     return new Promise(function (resolve, reject) {

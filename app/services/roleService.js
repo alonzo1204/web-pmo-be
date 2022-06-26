@@ -1,5 +1,5 @@
 const { mysqlConnection } = require('../connections');
-const { roleModel } = require('../models');
+const { roleModel } = require('../models/index');
 
 
 exports.getFullListV1 = function () {

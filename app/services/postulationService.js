@@ -1,5 +1,5 @@
 const { mysqlConnection, sequelize } = require('../connections');
-const { postulationModel, projectModel, groupModel, histPostulationModel, userModel } = require('../models');
+const { postulationModel, projectModel, groupModel, histPostulationModel, userModel } = require('../models/index');
 const { Op } = require("sequelize");
 
 

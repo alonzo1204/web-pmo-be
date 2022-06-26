@@ -23,20 +23,26 @@ const USER_URL = endpoints.USER_URL
  *         contens:
  *           application/json:
  */
-router.get(USER_URL.OPERATIONS.LIST, UserController.getFullList);
+ router.get(USER_URL.OPERATIONS.LIST, UserController.getFullList);
 
-//POST DAR DE BAJA
-router.post(USER_URL.OPERATIONS.DOWN, UserController.darBaja);
-
-//POST CARGA MASIVA DE REGISTRO
-router.post(USER_URL.OPERATIONS.MASIVEREGISTER, upload.single("file"), UserController.RegistroMasivo);
-
-//POST CARGA MASIVA DE REGISTRO DE LOS BLOQUEADOS
-router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
-
-router.post(USER_URL.OPERATIONS.UPDATE, UserController.changeName);
-
-//GET LISTA DE PROFESORES Y MIEMBROS DE COMITE
-router.get(USER_URL.OPERATIONS.GET_TEACHERS, UserController.getFullListTeachers);
-
-module.exports = router;
+ //POST DAR DE BAJA
+ router.post(USER_URL.OPERATIONS.DOWN, UserController.darBaja);
+ 
+ //POST CARGA MASIVA DE REGISTRO
+ router.post(USER_URL.OPERATIONS.MASIVEREGISTER, upload.single("file"), UserController.RegistroMasivo);
+ 
+ //POST CARGA MASIVA DE REGISTRO DE LOS BLOQUEADOS
+ router.post(USER_URL.OPERATIONS.MREGISTERBLOCK, upload.single("file"), UserController.RegistroMasivoBloqueados);
+ 
+ //Registro de ingles masivo
+ router.post(USER_URL.OPERATIONS.ENGLISHREGISTER, upload.single("file"), UserController.ActualizarInglesMasivo);
+ 
+ //Actualizacion de promedio ponderado
+ router.post(USER_URL.OPERATIONS.AVERAGEWEIGHT_UPDATE, upload.single("file"), UserController.ActualizarPromedioMasivo);
+ 
+ router.post(USER_URL.OPERATIONS.UPDATE, UserController.changeName);
+ 
+ //GET LISTA DE PROFESORES Y MIEMBROS DE COMITE
+ router.get(USER_URL.OPERATIONS.GET_TEACHERS, UserController.getFullListTeachers);
+ 
+ module.exports = router;
